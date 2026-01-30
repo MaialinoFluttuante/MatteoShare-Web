@@ -1,0 +1,2174 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>MatteoShare Web – Ultimate++</title>
+    <style>
+        :root {
+            --bg-main: #3a6ea5;
+            --bg-panel: #ece9d8;
+            --bg-sidebar: #d4d0c8;
+            --bg-header-top: #1f5fa9;
+            --bg-header-bottom: #0e3f7a;
+            --border-dark: #404040;
+            --border-light: #ffffff;
+            --text-main: #000000;
+        }
+
+        body.theme-default {
+            --bg-main: #3a6ea5;
+            --bg-panel: #ece9d8;
+            --bg-sidebar: #d4d0c8;
+            --bg-header-top: #1f5fa9;
+            --bg-header-bottom: #0e3f7a;
+            --text-main: #000000;
+        }
+
+        body.theme-dark {
+            --bg-main: #101820;
+            --bg-panel: #2b2b2b;
+            --bg-sidebar: #202020;
+            --bg-header-top: #303f9f;
+            --bg-header-bottom: #1a237e;
+            --text-main: #f0f0f0;
+        }
+
+        body.theme-neon {
+            --bg-main: #000018;
+            --bg-panel: #050520;
+            --bg-sidebar: #050515;
+            --bg-header-top: #00bcd4;
+            --bg-header-bottom: #00838f;
+            --text-main: #e0ffff;
+        }
+
+        body.theme-terminal {
+            --bg-main: #000000;
+            --bg-panel: #001800;
+            --bg-sidebar: #001000;
+            --bg-header-top: #003300;
+            --bg-header-bottom: #001a00;
+            --text-main: #00ff00;
+        }
+
+        body {
+            background: var(--bg-main);
+            color: var(--text-main);
+            font-family: Tahoma, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: linear-gradient(to bottom, var(--bg-header-top), var(--bg-header-bottom));
+            color: white;
+            padding: 8px 12px;
+            border-bottom: 2px solid #002d5c;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header .title-block {
+            display: flex;
+            flex-direction: column;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 22px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px #000;
+        }
+
+        header p {
+            margin: 2px 0 0;
+            font-size: 11px;
+            color: #d0e4ff;
+        }
+
+        header .account-info {
+            font-size: 11px;
+            text-align: right;
+        }
+
+        header .account-info span {
+            display: block;
+        }
+
+        .main {
+            display: flex;
+            height: calc(100vh - 48px);
+        }
+
+        .sidebar {
+            width: 230px;
+            background: var(--bg-sidebar);
+            border-right: 2px solid var(--border-dark);
+            padding: 8px;
+            box-sizing: border-box;
+            font-size: 12px;
+        }
+
+        .sidebar h3 {
+            margin-top: 0;
+            font-size: 13px;
+            color: #0e3f7a;
+        }
+
+        .sidebar button {
+            width: 100%;
+            text-align: left;
+            margin-bottom: 4px;
+        }
+
+        .content {
+            flex: 1;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+
+        .panel {
+            background: var(--bg-panel);
+            border: 2px solid var(--border-light);
+            border-right-color: #a7a6aa;
+            border-bottom-color: #a7a6aa;
+            padding: 8px;
+            margin-bottom: 8px;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+
+        .panel h2 {
+            margin-top: 0;
+            font-size: 15px;
+            color: #0e3f7a;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border: 2px solid #a7a6aa;
+        }
+
+        table th {
+            background: #d4d0c8;
+            padding: 5px;
+            border-bottom: 2px solid #a7a6aa;
+            text-align: left;
+            font-size: 11px;
+        }
+
+        table td {
+            padding: 5px;
+            border-bottom: 1px solid #c0c0c0;
+            font-size: 11px;
+        }
+
+        button {
+            background: #d4d0c8;
+            border: 2px solid #ffffff;
+            border-right-color: #404040;
+            border-bottom-color: #404040;
+            padding: 3px 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 11px;
+        }
+
+        button:active {
+            border: 2px solid #404040;
+            border-right-color: #ffffff;
+            border-bottom-color: #ffffff;
+            background: #c8c8c8;
+        }
+
+        input, select, textarea {
+            padding: 3px;
+            border: 2px solid #ffffff;
+            border-right-color: #a7a6aa;
+            border-bottom-color: #a7a6aa;
+            background: #f7f7f7;
+            font-family: Tahoma;
+            font-size: 11px;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        .window {
+            display:none;
+            position:fixed;
+            top:15%;
+            left:25%;
+            width:50%;
+            background: var(--bg-panel);
+            border:2px solid #ffffff;
+            border-right-color:#a7a6aa;
+            border-bottom-color:#a7a6aa;
+            z-index:9999;
+            animation: winOpen 0.15s ease-out;
+        }
+
+        .window-header {
+            background: linear-gradient(to bottom, var(--bg-header-top), var(--bg-header-bottom));
+            color:white;
+            padding:3px 6px;
+            font-size:11px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        }
+
+        .window-header span {
+            font-weight:bold;
+        }
+
+        .window-header button {
+            padding:0 5px;
+            font-size:9px;
+        }
+
+        .window-body {
+            padding:8px;
+            font-size:11px;
+        }
+
+        #chatMessages {
+            height: 200px;
+            overflow-y: auto;
+            background:white;
+            border:1px solid #a7a6aa;
+            padding:4px;
+            font-size:11px;
+        }
+
+        #peersList {
+            height: 200px;
+            overflow-y: auto;
+            background:white;
+            border:1px solid #a7a6aa;
+            padding:4px;
+            font-size:11px;
+        }
+
+        .peer-item {
+            display:flex;
+            justify-content:space-between;
+            border-bottom:1px solid #ddd;
+            padding:2px 0;
+        }
+
+        .status-online {
+            color:green;
+            font-weight:bold;
+        }
+
+        .status-offline {
+            color:red;
+            font-weight:bold;
+        }
+
+        .account-field {
+            margin-bottom:5px;
+        }
+
+        .account-field label {
+            display:block;
+            font-size:11px;
+            margin-bottom:2px;
+        }
+
+        .filters {
+            margin-bottom:6px;
+            display:flex;
+            flex-wrap:wrap;
+            gap:4px;
+            align-items:center;
+        }
+
+        .filters label {
+            font-size:11px;
+        }
+
+        #notifyBox {
+            position:fixed;
+            right:10px;
+            bottom:10px;
+            background:#ece9d8;
+            border:2px solid #a7a6aa;
+            padding:4px 8px;
+            font-size:10px;
+            display:none;
+        }
+
+        #miniPlayer {
+            width:260px;
+            right:10px;
+            left:auto;
+            top:10px;
+        }
+
+        #miniChat {
+            height:120px;
+            overflow-y:auto;
+            background:white;
+            border:1px solid #a7a6aa;
+            font-size:10px;
+            padding:3px;
+        }
+
+        .offline-banner {
+            background:#a00000;
+            color:white;
+            text-align:center;
+            font-size:10px;
+            padding:2px 0;
+            display:none;
+        }
+
+        .avatar-box {
+            width:40px;
+            height:40px;
+            border:1px solid #404040;
+            background:#f7f7f7;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:12px;
+            margin-bottom:5px;
+        }
+
+        .avatar-editor {
+            display:grid;
+            grid-template-columns:repeat(4,16px);
+            grid-template-rows:repeat(4,16px);
+            gap:2px;
+            margin-bottom:6px;
+        }
+
+        .avatar-pixel {
+            width:16px;
+            height:16px;
+            border:1px solid #404040;
+            cursor:pointer;
+        }
+
+        .badge-list div {
+            font-size:11px;
+            margin-bottom:2px;
+        }
+
+        .badge-unlocked {
+            color:green;
+            font-weight:bold;
+        }
+
+        .badge-locked {
+            color:gray;
+        }
+
+        .mention {
+            background: #ffff80;
+            font-weight:bold;
+        }
+
+        .reaction-btn {
+            font-size:9px;
+            padding:1px 4px;
+            margin-left:2px;
+        }
+
+        .server-stats {
+            font-size:11px;
+            margin-top:6px;
+            background:white;
+            border:1px solid #a7a6aa;
+            padding:4px;
+            max-height:120px;
+            overflow-y:auto;
+        }
+
+        .rep-score {
+            font-weight:bold;
+            color:#1f5fa9;
+        }
+
+        .verified-server {
+            color:green;
+            font-weight:bold;
+        }
+
+        .unverified-server {
+            color:#555;
+        }
+
+        .security-log {
+            font-size:10px;
+            background:white;
+            border:1px solid #a7a6aa;
+            padding:4px;
+            max-height:150px;
+            overflow-y:auto;
+        }
+
+        .profile-wall {
+            background:white;
+            border:1px solid #a7a6aa;
+            padding:4px;
+            max-height:180px;
+            overflow-y:auto;
+            font-size:11px;
+        }
+
+        .friend-item {
+            font-size:11px;
+            margin-bottom:3px;
+        }
+
+        @keyframes winOpen {
+            from { transform:scale(0.9); opacity:0; }
+            to { transform:scale(1); opacity:1; }
+        }
+    </style>
+</head>
+<body class="theme-default">
+
+<div id="offlineBanner" class="offline-banner">Modalità offline: alcune funzioni potrebbero non essere disponibili.</div>
+
+<header>
+    <div class="title-block">
+        <h1>MatteoShare Web</h1>
+        <p>Programmed by <strong>Angelini Matteo</strong></p>
+    </div>
+    <div class="account-info">
+        <span id="accountNameLabel">Account: (nessun account)</span>
+        <span id="accountIdLabel">ID: -</span>
+        <span id="accountStatusLabel">Stato: OFFLINE</span>
+        <span>
+            Tema:
+            <select id="themeSelect" onchange="changeTheme()">
+                <option value="default">Default</option>
+                <option value="dark">Dark Retro</option>
+                <option value="neon">Neon</option>
+                <option value="terminal">Terminale</option>
+            </select>
+        </span>
+    </div>
+</header>
+
+<div class="main">
+    <div class="sidebar">
+        <h3>Menu</h3>
+        <button onclick="showSection('files')">File Condivisi</button>
+        <button onclick="showSection('request')">Richiesta Pubblicazione</button>
+        <button onclick="showSection('chat')">Chat Globale</button>
+        <button onclick="showSection('peers')">Peer / Profili</button>
+        <button onclick="showSection('social')">Social 2.0</button>
+        <button onclick="showSection('history')">Cronologia Download</button>
+        <button onclick="showSection('favorites')">Preferiti</button>
+        <button onclick="showSection('badges')">Badge</button>
+        <button onclick="showSection('stats')">Statistiche</button>
+        <button onclick="showSection('security')">Sicurezza & Integrità</button>
+        <button onclick="showSection('account')">Account Locale</button>
+        <button onclick="showSection('admin')">Pannello Admin</button>
+        <button onclick="showSection('plugins')">Plugin</button>
+        <button onclick="showSection('server')">Server</button>
+        <hr>
+        <button onclick="openMiniPlayer()">Mini Player</button>
+        <hr>
+        <button id="connectBtn" onclick="toggleConnection()">Connetti</button>
+    </div>
+
+    <div class="content">
+
+        <!-- FILE -->
+        <div id="section-files" class="panel">
+            <h2>File Condivisi</h2>
+
+            <div class="filters">
+                <label>Nome:
+                    <input type="text" id="filterName" placeholder="Cerca per nome">
+                </label>
+                <label>Tipo:
+                    <select id="filterType">
+                        <option value="all">Tutti</option>
+                        <option value="local">Locali</option>
+                        <option value="cloud">Cloud</option>
+                    </select>
+                </label>
+                <label>Sicurezza:
+                    <select id="filterSec">
+                        <option value="all">Tutti</option>
+                        <option value="VERIFICATO">Verificati</option>
+                        <option value="NON VERIFICATO">Non verificati</option>
+                    </select>
+                </label>
+                <label>Ordina per:
+                    <select id="sortBy">
+                        <option value="name">Nome</option>
+                        <option value="size">Peso</option>
+                        <option value="security">Sicurezza</option>
+                    </select>
+                </label>
+                <button onclick="applyFilters()">Applica</button>
+            </div>
+
+            <table id="filesTable">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Descrizione</th>
+                        <th>Peso</th>
+                        <th>Sicurezza</th>
+                        <th>Tipo</th>
+                        <th>Tag</th>
+                        <th>Server</th>
+                        <th>Hash</th>
+                        <th>Preferito</th>
+                        <th>Download</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <!-- RICHIESTA PUBBLICAZIONE -->
+        <div id="section-request" class="panel" style="display:none;">
+            <h2>Richiesta Pubblicazione</h2>
+            <p>Solo il proprietario può pubblicare file. Usa questa funzione per chiedere la pubblicazione.</p>
+            <button onclick="openRequestWindow()">Apri finestra richiesta</button>
+        </div>
+
+        <!-- CHAT GLOBALE -->
+        <div id="section-chat" class="panel" style="display:none;">
+            <h2>Chat Globale</h2>
+            <div style="margin-bottom:4px;">
+                <label>Canale:
+                    <select id="chatChannel" onchange="renderChat()">
+                        <option value="generale">#generale</option>
+                        <option value="supporto">#supporto</option>
+                        <option value="gaming">#gaming</option>
+                    </select>
+                </label>
+            </div>
+            <div id="chatMessages"></div>
+            <div style="margin-top:4px;">
+                <input type="text" id="chatInput" placeholder="Scrivi un messaggio..." style="width:70%;">
+                <button onclick="sendChatMessage()">Invia</button>
+            </div>
+            <p style="font-size:10px; margin-top:4px;">Chat simulata locale (nessun backend). Reazioni e mention funzionano solo sul tuo client.</p>
+        </div>
+
+        <!-- PEER / PROFILI -->
+        <div id="section-peers" class="panel" style="display:none;">
+            <h2>Peer Online & Profili</h2>
+            <div id="peersList"></div>
+            <p style="font-size:10px;">Peer simulati localmente. Il tuo profilo appare come ONLINE quando sei connesso.</p>
+        </div>
+
+        <!-- SOCIAL 2.0 -->
+        <div id="section-social" class="panel" style="display:none;">
+            <h2>Social 2.0</h2>
+            <div style="display:flex; gap:10px;">
+                <div style="flex:1;">
+                    <h3 style="font-size:13px;">Stato & Bacheca</h3>
+                    <div class="account-field">
+                        <label>Stato personalizzato</label>
+                        <input id="socialStatus" style="width:100%;" placeholder="Es: Giocando, Occupato, AFK...">
+                    </div>
+                    <div class="account-field">
+                        <label>Nuovo post sulla bacheca</label>
+                        <textarea id="socialPost" rows="3" style="width:100%;"></textarea>
+                    </div>
+                    <button onclick="saveSocialStatus()">Salva stato</button>
+                    <button onclick="addWallPost()">Pubblica post</button>
+                    <h4 style="font-size:12px; margin-top:8px;">La tua bacheca</h4>
+                    <div id="wallBox" class="profile-wall"></div>
+                </div>
+                <div style="flex:1;">
+                    <h3 style="font-size:13px;">Amici</h3>
+                    <div class="account-field">
+                        <label>Aggiungi amico (ID)</label>
+                        <input id="friendId" style="width:100%;" placeholder="ID peer">
+                    </div>
+                    <button onclick="addFriend()">Aggiungi amico</button>
+                    <h4 style="font-size:12px; margin-top:8px;">Lista amici</h4>
+                    <div id="friendsBox" style="background:white; border:1px solid #a7a6aa; padding:4px; max-height:180px; overflow-y:auto;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CRONOLOGIA -->
+        <div id="section-history" class="panel" style="display:none;">
+            <h2>Cronologia Download</h2>
+            <div id="historyList" style="max-height:200px; overflow-y:auto; background:white; border:1px solid #a7a6aa; padding:4px; font-size:11px;"></div>
+            <button onclick="clearHistory()">Svuota cronologia</button>
+        </div>
+
+        <!-- PREFERITI -->
+        <div id="section-favorites" class="panel" style="display:none;">
+            <h2>Preferiti</h2>
+            <div id="favoritesList" style="max-height:200px; overflow-y:auto; background:white; border:1px solid #a7a6aa; padding:4px; font-size:11px;"></div>
+        </div>
+
+        <!-- BADGE -->
+        <div id="section-badges" class="panel" style="display:none;">
+            <h2>Badge / Achievements</h2>
+            <div class="badge-list" id="badgeList"></div>
+        </div>
+
+        <!-- STATISTICHE -->
+        <div id="section-stats" class="panel" style="display:none;">
+            <h2>Statistiche</h2>
+            <div id="statsBox" style="font-size:11px;"></div>
+            <h3 style="font-size:12px; margin-top:8px;">Analisi server</h3>
+            <div id="serverStatsBox" class="server-stats"></div>
+        </div>
+
+        <!-- SICUREZZA & INTEGRITÀ -->
+        <div id="section-security" class="panel" style="display:none;">
+            <h2>Sicurezza & Integrità</h2>
+            <div class="account-field">
+                <label><input type="checkbox" id="safeMode" onchange="toggleSafeMode()"> Modalità Safe Mode (solo server verificati)</label>
+            </div>
+            <div class="account-field">
+                <label>Server bannati (uno per riga)</label>
+                <textarea id="bannedServers" rows="4" style="width:100%;"></textarea>
+                <button onclick="saveBannedServers()">Salva lista server bannati</button>
+            </div>
+            <div class="account-field">
+                <label>Verifica integrità file (hash)</label>
+                <input id="verifyHashInput" style="width:100%;" placeholder="Incolla hash atteso">
+                <button onclick="verifyHash()">Verifica hash selezionato</button>
+                <div id="verifyHashResult" style="font-size:11px; margin-top:4px;"></div>
+            </div>
+            <h3 style="font-size:12px; margin-top:8px;">Log sicurezza locale</h3>
+            <div id="securityLog" class="security-log"></div>
+        </div>
+
+        <!-- ACCOUNT -->
+        <div id="section-account" class="panel" style="display:none;">
+            <h2>Account Locale</h2>
+
+            <div style="display:flex; gap:8px; align-items:flex-start;">
+                <div>
+                    <div class="avatar-box" id="avatarBox">MS</div>
+                    <div class="account-field">
+                        <label>Editor avatar (pixel‑art 4×4)</label>
+                        <div class="avatar-editor" id="avatarEditor"></div>
+                    </div>
+                </div>
+                <div style="flex:1;">
+                    <div class="account-field">
+                        <label>Nome utente</label>
+                        <input type="text" id="accName" placeholder="Il tuo nome" style="width:100%;">
+                    </div>
+
+                    <div class="account-field">
+                        <label>ID (generato automaticamente se vuoto)</label>
+                        <input type="text" id="accId" placeholder="ID univoco" style="width:100%;">
+                    </div>
+
+                    <div class="account-field">
+                        <label>Bio</label>
+                        <textarea id="accBio" rows="3" style="width:100%;"></textarea>
+                    </div>
+
+                    <div class="account-field">
+                        <label>Preferenze</label>
+                        <label><input type="checkbox" id="accSounds"> Suoni attivi</label>
+                        <label><input type="checkbox" id="accDark"> Tema scuro retro (shortcut)</label>
+                        <label><input type="checkbox" id="accAdmin"> Modalità admin chat locale</label>
+                    </div>
+
+                    <button onclick="saveAccount()">Salva account</button>
+                    <button onclick="exportAccount()">Esporta account</button>
+                    <input type="file" id="importFile" style="display:none;" onchange="importAccountFile(event)">
+                    <button onclick="document.getElementById('importFile').click()">Importa account</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ADMIN -->
+        <div id="section-admin" class="panel" style="display:none;">
+            <h2>Pannello Admin (locale)</h2>
+            <p>Se l'account ha la modalità admin attiva, in chat compariranno pulsanti per moderare i messaggi (solo localmente) e assegnare reputazione ai peer.</p>
+            <p>La moderazione reale richiederebbe un backend, qui è tutto simulato sul tuo browser.</p>
+        </div>
+
+        <!-- PLUGIN -->
+        <div id="section-plugins" class="panel" style="display:none;">
+            <h2>Plugin MatteoShare</h2>
+            <p>Carica un file JSON plugin con campi: <code>name</code>, <code>css</code>, <code>js</code>.</p>
+            <input type="file" id="pluginFile" onchange="loadPluginFile(event)">
+            <div id="pluginList" style="margin-top:6px; font-size:11px;"></div>
+        </div>
+
+        <!-- SERVER -->
+        <div id="section-server" class="panel" style="display:none;">
+            <h2>Server (Google Sheets CSV)</h2>
+
+            <h3 style="font-size:13px;">Aggiungi nuovo server</h3>
+            <input type="text" id="newServerUrl" placeholder="Incolla qui il link CSV" style="width:100%;">
+            <button onclick="addServer()">Aggiungi server</button>
+
+            <h3 style="font-size:13px; margin-top:10px;">Server configurati</h3>
+            <div id="serverList" style="font-size:11px;"></div>
+
+            <button style="margin-top:6px;" onclick="reloadAllServers()">Ricarica tutti i server</button>
+            <p style="font-size:10px; margin-top:4px;">MatteoShare usa SOLO i server attivi come database file.</p>
+        </div>
+
+    </div>
+</div>
+
+<!-- FINESTRA RICHIESTA -->
+<div id="requestWindow" class="window">
+    <div class="window-header">
+        <span>Richiesta pubblicazione</span>
+        <button onclick="closeRequestWindow()">X</button>
+    </div>
+    <div class="window-body">
+        <div class="account-field">
+            <label>Nome file</label>
+            <input id="reqName" style="width:98%;">
+        </div>
+        <div class="account-field">
+            <label>Descrizione</label>
+            <input id="reqDesc" style="width:98%;">
+        </div>
+        <div class="account-field">
+            <label>Peso (es: 1.2 GB)</label>
+            <input id="reqSize" style="width:98%;">
+        </div>
+        <div class="account-field">
+            <label>Sicurezza</label>
+            <select id="reqSec" style="width:98%;">
+                <option value="VERIFICATO">VERIFICATO</option>
+                <option value="NON VERIFICATO">NON VERIFICATO</option>
+            </select>
+        </div>
+        <div class="account-field">
+            <label>Link (Google Drive / Mega)</label>
+            <input id="reqLink" style="width:98%;">
+        </div>
+
+        <div class="account-field">
+            <label>Anteprima messaggio</label>
+            <textarea id="reqPreview" style="width:98%; height:100px;" readonly></textarea>
+        </div>
+
+        <button onclick="updateRequestPreview()">Aggiorna anteprima</button>
+        <button onclick="copyRequestPreview()">Copia testo</button>
+        <button onclick="sendRequestEmail()">Invia richiesta</button>
+        <button onclick="closeRequestWindow()">Annulla</button>
+    </div>
+</div>
+
+<!-- MINI PLAYER -->
+<div id="miniPlayer" class="window" style="display:none;">
+    <div class="window-header">
+        <span>MatteoShare Mini</span>
+        <button onclick="closeMiniPlayer()">X</button>
+    </div>
+    <div class="window-body">
+        <div id="miniChat"></div>
+        <input id="miniInput" style="width:80%; font-size:10px;" placeholder="Msg...">
+        <button onclick="sendMiniChat()" style="font-size:10px;">OK</button>
+    </div>
+</div>
+
+<!-- CHAT PRIVATA -->
+<div id="privateChatWindow" class="window" style="display:none; width:320px; left:calc(50% - 160px);">
+    <div class="window-header">
+        <span id="privateChatTitle">Chat privata</span>
+        <button onclick="closePrivateChat()">X</button>
+    </div>
+    <div class="window-body">
+        <div id="privateChatMessages" style="height:180px; overflow-y:auto; background:white; border:1px solid #a7a6aa; padding:4px;"></div>
+        <input id="privateChatInput" style="width:80%;">
+        <button onclick="sendPrivateChat()">Invia</button>
+    </div>
+</div>
+
+<!-- DOWNLOAD MANAGER -->
+<div id="downloadWindow" class="window" style="width:300px; left:calc(50% - 150px);">
+    <div class="window-header">
+        <span>Download in corso</span>
+        <button onclick="closeDownloadWindow()">X</button>
+    </div>
+    <div class="window-body">
+        <div id="downloadFileName" style="font-size:11px; margin-bottom:4px;"></div>
+        <div style="width:100%; height:14px; border:1px solid #404040; background:#f0f0f0;">
+            <div id="downloadBar" style="height:100%; width:0%; background:#1f5fa9;"></div>
+        </div>
+        <div id="downloadStatus" style="font-size:10px; margin-top:3px;">Preparazione...</div>
+    </div>
+</div>
+
+<div id="notifyBox"></div>
+
+<script>
+/* GLOBALI */
+let allFiles = [];
+let lastFilesCount = 0;
+let downloadTimer = null;
+let downloadQueue = [];
+let activeDownload = null;
+
+let chatMessages = [];
+let privateChats = {};
+let currentPrivatePeer = null;
+
+let avatarColors = ["#f7f7f7", "#000000", "#1f5fa9", "#ff0000", "#00aa00", "#ffaa00"];
+
+let selectedHashForVerify = null;
+
+/* SEZIONI */
+function showSection(name) {
+    const ids = ["files","request","chat","peers","social","history","favorites","badges","stats","security","account","admin","plugins","server"];
+    ids.forEach(id => {
+        document.getElementById("section-" + id).style.display = (id === name) ? "block" : "none";
+    });
+}
+
+/* NOTIFICHE */
+function showNotify(msg) {
+    const box = document.getElementById("notifyBox");
+    box.textContent = msg;
+    box.style.display = "block";
+    setTimeout(() => box.style.display = "none", 4000);
+}
+
+/* CSV */
+function parseCSV(text) {
+    const lines = text.split(/\r?\n/).filter(l => l.trim() !== "");
+    if (lines.length === 0) return [];
+    const headers = lines[0].split(",").map(h => h.trim());
+    const rows = lines.slice(1);
+    return rows.map(line => {
+        const cols = line.split(",");
+        const obj = {};
+        headers.forEach((h, i) => {
+            obj[h] = (cols[i] || "").trim();
+        });
+        return obj;
+    });
+}
+
+/* SERVER MULTIPLI + DEFAULT */
+const DEFAULT_SERVER_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR0JBmDzlXu9-Mr4hG1TSr5lkuHf8vJjBtkljZ-Kqa8gFoRx84r5EJ-xFfB0fE7vqlB06aW8jmYBUrg/pub?gid=0&single=true&output=csv";
+
+function getServers() {
+    try {
+        let servers = JSON.parse(localStorage.getItem("matteoshare_servers") || "[]");
+        if (!servers || servers.length === 0) {
+            servers = [{ url: DEFAULT_SERVER_URL, active: true, verified: true }];
+            localStorage.setItem("matteoshare_servers", JSON.stringify(servers));
+        }
+        return servers;
+    } catch {
+        return [{ url: DEFAULT_SERVER_URL, active: true, verified: true }];
+    }
+}
+
+function saveServers(list) {
+    localStorage.setItem("matteoshare_servers", JSON.stringify(list));
+}
+
+function addServer() {
+    const url = document.getElementById("newServerUrl").value.trim();
+    if (!url) {
+        alert("Inserisci un URL CSV valido.");
+        return;
+    }
+
+    const servers = getServers();
+    servers.push({ url, active: true, verified: false });
+    saveServers(servers);
+
+    document.getElementById("newServerUrl").value = "";
+    renderServerList();
+    showNotify("Server aggiunto.");
+    reloadAllServers();
+}
+
+function toggleServer(index) {
+    const servers = getServers();
+    servers[index].active = !servers[index].active;
+    saveServers(servers);
+    renderServerList();
+    reloadAllServers();
+}
+
+function deleteServer(index) {
+    const servers = getServers();
+    servers.splice(index, 1);
+    saveServers(servers);
+    renderServerList();
+    reloadAllServers();
+}
+
+function toggleServerVerified(index) {
+    const servers = getServers();
+    servers[index].verified = !servers[index].verified;
+    saveServers(servers);
+    renderServerList();
+    reloadAllServers();
+}
+
+function renderServerList() {
+    const box = document.getElementById("serverList");
+    const servers = getServers();
+    box.innerHTML = "";
+
+    if (servers.length === 0) {
+        box.textContent = "Nessun server configurato. Aggiungi un link CSV qui sopra.";
+        return;
+    }
+
+    servers.forEach((s, i) => {
+        const div = document.createElement("div");
+        div.style.marginBottom = "5px";
+        div.innerHTML = `
+            <b>${i+1})</b> 
+            <span>${s.url}</span><br>
+            <label>
+                <input type="checkbox" ${s.active ? "checked" : ""} onclick="toggleServer(${i})">
+                Attivo
+            </label>
+            <label style="margin-left:8px;">
+                <input type="checkbox" ${s.verified ? "checked" : ""} onclick="toggleServerVerified(${i})">
+                Verificato
+            </label>
+            <button onclick="deleteServer(${i})">Rimuovi</button>
+            <hr>
+        `;
+        box.appendChild(div);
+    });
+
+    renderServerStats();
+}
+
+/* ANALISI SERVER */
+function updateServerStats(url, ok, fileCount=0) {
+    const raw = localStorage.getItem("matteoshare_server_stats") || "{}";
+    const stats = JSON.parse(raw);
+    if (!stats[url]) stats[url] = { ok:0, fail:0, files:0, last: null };
+    if (ok) {
+        stats[url].ok++;
+        stats[url].files = fileCount;
+    } else {
+        stats[url].fail++;
+    }
+    stats[url].last = new Date().toLocaleString();
+    localStorage.setItem("matteoshare_server_stats", JSON.stringify(stats));
+}
+
+function renderServerStats() {
+    const box = document.getElementById("serverStatsBox");
+    const raw = localStorage.getItem("matteoshare_server_stats") || "{}";
+    const stats = JSON.parse(raw);
+    box.innerHTML = "";
+    const servers = Object.keys(stats);
+    if (servers.length === 0) {
+        box.textContent = "Nessuna statistica ancora disponibile.";
+        return;
+    }
+    servers.forEach(url => {
+        const s = stats[url];
+        const div = document.createElement("div");
+        div.innerHTML = `
+            <b>${url}</b><br>
+            OK: ${s.ok} | FAIL: ${s.fail} | File: ${s.files} | Ultimo: ${s.last}
+            <hr>
+        `;
+        box.appendChild(div);
+    });
+}
+
+/* AUTO-TAGGING */
+function autoTagFile(f) {
+    const text = ((f.name || "") + " " + (f.description || "")).toLowerCase();
+    const tags = new Set(f.tags || []);
+
+    if (text.includes(".iso") || text.includes("setup") || text.includes("installer")) tags.add("software");
+    if (text.includes("game") || text.includes("gioco")) tags.add("game");
+    if (text.includes(".zip") || text.includes(".rar") || text.includes(".7z")) tags.add("archive");
+    if (text.includes("python")) tags.add("python");
+    if (text.includes("source") || text.includes("src")) tags.add("source");
+    if (text.includes("music") || text.includes("mp3") || text.includes("flac")) tags.add("music");
+
+    f.tags = Array.from(tags);
+    return f;
+}
+
+/* SICUREZZA: BANNED SERVER + SAFE MODE + LOG */
+function getBannedServers() {
+    try {
+        return JSON.parse(localStorage.getItem("matteoshare_banned_servers") || "[]");
+    } catch {
+        return [];
+    }
+}
+
+function saveBannedServersList(list) {
+    localStorage.setItem("matteoshare_banned_servers", JSON.stringify(list));
+}
+
+function saveBannedServers() {
+    const text = document.getElementById("bannedServers").value;
+    const lines = text.split(/\r?\n/).map(l => l.trim()).filter(l => l);
+    saveBannedServersList(lines);
+    logSecurity("Lista server bannati aggiornata (" + lines.length + " voci).");
+    reloadAllServers();
+}
+
+function loadBannedServersUI() {
+    const list = getBannedServers();
+    document.getElementById("bannedServers").value = list.join("\n");
+}
+
+function isSafeMode() {
+    return localStorage.getItem("matteoshare_safe_mode") === "1";
+}
+
+function toggleSafeMode() {
+    const checked = document.getElementById("safeMode").checked;
+    localStorage.setItem("matteoshare_safe_mode", checked ? "1" : "0");
+    logSecurity("Safe Mode " + (checked ? "attivata" : "disattivata") + ".");
+    reloadAllServers();
+}
+
+function loadSafeModeUI() {
+    document.getElementById("safeMode").checked = isSafeMode();
+}
+
+function logSecurity(msg) {
+    const raw = localStorage.getItem("matteoshare_security_log") || "[]";
+    const arr = JSON.parse(raw);
+    arr.push({ time: new Date().toLocaleString(), msg });
+    localStorage.setItem("matteoshare_security_log", JSON.stringify(arr));
+    renderSecurityLog();
+}
+
+function renderSecurityLog() {
+    const box = document.getElementById("securityLog");
+    const raw = localStorage.getItem("matteoshare_security_log") || "[]";
+    const arr = JSON.parse(raw);
+    box.innerHTML = "";
+    arr.slice().reverse().forEach(e => {
+        const div = document.createElement("div");
+        div.textContent = "[" + e.time + "] " + e.msg;
+        box.appendChild(div);
+    });
+}
+
+/* FILE & FILTRI */
+async function loadFiles() {
+    const banned = getBannedServers();
+    let servers = getServers().filter(s => s.active && !banned.includes(s.url));
+
+    if (isSafeMode()) {
+        servers = servers.filter(s => s.verified);
+    }
+
+    if (servers.length === 0) {
+        allFiles = [];
+        renderFiles([]);
+        updateStats();
+        setOffline(true);
+        return;
+    }
+
+    let combined = [];
+
+    for (const server of servers) {
+        try {
+            const res = await fetch(server.url);
+            const csv = await res.text();
+            const rows = parseCSV(csv);
+
+            const files = rows.map(row => autoTagFile({
+                name: row.name || row.Nome || "",
+                description: row.description || row.Descrizione || "",
+                size: row.size || row.Peso || "",
+                security: row.security || row.Sicurezza || "NON VERIFICATO",
+                type: row.type || row.Tipo || "cloud",
+                tags: (row.tags || row.Tag || "").split(";").map(t => t.trim()).filter(t => t),
+                hash: row.hash || row.Hash || (row.name || "") + "_" + (row.size || ""),
+                cloud_url: row.cloud_url || row.Link || "",
+                server_verified: server.verified === true
+            }));
+
+            combined = combined.concat(files);
+            updateServerStats(server.url, true, files.length);
+
+        } catch (e) {
+            console.warn("Server non raggiungibile:", server.url);
+            updateServerStats(server.url, false, 0);
+            logSecurity("Server non raggiungibile: " + server.url);
+        }
+    }
+
+    const oldCount = allFiles.length;
+    allFiles = combined;
+    renderFiles(allFiles);
+    if (allFiles.length > oldCount) {
+        showNotify("Nuovi file disponibili dai server.");
+    }
+    lastFilesCount = allFiles.length;
+    setOffline(false);
+    updateStats();
+    renderServerStats();
+}
+
+function renderFiles(files) {
+    const tbody = document.querySelector("#filesTable tbody");
+    tbody.innerHTML = "";
+
+    const favs = getFavs();
+
+    files.forEach(f => {
+        const isFav = favs.includes(f.hash);
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td>${f.name}</td>
+            <td>${f.description || ""}</td>
+            <td>${f.size}</td>
+            <td>${f.security}</td>
+            <td>${f.type}</td>
+            <td>${(f.tags || []).join(", ")}</td>
+            <td>${f.server_verified ? '<span class="verified-server">✔ Verificato</span>' : '<span class="unverified-server">—</span>'}</td>
+            <td><button onclick="selectHashForVerify('${f.hash}')">Hash</button></td>
+            <td><button onclick="toggleFav('${f.hash}')">${isFav ? "★" : "☆"}</button></td>
+            <td><button data-type="${f.type}" data-url="${f.cloud_url || ""}" data-hash="${f.hash}">Download</button></td>
+        `;
+        tbody.appendChild(tr);
+    });
+
+    document.querySelectorAll("#filesTable button[data-type]").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const type = btn.dataset.type;
+            const url = btn.dataset.url;
+            const hash = btn.dataset.hash;
+            const file = allFiles.find(x => x.hash === hash);
+            if (file) {
+                logDownload(file);
+                unlockBadge("firstDownload");
+                checkDownloadCountBadges();
+                queueDownload(file, type, url, hash);
+            }
+        });
+    });
+
+    renderFavorites();
+    renderHistory();
+}
+
+function applyFilters() {
+    let filtered = [...allFiles];
+
+    const name = document.getElementById("filterName").value.toLowerCase();
+    const type = document.getElementById("filterType").value;
+    const sec = document.getElementById("filterSec").value;
+    const sortBy = document.getElementById("sortBy").value;
+
+    if (name) {
+        filtered = filtered.filter(f => (f.name || "").toLowerCase().includes(name));
+    }
+    if (type !== "all") {
+        filtered = filtered.filter(f => f.type === type);
+    }
+    if (sec !== "all") {
+        filtered = filtered.filter(f => f.security === sec);
+    }
+
+    if (sortBy === "name") {
+        filtered.sort((a,b) => (a.name || "").localeCompare(b.name || ""));
+    } else if (sortBy === "size") {
+        filtered.sort((a,b) => (a.size || "").localeCompare(b.size || ""));
+    } else if (sortBy === "security") {
+        filtered.sort((a,b) => (a.security || "").localeCompare(b.security || ""));
+    }
+
+    renderFiles(filtered);
+}
+
+/* DOWNLOAD MANAGER AVANZATO */
+function queueDownload(file, type, url, hash) {
+    downloadQueue.push({file, type, url, hash});
+    if (!activeDownload) processNextDownload();
+}
+
+function processNextDownload() {
+    if (downloadQueue.length === 0) {
+        activeDownload = null;
+        return;
+    }
+    activeDownload = downloadQueue.shift();
+    startDownloadManager(activeDownload.file, activeDownload.type, activeDownload.url, activeDownload.hash, processNextDownload);
+}
+
+function startDownloadManager(file, type, url, hash, onFinish) {
+    const win = document.getElementById("downloadWindow");
+    const bar = document.getElementById("downloadBar");
+    const status = document.getElementById("downloadStatus");
+    const nameBox = document.getElementById("downloadFileName");
+
+    nameBox.textContent = "File: " + file.name;
+    bar.style.width = "0%";
+    status.textContent = "Inizializzazione...";
+    win.style.display = "block";
+
+    let progress = 0;
+    let speed = 0;
+    let startTime = Date.now();
+
+    if (downloadTimer) clearInterval(downloadTimer);
+    downloadTimer = setInterval(() => {
+        const now = Date.now();
+        const elapsed = (now - startTime) / 1000;
+        const step = 5 + Math.random() * 15;
+        progress += step;
+        if (elapsed > 0) speed = progress / elapsed;
+
+        if (progress >= 100) {
+            progress = 100;
+            clearInterval(downloadTimer);
+            status.textContent = "Completato. Avvio download...";
+            setTimeout(() => {
+                win.style.display = "none";
+                if (type === "cloud") {
+                    if (url) window.open(url, "_blank");
+                } else {
+                    window.location.href = "/api/download/" + hash;
+                }
+                if (onFinish) onFinish();
+            }, 700);
+        } else {
+            const remaining = (100 - progress) / (speed || 1);
+            status.textContent = "Scaricamento... " + Math.floor(progress) + "% | Vel: " +
+                speed.toFixed(1) + "%/s | ETA: " + Math.max(1, Math.floor(remaining)) + "s";
+        }
+        bar.style.width = progress + "%";
+    }, 300);
+}
+
+function closeDownloadWindow() {
+    const win = document.getElementById("downloadWindow");
+    win.style.display = "none";
+    if (downloadTimer) clearInterval(downloadTimer);
+    activeDownload = null;
+}
+
+/* CRONOLOGIA */
+function logDownload(file) {
+    const raw = localStorage.getItem("matteoshare_history") || "[]";
+    const arr = JSON.parse(raw);
+    arr.push({
+        name: file.name,
+        time: new Date().toLocaleString(),
+        type: file.type,
+        size: file.size
+    });
+    localStorage.setItem("matteoshare_history", JSON.stringify(arr));
+}
+
+function renderHistory() {
+    const box = document.getElementById("historyList");
+    const raw = localStorage.getItem("matteoshare_history") || "[]";
+    const arr = JSON.parse(raw);
+    box.innerHTML = "";
+    arr.slice().reverse().forEach(h => {
+        const div = document.createElement("div");
+        div.textContent = `[${h.time}] ${h.name} (${h.size}) [${h.type}]`;
+        box.appendChild(div);
+    });
+}
+
+function clearHistory() {
+    localStorage.removeItem("matteoshare_history");
+    renderHistory();
+}
+
+/* PREFERITI */
+function getFavs() {
+    try { return JSON.parse(localStorage.getItem("matteoshare_favs") || "[]"); }
+    catch { return []; }
+}
+
+function saveFavs(arr) {
+    localStorage.setItem("matteoshare_favs", JSON.stringify(arr));
+}
+
+function toggleFav(hash) {
+    let favs = getFavs();
+    if (favs.includes(hash)) {
+        favs = favs.filter(h => h !== hash);
+    } else {
+        favs.push(hash);
+    }
+    saveFavs(favs);
+    renderFiles(allFiles);
+}
+
+function renderFavorites() {
+    const favs = getFavs();
+    const box = document.getElementById("favoritesList");
+    box.innerHTML = "";
+    const favFiles = allFiles.filter(f => favs.includes(f.hash));
+    favFiles.forEach(f => {
+        const div = document.createElement("div");
+        div.textContent = `${f.name} (${f.size}) [${f.security}]`;
+        box.appendChild(div);
+    });
+}
+
+/* RICHIESTA PUBBLICAZIONE */
+function openRequestWindow() {
+    document.getElementById("requestWindow").style.display = "block";
+    updateRequestPreview();
+}
+
+function closeRequestWindow() {
+    document.getElementById("requestWindow").style.display = "none";
+}
+
+function updateRequestPreview() {
+    const name = document.getElementById("reqName").value;
+    const desc = document.getElementById("reqDesc").value;
+    const size = document.getElementById("reqSize").value;
+    const sec = document.getElementById("reqSec").value;
+    const link = document.getElementById("reqLink").value;
+
+    const preview =
+        "Richiesta pubblicazione file:\n\n" +
+        "Nome: " + name + "\n" +
+        "Descrizione: " + desc + "\n" +
+        "Peso: " + size + "\n" +
+        "Sicurezza: " + sec + "\n" +
+        "Link: " + link + "\n\n" +
+        "Richiesta inviata tramite MatteoShare Web.";
+
+    document.getElementById("reqPreview").value = preview;
+}
+
+function copyRequestPreview() {
+    const ta = document.getElementById("reqPreview");
+    ta.select();
+    document.execCommand("copy");
+}
+
+function sendRequestEmail() {
+    updateRequestPreview();
+    const text = document.getElementById("reqPreview").value;
+    const subject = encodeURIComponent("Richiesta pubblicazione file");
+    const body = encodeURIComponent(text);
+    window.location.href = "mailto:club.dei.ninja.official@gmail.com?subject=" + subject + "&body=" + body;
+    closeRequestWindow();
+}
+
+/* CHAT GLOBALE (locale, con reazioni e mention) */
+function loadChatFromStorage() {
+    try {
+        chatMessages = JSON.parse(localStorage.getItem("matteoshare_chat") || "[]");
+    } catch {
+        chatMessages = [];
+    }
+}
+
+function saveChatToStorage() {
+    localStorage.setItem("matteoshare_chat", JSON.stringify(chatMessages));
+}
+
+function highlightMentions(text, myName) {
+    if (!myName) return text;
+    const safeName = myName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const pattern = new RegExp("@" + safeName, "gi");
+    return text.replace(pattern, m => "<span class='mention'>" + m + "</span>");
+}
+
+function renderChat() {
+    const box = document.getElementById("chatMessages");
+    box.innerHTML = "";
+    const channel = document.getElementById("chatChannel").value;
+    const acc = loadAccountFromStorage();
+    const myName = acc ? acc.name : "";
+
+    const isAdmin = acc && acc.admin;
+
+    chatMessages
+        .filter(m => m.channel === channel)
+        .forEach(m => {
+            const div = document.createElement("div");
+            let text = "[" + m.time + "] " + m.user + ": " + m.text;
+            text = highlightMentions(text, myName);
+            div.innerHTML = text + " ";
+
+            const reactionsSpan = document.createElement("span");
+            reactionsSpan.style.fontSize = "10px";
+            reactionsSpan.textContent = m.reactions ? " " + m.reactions.join(" ") : "";
+            div.appendChild(reactionsSpan);
+
+            if (isAdmin) {
+                const delBtn = document.createElement("button");
+                delBtn.textContent = "X";
+                delBtn.className = "reaction-btn";
+                delBtn.onclick = () => deleteChatMessage(m.id);
+                div.appendChild(delBtn);
+            }
+
+            ["👍","❤️","😂"].forEach(r => {
+                const btn = document.createElement("button");
+                btn.textContent = r;
+                btn.className = "reaction-btn";
+                btn.onclick = () => addReaction(m.id, r);
+                div.appendChild(btn);
+            });
+
+            box.appendChild(div);
+        });
+
+    box.scrollTop = box.scrollHeight;
+
+    const mini = document.getElementById("miniChat");
+    mini.innerHTML = "";
+    chatMessages.slice(-10).forEach(m => {
+        const d = document.createElement("div");
+        d.textContent = m.user + ": " + m.text;
+        mini.appendChild(d);
+    });
+    mini.scrollTop = mini.scrollHeight;
+}
+
+function sendChatMessage() {
+    if (!isConnected()) {
+        showNotify("Devi essere connesso per inviare messaggi.");
+        return;
+    }
+    const input = document.getElementById("chatInput");
+    const text = input.value.trim();
+    if (!text) return;
+
+    const acc = loadAccountFromStorage();
+    const user = acc && acc.name ? acc.name : "Anon";
+    const channel = document.getElementById("chatChannel").value;
+
+    const msg = {
+        id: "msg-" + Date.now() + "-" + Math.random().toString(36).substring(2,6),
+        user,
+        text,
+        channel,
+        time: new Date().toLocaleTimeString(),
+        reactions: []
+    };
+    chatMessages.push(msg);
+    saveChatToStorage();
+    input.value = "";
+    renderChat();
+    unlockBadge("firstChat");
+}
+
+function deleteChatMessage(id) {
+    chatMessages = chatMessages.filter(m => m.id !== id);
+    saveChatToStorage();
+    renderChat();
+}
+
+function addReaction(id, reaction) {
+    const msg = chatMessages.find(m => m.id === id);
+    if (!msg) return;
+    if (!msg.reactions) msg.reactions = [];
+    msg.reactions.push(reaction);
+    saveChatToStorage();
+    renderChat();
+}
+
+function sendMiniChat() {
+    const v = document.getElementById("miniInput").value;
+    document.getElementById("chatInput").value = v;
+    sendChatMessage();
+    document.getElementById("miniInput").value = "";
+}
+
+/* MINI PLAYER */
+function openMiniPlayer() {
+    document.getElementById("miniPlayer").style.display = "block";
+}
+
+function closeMiniPlayer() {
+    document.getElementById("miniPlayer").style.display = "none";
+}
+
+/* CHAT PRIVATA P2P (locale) */
+function openPrivateChat(peerId, peerName) {
+    currentPrivatePeer = { id: peerId, name: peerName };
+    document.getElementById("privateChatTitle").textContent = "Chat con " + peerName;
+    document.getElementById("privateChatWindow").style.display = "block";
+    renderPrivateChat();
+}
+
+function closePrivateChat() {
+    document.getElementById("privateChatWindow").style.display = "none";
+    currentPrivatePeer = null;
+}
+
+function getPrivateChatKey(peerId) {
+    const acc = loadAccountFromStorage();
+    const myId = acc ? acc.id : "ME";
+    return "pc_" + [myId, peerId].sort().join("_");
+}
+
+function loadPrivateChat(peerId) {
+    const key = getPrivateChatKey(peerId);
+    try {
+        privateChats[key] = JSON.parse(localStorage.getItem("matteoshare_private_" + key) || "[]");
+    } catch {
+        privateChats[key] = [];
+    }
+}
+
+function savePrivateChat(peerId) {
+    const key = getPrivateChatKey(peerId);
+    localStorage.setItem("matteoshare_private_" + key, JSON.stringify(privateChats[key] || []));
+}
+
+function renderPrivateChat() {
+    if (!currentPrivatePeer) return;
+    const peerId = currentPrivatePeer.id;
+    loadPrivateChat(peerId);
+    const key = getPrivateChatKey(peerId);
+    const msgs = privateChats[key] || [];
+    const box = document.getElementById("privateChatMessages");
+    box.innerHTML = "";
+    msgs.forEach(m => {
+        const div = document.createElement("div");
+        div.textContent = "[" + m.time + "] " + m.user + ": " + m.text;
+        box.appendChild(div);
+    });
+    box.scrollTop = box.scrollHeight;
+}
+
+function sendPrivateChat() {
+    if (!currentPrivatePeer) return;
+    if (!isConnected()) {
+        showNotify("Devi essere connesso per usare la chat privata.");
+        return;
+    }
+    const input = document.getElementById("privateChatInput");
+    const text = input.value.trim();
+    if (!text) return;
+
+    const acc = loadAccountFromStorage();
+    const user = acc && acc.name ? acc.name : "Anon";
+    const peerId = currentPrivatePeer.id;
+
+    loadPrivateChat(peerId);
+    const key = getPrivateChatKey(peerId);
+    if (!privateChats[key]) privateChats[key] = [];
+    privateChats[key].push({
+        user,
+        text,
+        time: new Date().toLocaleTimeString()
+    });
+    savePrivateChat(peerId);
+    input.value = "";
+    renderPrivateChat();
+    showNotify("Messaggio privato inviato (simulato).");
+}
+
+/* PEER / PROFILI + REPUTAZIONE (locale) */
+function getReputation() {
+    try {
+        return JSON.parse(localStorage.getItem("matteoshare_rep") || "{}");
+    } catch {
+        return {};
+    }
+}
+
+function saveReputation(rep) {
+    localStorage.setItem("matteoshare_rep", JSON.stringify(rep));
+}
+
+function addReputation(peerId, delta) {
+    const rep = getReputation();
+    rep[peerId] = (rep[peerId] || 0) + delta;
+    saveReputation(rep);
+    renderPeers();
+}
+
+function renderPeers() {
+    const box = document.getElementById("peersList");
+    box.innerHTML = "";
+
+    const acc = loadAccountFromStorage();
+    const rep = getReputation();
+    const isAdmin = acc && acc.admin;
+
+    const peers = [];
+
+    if (acc) {
+        peers.push({
+            id: acc.id,
+            name: acc.name,
+            online: isConnected(),
+            bio: acc.bio || "",
+            score: rep[acc.id] || 0,
+            self: true
+        });
+    }
+
+    peers.push({
+        id: "PEER-1234",
+        name: "RetroUser",
+        online: true,
+        bio: "Ama i sistemi operativi vecchi.",
+        score: rep["PEER-1234"] || 5,
+        self: false
+    });
+
+    peers.push({
+        id: "PEER-5678",
+        name: "Gamer98",
+        online: false,
+        bio: "Giocatore LAN party.",
+        score: rep["PEER-5678"] || 2,
+        self: false
+    });
+
+    peers.forEach(p => {
+        const div = document.createElement("div");
+        div.className = "peer-item";
+        const left = document.createElement("div");
+        const right = document.createElement("div");
+
+        left.innerHTML = `<b>${p.name}</b> (${p.id})<br><span style="font-size:10px;">${p.bio}</span>`;
+        right.innerHTML = `
+            <span class="${p.online ? 'status-online' : 'status-offline'}">
+                ${p.online ? 'ONLINE' : 'OFFLINE'}
+            </span><br>
+            <span class="rep-score">Rep: ${p.score}</span>
+        `;
+
+        if (!p.self) {
+            const chatBtn = document.createElement("button");
+            chatBtn.textContent = "Chat";
+            chatBtn.style.fontSize = "9px";
+            chatBtn.onclick = () => openPrivateChat(p.id, p.name);
+            right.appendChild(document.createElement("br"));
+            right.appendChild(chatBtn);
+        }
+
+        if (isAdmin && !p.self) {
+            const plusBtn = document.createElement("button");
+            plusBtn.textContent = "+Rep";
+            plusBtn.style.fontSize = "9px";
+            plusBtn.onclick = () => addReputation(p.id, 1);
+            right.appendChild(plusBtn);
+        }
+
+        div.appendChild(left);
+        div.appendChild(right);
+        box.appendChild(div);
+    });
+}
+
+/* SOCIAL 2.0: STATO, WALL, AMICI */
+function getSocialData() {
+    try {
+        return JSON.parse(localStorage.getItem("matteoshare_social") || "{}");
+    } catch {
+        return {};
+    }
+}
+
+function saveSocialData(data) {
+    localStorage.setItem("matteoshare_social", JSON.stringify(data));
+}
+
+function loadSocialUI() {
+    const data = getSocialData();
+    document.getElementById("socialStatus").value = data.status || "";
+    renderWall();
+    renderFriends();
+}
+
+function saveSocialStatus() {
+    const data = getSocialData();
+    data.status = document.getElementById("socialStatus").value;
+    saveSocialData(data);
+    showNotify("Stato aggiornato.");
+}
+
+function addWallPost() {
+    const text = document.getElementById("socialPost").value.trim();
+    if (!text) return;
+    const data = getSocialData();
+    if (!data.wall) data.wall = [];
+    const acc = loadAccountFromStorage();
+    data.wall.push({
+        time: new Date().toLocaleString(),
+        text,
+        author: acc && acc.name ? acc.name : "Tu"
+    });
+    saveSocialData(data);
+    document.getElementById("socialPost").value = "";
+    renderWall();
+}
+
+function renderWall() {
+    const box = document.getElementById("wallBox");
+    const data = getSocialData();
+    const wall = data.wall || [];
+    box.innerHTML = "";
+    wall.slice().reverse().forEach(p => {
+        const div = document.createElement("div");
+        div.style.borderBottom = "1px solid #ddd";
+        div.style.marginBottom = "3px";
+        div.innerHTML = `<b>${p.author}</b> [${p.time}]<br>${p.text}`;
+        box.appendChild(div);
+    });
+}
+
+function addFriend() {
+    const id = document.getElementById("friendId").value.trim();
+    if (!id) return;
+    const data = getSocialData();
+    if (!data.friends) data.friends = [];
+    if (!data.friends.includes(id)) {
+        data.friends.push(id);
+        saveSocialData(data);
+        renderFriends();
+        document.getElementById("friendId").value = "";
+        showNotify("Amico aggiunto: " + id);
+    }
+}
+
+function renderFriends() {
+    const box = document.getElementById("friendsBox");
+    const data = getSocialData();
+    const friends = data.friends || [];
+    box.innerHTML = "";
+    if (friends.length === 0) {
+        box.textContent = "Nessun amico aggiunto.";
+        return;
+    }
+    friends.forEach(id => {
+        const div = document.createElement("div");
+        div.className = "friend-item";
+        div.textContent = id;
+        box.appendChild(div);
+    });
+}
+
+/* ACCOUNT + AVATAR + TEMA */
+function generateId() {
+    return "MS-" + Math.random().toString(36).substring(2, 10).toUpperCase();
+}
+
+function loadAccountFromStorage() {
+    try {
+        const raw = localStorage.getItem("matteoshare_account");
+        if (!raw) return null;
+        return JSON.parse(raw);
+    } catch (e) {
+        return null;
+    }
+}
+
+function saveAccountToStorage(acc) {
+    localStorage.setItem("matteoshare_account", JSON.stringify(acc));
+}
+
+function refreshAccountUI() {
+    const acc = loadAccountFromStorage();
+    const nameLabel = document.getElementById("accountNameLabel");
+    const idLabel = document.getElementById("accountIdLabel");
+    const statusLabel = document.getElementById("accountStatusLabel");
+    const avatar = document.getElementById("avatarBox");
+    const themeSelect = document.getElementById("themeSelect");
+
+    if (acc) {
+        nameLabel.textContent = "Account: " + (acc.name || "(senza nome)");
+        idLabel.textContent = "ID: " + (acc.id || "-");
+
+        document.getElementById("accName").value = acc.name || "";
+        document.getElementById("accId").value = acc.id || "";
+        document.getElementById("accBio").value = acc.bio || "";
+        document.getElementById("accSounds").checked = !!acc.sounds;
+        document.getElementById("accDark").checked = !!acc.dark;
+        document.getElementById("accAdmin").checked = !!acc.admin;
+
+        avatar.textContent = (acc.name || "MS").substring(0,2).toUpperCase();
+        if (acc.avatarPixels) {
+            applyAvatarPixelsToEditor(acc.avatarPixels);
+        }
+
+        const theme = acc.theme || "default";
+        themeSelect.value = theme;
+        applyTheme(theme);
+    } else {
+        nameLabel.textContent = "Account: (nessun account)";
+        idLabel.textContent = "ID: -";
+        avatar.textContent = "MS";
+    }
+
+    statusLabel.textContent = "Stato: " + (isConnected() ? "ONLINE" : "OFFLINE");
+    renderBadges();
+}
+
+function saveAccount() {
+    let name = document.getElementById("accName").value.trim();
+    let id = document.getElementById("accId").value.trim();
+    const bio = document.getElementById("accBio").value;
+    const sounds = document.getElementById("accSounds").checked;
+    const dark = document.getElementById("accDark").checked;
+    const admin = document.getElementById("accAdmin").checked;
+    const theme = document.getElementById("themeSelect").value;
+    const avatarPixels = readAvatarPixelsFromEditor();
+
+    if (!name) name = "Utente MatteoShare";
+    if (!id) id = generateId();
+
+    const acc = { name, id, sounds, dark, admin, theme, avatarPixels, bio };
+    saveAccountToStorage(acc);
+    refreshAccountUI();
+    backupAccount();
+    renderPeers();
+}
+
+/* AVATAR PIXEL-ART */
+function initAvatarEditor() {
+    const editor = document.getElementById("avatarEditor");
+    editor.innerHTML = "";
+    for (let i=0;i<16;i++) {
+        const div = document.createElement("div");
+        div.className = "avatar-pixel";
+        div.dataset.colorIndex = "0";
+        div.style.backgroundColor = avatarColors[0];
+        div.onclick = () => {
+            let idx = parseInt(div.dataset.colorIndex,10);
+            idx = (idx + 1) % avatarColors.length;
+            div.dataset.colorIndex = idx.toString();
+            div.style.backgroundColor = avatarColors[idx];
+        };
+        editor.appendChild(div);
+    }
+}
+
+function readAvatarPixelsFromEditor() {
+    const editor = document.getElementById("avatarEditor");
+    const pixels = Array.from(editor.querySelectorAll(".avatar-pixel"));
+    const matrix = [];
+    for (let r=0;r<4;r++) {
+        const row = [];
+        for (let c=0;c<4;c++) {
+            const idx = r*4 + c;
+            row.push(parseInt(pixels[idx].dataset.colorIndex,10));
+        }
+        matrix.push(row);
+    }
+    return matrix;
+}
+
+function applyAvatarPixelsToEditor(matrix) {
+    const editor = document.getElementById("avatarEditor");
+    const pixels = Array.from(editor.querySelectorAll(".avatar-pixel"));
+    for (let r=0;r<4;r++) {
+        for (let c=0;c<4;c++) {
+            const idx = r*4 + c;
+            const colorIndex = matrix[r][c] || 0;
+            pixels[idx].dataset.colorIndex = colorIndex.toString();
+            pixels[idx].style.backgroundColor = avatarColors[colorIndex];
+        }
+    }
+}
+
+/* TEMA */
+function applyTheme(theme) {
+    document.body.className = "theme-" + theme;
+}
+
+function changeTheme() {
+    const theme = document.getElementById("themeSelect").value;
+    applyTheme(theme);
+    const acc = loadAccountFromStorage();
+    if (acc) {
+        acc.theme = theme;
+        saveAccountToStorage(acc);
+    }
+}
+
+/* OFFLINE MODE */
+function setOffline(isOffline) {
+    const banner = document.getElementById("offlineBanner");
+    banner.style.display = isOffline ? "block" : "none";
+}
+
+/* BADGE */
+function getBadges() {
+    const raw = localStorage.getItem("matteoshare_badges") || "{}";
+    return JSON.parse(raw);
+}
+
+function saveBadges(b) {
+    localStorage.setItem("matteoshare_badges", JSON.stringify(b));
+}
+
+function unlockBadge(key) {
+    const badges = getBadges();
+    if (!badges[key]) {
+        badges[key] = true;
+        saveBadges(badges);
+        showNotify("Nuovo badge sbloccato: " + badgeDefinitions[key].label);
+        renderBadges();
+    }
+}
+
+function checkDownloadCountBadges() {
+    const raw = localStorage.getItem("matteoshare_history") || "[]";
+    const arr = JSON.parse(raw);
+    if (arr.length >= 1) unlockBadge("firstDownload");
+    if (arr.length >= 10) unlockBadge("tenDownloads");
+    if (arr.length >= 50) unlockBadge("fiftyDownloads");
+}
+
+const badgeDefinitions = {
+    firstDownload: { label: "Primo download" },
+    tenDownloads: { label: "10 download" },
+    fiftyDownloads: { label: "50 download" },
+    firstChat: { label: "Primo messaggio in chat" },
+    veteran: { label: "Account veterano (30 giorni)" }
+};
+
+function renderBadges() {
+    const box = document.getElementById("badgeList");
+    const badges = getBadges();
+    box.innerHTML = "";
+    Object.keys(badgeDefinitions).forEach(key => {
+        const def = badgeDefinitions[key];
+        const unlocked = !!badges[key];
+        const div = document.createElement("div");
+        div.className = unlocked ? "badge-unlocked" : "badge-locked";
+        div.textContent = (unlocked ? "✔ " : "✖ ") + def.label;
+        box.appendChild(div);
+    });
+}
+
+/* STATISTICHE */
+function updateStats() {
+    const box = document.getElementById("statsBox");
+    const historyRaw = localStorage.getItem("matteoshare_history") || "[]";
+    const history = JSON.parse(historyRaw);
+    const totalDownloads = history.length;
+    const totalFiles = allFiles.length;
+    const totalChat = chatMessages.length;
+
+    let mostDownloaded = "N/D";
+    if (history.length > 0) {
+        const countMap = {};
+        history.forEach(h => {
+            countMap[h.name] = (countMap[h.name] || 0) + 1;
+        });
+        let maxName = null, maxCount = 0;
+        Object.keys(countMap).forEach(name => {
+            if (countMap[name] > maxCount) {
+                maxCount = countMap[name];
+                maxName = name;
+            }
+        });
+        mostDownloaded = maxName + " (" + maxCount + " download)";
+    }
+
+    box.innerHTML = `
+        File totali (da server): ${totalFiles}<br>
+        Download totali (locale): ${totalDownloads}<br>
+        File più scaricato (locale): ${mostDownloaded}<br>
+        Messaggi in chat (locale): ${totalChat}
+    `;
+}
+
+/* PLUGIN SYSTEM BASE */
+function getPlugins() {
+    const raw = localStorage.getItem("matteoshare_plugins") || "[]";
+    return JSON.parse(raw);
+}
+
+function savePlugins(p) {
+    localStorage.setItem("matteoshare_plugins", JSON.stringify(p));
+}
+
+function loadPluginFile(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const plugin = JSON.parse(e.target.result);
+            applyPlugin(plugin);
+            const plugins = getPlugins();
+            plugins.push(plugin);
+            savePlugins(plugins);
+            renderPlugins();
+            showNotify("Plugin caricato: " + (plugin.name || "Senza nome"));
+        } catch (err) {
+            alert("Plugin non valido.");
+        }
+    };
+    reader.readAsText(file);
+}
+
+function applyPlugin(plugin) {
+    if (plugin.css) {
+        const style = document.createElement("style");
+        style.textContent = plugin.css;
+        document.head.appendChild(style);
+    }
+    if (plugin.js) {
+        const script = document.createElement("script");
+        script.textContent = plugin.js;
+        document.body.appendChild(script);
+    }
+}
+
+function renderPlugins() {
+    const box = document.getElementById("pluginList");
+    const plugins = getPlugins();
+    box.innerHTML = "";
+    plugins.forEach((p, i) => {
+        const div = document.createElement("div");
+        div.textContent = (i+1) + ". " + (p.name || "Plugin senza nome");
+        box.appendChild(div);
+    });
+}
+
+/* BACKUP AUTOMATICO */
+function backupAccount() {
+    const acc = loadAccountFromStorage();
+    if (!acc) return;
+    const backup = {
+        time: new Date().toISOString(),
+        account: acc
+    };
+    localStorage.setItem("matteoshare_backup", JSON.stringify(backup));
+}
+
+/* EXPORT / IMPORT ACCOUNT */
+function exportAccount() {
+    const acc = loadAccountFromStorage();
+    if (!acc) {
+        alert("Nessun account da esportare.");
+        return;
+    }
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(acc, null, 2));
+    const a = document.createElement("a");
+    a.href = dataStr;
+    a.download = "matteoshare_account.json";
+    a.click();
+}
+
+function importAccountFile(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const acc = JSON.parse(e.target.result);
+            saveAccountToStorage(acc);
+            refreshAccountUI();
+            renderPeers();
+            showNotify("Account importato.");
+        } catch (err) {
+            alert("File account non valido.");
+        }
+    };
+    reader.readAsText(file);
+}
+
+/* CONNESSIONE REALE (locale) */
+function isConnected() {
+    return localStorage.getItem("matteoshare_connected") === "1";
+}
+
+function setConnected(state) {
+    localStorage.setItem("matteoshare_connected", state ? "1" : "0");
+    const btn = document.getElementById("connectBtn");
+    const statusLabel = document.getElementById("accountStatusLabel");
+    if (state) {
+        btn.textContent = "Disconnetti";
+        statusLabel.textContent = "Stato: ONLINE";
+        showNotify("Connesso (simulazione locale).");
+    } else {
+        btn.textContent = "Connetti";
+        statusLabel.textContent = "Stato: OFFLINE";
+        showNotify("Disconnesso.");
+    }
+    renderPeers();
+}
+
+function toggleConnection() {
+    setConnected(!isConnected());
+}
+
+/* HASH: SELEZIONE E VERIFICA (simulata) */
+function selectHashForVerify(hash) {
+    selectedHashForVerify = hash;
+    document.getElementById("verifyHashResult").textContent = "Hash selezionato: " + hash;
+}
+
+function verifyHash() {
+    if (!selectedHashForVerify) {
+        document.getElementById("verifyHashResult").textContent = "Seleziona prima un file (pulsante Hash).";
+        return;
+    }
+    const expected = document.getElementById("verifyHashInput").value.trim();
+    if (!expected) {
+        document.getElementById("verifyHashResult").textContent = "Inserisci un hash atteso.";
+        return;
+    }
+    if (expected === selectedHashForVerify) {
+        document.getElementById("verifyHashResult").textContent = "OK: hash corrispondente.";
+        logSecurity("Verifica hash OK per " + selectedHashForVerify);
+    } else {
+        document.getElementById("verifyHashResult").textContent = "ATTENZIONE: hash NON corrispondente.";
+        logSecurity("Verifica hash FALLITA per " + selectedHashForVerify);
+    }
+}
+
+/* INIT */
+function reloadAllServers() {
+    loadFiles();
+}
+
+function init() {
+    initAvatarEditor();
+    loadAccountFromStorage();
+    refreshAccountUI();
+    renderBadges();
+    renderPlugins();
+    renderServerList();
+    loadChatFromStorage();
+    renderChat();
+    renderPeers();
+    renderHistory();
+    renderFavorites();
+    updateStats();
+    loadSafeModeUI();
+    loadBannedServersUI();
+    renderSecurityLog();
+    loadSocialUI();
+    showSection("files");
+    loadFiles();
+
+    if (isConnected()) setConnected(true);
+}
+
+init();
+</script>
+
+</body>
+</html>
