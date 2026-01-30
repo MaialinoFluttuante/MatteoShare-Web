@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>MatteoShare Web – Ultimate++</title>
+    <title>MatteoShare Web – Versione Completa</title>
     <style>
         :root {
             --bg-main: #3a6ea5;
@@ -428,6 +428,30 @@
             margin-bottom:3px;
         }
 
+        .news-list {
+            background:white;
+            border:1px solid #a7a6aa;
+            padding:4px;
+            max-height:260px;
+            overflow-y:auto;
+            font-size:11px;
+        }
+
+        .news-item {
+            border-bottom:1px solid #ddd;
+            margin-bottom:4px;
+            padding-bottom:3px;
+        }
+
+        .news-title {
+            font-weight:bold;
+        }
+
+        .news-date {
+            font-size:10px;
+            color:#555;
+        }
+
         @keyframes winOpen {
             from { transform:scale(0.9); opacity:0; }
             to { transform:scale(1); opacity:1; }
@@ -463,6 +487,7 @@
     <div class="sidebar">
         <h3>Menu</h3>
         <button onclick="showSection('files')">File Condivisi</button>
+        <button onclick="showSection('news')">News</button>
         <button onclick="showSection('request')">Richiesta Pubblicazione</button>
         <button onclick="showSection('chat')">Chat Globale</button>
         <button onclick="showSection('peers')">Peer / Profili</button>
@@ -526,13 +551,20 @@
                         <th>Tipo</th>
                         <th>Tag</th>
                         <th>Server</th>
-                        <th>Hash</th>
+                        <th>Link</th>
                         <th>Preferito</th>
                         <th>Download</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
             </table>
+        </div>
+
+        <!-- NEWS -->
+        <div id="section-news" class="panel" style="display:none;">
+            <h2>News / Messaggi del creatore</h2>
+            <p style="font-size:11px;">Questa sezione legge i messaggi da un Google Sheets (solo lettura).</p>
+            <div id="newsList" class="news-list"></div>
         </div>
 
         <!-- RICHIESTA PUBBLICAZIONE -->
@@ -633,6 +665,12 @@
             <h2>Sicurezza & Integrità</h2>
             <div class="account-field">
                 <label><input type="checkbox" id="safeMode" onchange="toggleSafeMode()"> Modalità Safe Mode (solo server verificati)</label>
+            </div>
+            <div class="account-field">
+                <label><input type="checkbox" id="onlyVerifiedFiles" onchange="toggleOnlyVerifiedFiles()"> Mostra solo file verificati</label>
+            </div>
+            <div class="account-field">
+                <label><input type="checkbox" id="obfuscateProtocol" onchange="toggleObfuscateProtocol()"> Offusca protocollo nei link (https → hxxps)</label>
             </div>
             <div class="account-field">
                 <label>Server bannati (uno per riga)</label>
@@ -752,7 +790,7 @@
             </select>
         </div>
         <div class="account-field">
-            <label>Link (Google Drive / Mega)</label>
+            <label>Link (Google Drive / Mega / GitHub Pages)</label>
             <input id="reqLink" style="width:98%;">
         </div>
 
@@ -812,9 +850,12 @@
 <div id="notifyBox"></div>
 
 <script>
+/* COSTANTI */
+const DEFAULT_SERVER_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR0JBmDzlXu9-Mr4hG1TSr5lkuHf8vJjBtkljZ-Kqa8gFoRx84r5EJ-xFfB0fE7vqlB06aW8jmYBUrg/pub?gid=0&single=true&output=csv";
+const NEWS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSOlGHBjwu4fcWoNNXfgS_cZWR2O7lQyzwPxTA9BRZ6N-DXJXeWMRn6hfJfzaba-JpWWmnfRu0or2iP/pub?gid=0&single=true&output=csv";
+
 /* GLOBALI */
 let allFiles = [];
-let lastFilesCount = 0;
 let downloadTimer = null;
 let downloadQueue = [];
 let activeDownload = null;
@@ -826,10 +867,12 @@ let currentPrivatePeer = null;
 let avatarColors = ["#f7f7f7", "#000000", "#1f5fa9", "#ff0000", "#00aa00", "#ffaa00"];
 
 let selectedHashForVerify = null;
+let onlyVerifiedFilesFlag = false;
+let obfuscateProtocolFlag = false;
 
 /* SEZIONI */
 function showSection(name) {
-    const ids = ["files","request","chat","peers","social","history","favorites","badges","stats","security","account","admin","plugins","server"];
+    const ids = ["files","news","request","chat","peers","social","history","favorites","badges","stats","security","account","admin","plugins","server"];
     ids.forEach(id => {
         document.getElementById("section-" + id).style.display = (id === name) ? "block" : "none";
     });
@@ -859,9 +902,7 @@ function parseCSV(text) {
     });
 }
 
-/* SERVER MULTIPLI + DEFAULT */
-const DEFAULT_SERVER_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR0JBmDzlXu9-Mr4hG1TSr5lkuHf8vJjBtkljZ-Kqa8gFoRx84r5EJ-xFfB0fE7vqlB06aW8jmYBUrg/pub?gid=0&single=true&output=csv";
-
+/* SERVER MULTIPLI */
 function getServers() {
     try {
         let servers = JSON.parse(localStorage.getItem("matteoshare_servers") || "[]");
@@ -1006,7 +1047,7 @@ function autoTagFile(f) {
     return f;
 }
 
-/* SICUREZZA: BANNED SERVER + SAFE MODE + LOG */
+/* SICUREZZA: BANNED SERVER + SAFE MODE + LOG + SOLO VERIFICATI + OFFUSCA PROTOCOLLO */
 function getBannedServers() {
     try {
         return JSON.parse(localStorage.getItem("matteoshare_banned_servers") || "[]");
@@ -1045,6 +1086,16 @@ function toggleSafeMode() {
 
 function loadSafeModeUI() {
     document.getElementById("safeMode").checked = isSafeMode();
+}
+
+function toggleOnlyVerifiedFiles() {
+    onlyVerifiedFilesFlag = document.getElementById("onlyVerifiedFiles").checked;
+    applyFilters();
+}
+
+function toggleObfuscateProtocol() {
+    obfuscateProtocolFlag = document.getElementById("obfuscateProtocol").checked;
+    renderFiles(allFiles);
 }
 
 function logSecurity(msg) {
@@ -1114,16 +1165,17 @@ async function loadFiles() {
         }
     }
 
-    const oldCount = allFiles.length;
     allFiles = combined;
     renderFiles(allFiles);
-    if (allFiles.length > oldCount) {
-        showNotify("Nuovi file disponibili dai server.");
-    }
-    lastFilesCount = allFiles.length;
     setOffline(false);
     updateStats();
     renderServerStats();
+}
+
+function obfuscateUrl(url) {
+    if (!url) return "";
+    if (!obfuscateProtocolFlag) return url;
+    return url.replace(/^https:/i, "hxxps:").replace(/^http:/i, "hxxp:");
 }
 
 function renderFiles(files) {
@@ -1132,9 +1184,15 @@ function renderFiles(files) {
 
     const favs = getFavs();
 
-    files.forEach(f => {
+    let list = [...files];
+    if (onlyVerifiedFilesFlag) {
+        list = list.filter(f => f.security === "VERIFICATO");
+    }
+
+    list.forEach(f => {
         const isFav = favs.includes(f.hash);
         const tr = document.createElement("tr");
+        const displayUrl = obfuscateUrl(f.cloud_url || "");
         tr.innerHTML = `
             <td>${f.name}</td>
             <td>${f.description || ""}</td>
@@ -1143,16 +1201,15 @@ function renderFiles(files) {
             <td>${f.type}</td>
             <td>${(f.tags || []).join(", ")}</td>
             <td>${f.server_verified ? '<span class="verified-server">✔ Verificato</span>' : '<span class="unverified-server">—</span>'}</td>
-            <td><button onclick="selectHashForVerify('${f.hash}')">Hash</button></td>
+            <td>${displayUrl ? '<span style="font-size:10px;">'+displayUrl+'</span>' : ''}</td>
             <td><button onclick="toggleFav('${f.hash}')">${isFav ? "★" : "☆"}</button></td>
-            <td><button data-type="${f.type}" data-url="${f.cloud_url || ""}" data-hash="${f.hash}">Download</button></td>
+            <td><button data-url="${f.cloud_url || ""}" data-hash="${f.hash}">Download</button></td>
         `;
         tbody.appendChild(tr);
     });
 
-    document.querySelectorAll("#filesTable button[data-type]").forEach(btn => {
+    document.querySelectorAll("#filesTable button[data-url]").forEach(btn => {
         btn.addEventListener("click", () => {
-            const type = btn.dataset.type;
             const url = btn.dataset.url;
             const hash = btn.dataset.hash;
             const file = allFiles.find(x => x.hash === hash);
@@ -1160,7 +1217,7 @@ function renderFiles(files) {
                 logDownload(file);
                 unlockBadge("firstDownload");
                 checkDownloadCountBadges();
-                queueDownload(file, type, url, hash);
+                queueDownload(file, url, hash);
             }
         });
     });
@@ -1198,9 +1255,9 @@ function applyFilters() {
     renderFiles(filtered);
 }
 
-/* DOWNLOAD MANAGER AVANZATO */
-function queueDownload(file, type, url, hash) {
-    downloadQueue.push({file, type, url, hash});
+/* DOWNLOAD MANAGER – TUTTO VIA LINK */
+function queueDownload(file, url, hash) {
+    downloadQueue.push({file, url, hash});
     if (!activeDownload) processNextDownload();
 }
 
@@ -1210,10 +1267,10 @@ function processNextDownload() {
         return;
     }
     activeDownload = downloadQueue.shift();
-    startDownloadManager(activeDownload.file, activeDownload.type, activeDownload.url, activeDownload.hash, processNextDownload);
+    startDownloadManager(activeDownload.file, activeDownload.url, activeDownload.hash, processNextDownload);
 }
 
-function startDownloadManager(file, type, url, hash, onFinish) {
+function startDownloadManager(file, url, hash, onFinish) {
     const win = document.getElementById("downloadWindow");
     const bar = document.getElementById("downloadBar");
     const status = document.getElementById("downloadStatus");
@@ -1242,10 +1299,10 @@ function startDownloadManager(file, type, url, hash, onFinish) {
             status.textContent = "Completato. Avvio download...";
             setTimeout(() => {
                 win.style.display = "none";
-                if (type === "cloud") {
-                    if (url) window.open(url, "_blank");
+                if (url) {
+                    window.location.href = url;
                 } else {
-                    window.location.href = "/api/download/" + hash;
+                    alert("Nessun link disponibile per questo file.");
                 }
                 if (onFinish) onFinish();
             }, 700);
@@ -2139,6 +2196,41 @@ function verifyHash() {
     }
 }
 
+/* NEWS DA GOOGLE SHEETS */
+async function loadNews() {
+    try {
+        const res = await fetch(NEWS_CSV_URL);
+        const csv = await res.text();
+        const rows = parseCSV(csv);
+        renderNews(rows);
+    } catch (e) {
+        const box = document.getElementById("newsList");
+        box.innerHTML = "Impossibile caricare le news.";
+    }
+}
+
+function renderNews(rows) {
+    const box = document.getElementById("newsList");
+    box.innerHTML = "";
+    if (!rows || rows.length === 0) {
+        box.textContent = "Nessuna news disponibile.";
+        return;
+    }
+    rows.slice().reverse().forEach(r => {
+        const div = document.createElement("div");
+        div.className = "news-item";
+        const title = r.title || r.Titolo || r.titolo || "";
+        const msg = r.message || r.Messaggio || r.messaggio || "";
+        const date = r.date || r.Data || r.data || "";
+        div.innerHTML = `
+            <div class="news-title">${title || "(senza titolo)"}</div>
+            <div class="news-date">${date}</div>
+            <div>${msg}</div>
+        `;
+        box.appendChild(div);
+    });
+}
+
 /* INIT */
 function reloadAllServers() {
     loadFiles();
@@ -2146,7 +2238,6 @@ function reloadAllServers() {
 
 function init() {
     initAvatarEditor();
-    loadAccountFromStorage();
     refreshAccountUI();
     renderBadges();
     renderPlugins();
@@ -2161,6 +2252,7 @@ function init() {
     loadBannedServersUI();
     renderSecurityLog();
     loadSocialUI();
+    loadNews();
     showSection("files");
     loadFiles();
 
