@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>MatteoShare Web – Versione Completa 100%</title>
+    <title>MatteoShare Web – Versione Completa 100% (Compatibile Google Sheets)</title>
     <style>
         :root {
             --bg-main: #141b2b;
@@ -544,7 +544,7 @@
     <div class="title-block">
         <h1>MatteoShare Web</h1>
         <p>Programmed by <strong>Angelini Matteo</strong> – Social 3.0, Sicurezza & Auto‑Update Intelligente</p>
-        <span class="version-label" id="versionLabel">Build 2.0.0 – Auto‑update intelligente attivo</span>
+        <span class="version-label" id="versionLabel">Build 2.0.0 – Compatibile con Google Sheets (nome, url, size, hash, categoria, note, sicurezza)</span>
     </div>
     <div class="account-info">
         <span id="accountNameLabel">Account: (nessun account)</span>
@@ -1198,7 +1198,7 @@ function renderServerStats() {
 
 /* AUTO-TAGGING */
 function autoTagFile(f) {
-    const text = ((f.name || "") + " " + (f.description || "")).toLowerCase();
+    const text = ((f.name || "") + " " + (f.description || "") + " " + (f.tags || []).join(" ")).toLowerCase();
     const tags = new Set(f.tags || []);
 
     if (text.includes(".iso") || text.includes("setup") || text.includes("installer")) tags.add("software");
@@ -1352,17 +1352,22 @@ async function loadFiles() {
             const csv = await res.text();
             const rows = parseCSV(csv);
 
-            const files = rows.map(row => autoTagFile({
-                name: row.name || row.Nome || "",
-                description: row.description || row.Descrizione || "",
-                size: row.size || row.Peso || "",
-                security: row.security || row.Sicurezza || "NON VERIFICATO",
-                type: row.type || row.Tipo || "cloud",
-                tags: (row.tags || row.Tag || "").split(";").map(t => t.trim()).filter(t => t),
-                hash: row.hash || row.Hash || (row.name || "") + "_" + (row.size || ""),
-                cloud_url: row.cloud_url || row.Link || "",
-                server_verified: server.verified === true
-            }));
+            const files = rows.map(row => {
+                const f = {
+                    // MAPPATURA SPECIFICA PER IL TUO FOGLIO:
+                    // nome, url, size, hash, categoria, note, sicurezza
+                    name: row.name || row.Nome || row.nome || "",
+                    description: row.description || row.Descrizione || row.note || row.Note || "",
+                    size: row.size || row.Peso || row.size || "",
+                    security: row.security || row.Sicurezza || row.sicurezza || "NON VERIFICATO",
+                    type: row.type || row.Tipo || "cloud",
+                    tags: (row.tags || row.Tag || row.categoria || row.Categoria || "").split(";").map(t => t.trim()).filter(t => t),
+                    hash: row.hash || row.Hash || row.hash || (row.nome || row.name || "") + "_" + (row.size || ""),
+                    cloud_url: row.cloud_url || row.Link || row.url || row.URL || "",
+                    server_verified: server.verified === true
+                };
+                return autoTagFile(f);
+            });
 
             combined = combined.concat(files);
             updateServerStats(server.url, true, files.length);
@@ -1846,7 +1851,6 @@ function addReaction(id, reaction) {
     saveChatToStorage();
     renderChat();
 
-    // reputazione + XP per autore
     const rep = getReputation();
     rep[msg.user] = (rep[msg.user] || 0) + 1;
     saveReputation(rep);
