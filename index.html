@@ -2,668 +2,564 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <title>MatteoShare</title>
+  <title>MatteoShare · Social 3.0</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    :root {
-      --bg: #050816;
-      --bg-alt: #0b1020;
-      --accent: #4cc9f0;
-      --accent-soft: rgba(76,201,240,0.15);
-      --accent-strong: #f72585;
-      --text: #f5f5f5;
-      --muted: #9ca3af;
-      --danger: #f97373;
-      --success: #4ade80;
-      --border: #1f2933;
-      --card-radius: 14px;
-      --shadow-soft: 0 18px 45px rgba(0,0,0,0.55);
-      --shadow-hard: 0 0 0 1px rgba(255,255,255,0.02);
-      --font-main: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: var(--font-main);
-      background: radial-gradient(circle at top, #111827 0, #020617 40%, #000 100%);
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-    .app-shell {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 18px 16px 32px;
-      width: 100%;
-    }
-    header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 18px;
-      gap: 12px;
-    }
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .brand-logo {
-      width: 40px;
-      height: 40px;
-      border-radius: 14px;
-      background: radial-gradient(circle at 30% 20%, #f72585 0, #7209b7 40%, #3a0ca3 70%, #030712 100%);
-      box-shadow: 0 0 25px rgba(247,37,133,0.6);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 800;
-      letter-spacing: 0.04em;
-      font-size: 18px;
-    }
-    .brand-text-title {
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      font-size: 18px;
-      text-transform: uppercase;
-    }
-    .brand-text-sub {
-      font-size: 11px;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-    }
-    .pill {
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(148,163,184,0.3);
-      font-size: 11px;
-      color: var(--muted);
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: linear-gradient(135deg, rgba(15,23,42,0.9), rgba(15,23,42,0.4));
-      backdrop-filter: blur(10px);
-    }
-    .pill-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 999px;
-      background: var(--success);
-      box-shadow: 0 0 10px rgba(74,222,128,0.8);
-    }
-    nav {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 16px;
-      flex-wrap: wrap;
-    }
-    .tab-btn {
-      border-radius: 999px;
-      border: 1px solid rgba(148,163,184,0.35);
-      background: radial-gradient(circle at top left, rgba(148,163,184,0.18), rgba(15,23,42,0.9));
-      color: var(--muted);
-      font-size: 12px;
-      padding: 7px 14px;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.18s ease-out;
-    }
-    .tab-btn span.icon {
-      font-size: 13px;
-    }
-    .tab-btn.active {
-      color: var(--text);
-      border-color: rgba(76,201,240,0.9);
-      box-shadow: 0 0 0 1px rgba(76,201,240,0.4), 0 0 25px rgba(76,201,240,0.35);
-      background: radial-gradient(circle at top left, rgba(76,201,240,0.25), rgba(15,23,42,0.95));
-    }
-    .layout {
-      display: grid;
-      grid-template-columns: minmax(0, 2.1fr) minmax(0, 1.3fr);
-      gap: 16px;
-    }
-    @media (max-width: 900px) {
-      .layout { grid-template-columns: minmax(0, 1fr); }
-    }
-    .card {
-      background: radial-gradient(circle at top, rgba(15,23,42,0.95), rgba(3,7,18,0.98));
-      border-radius: var(--card-radius);
-      border: 1px solid rgba(15,23,42,0.9);
-      box-shadow: var(--shadow-soft), var(--shadow-hard);
-      padding: 14px 14px 12px;
-      position: relative;
-      overflow: hidden;
-    }
-    .card::before {
-      content: "";
-      position: absolute;
-      inset: -40%;
-      background: radial-gradient(circle at top, rgba(76,201,240,0.08), transparent 60%);
-      opacity: 0.7;
-      pointer-events: none;
-    }
-    .card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 8px;
-      position: relative;
-      z-index: 1;
-    }
-    .card-title {
-      font-size: 13px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: #e5e7eb;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .card-title-pill {
-      font-size: 10px;
-      padding: 2px 7px;
-      border-radius: 999px;
-      border: 1px solid rgba(148,163,184,0.4);
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-    }
-    .card-body {
-      position: relative;
-      z-index: 1;
-      font-size: 13px;
-      color: #e5e7eb;
-    }
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 3px 8px;
-      border-radius: 999px;
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      border: 1px solid rgba(148,163,184,0.4);
-      color: var(--muted);
-      background: linear-gradient(135deg, rgba(15,23,42,0.9), rgba(15,23,42,0.4));
-    }
-    .badge-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 999px;
-      background: var(--accent);
-      box-shadow: 0 0 10px rgba(76,201,240,0.8);
-    }
-    .files-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 12px;
-      margin-top: 6px;
-    }
-    .files-table thead {
-      background: linear-gradient(90deg, rgba(15,23,42,0.9), rgba(15,23,42,0.6));
-    }
-    .files-table th,
-    .files-table td {
-      padding: 6px 7px;
-      border-bottom: 1px solid rgba(31,41,55,0.9);
-      text-align: left;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .files-table th {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--muted);
-    }
-    .files-table tbody tr {
-      cursor: pointer;
-      transition: background 0.12s ease-out;
-    }
-    .files-table tbody tr:hover {
-      background: rgba(15,23,42,0.9);
-    }
-    .files-table tbody tr.selected {
-      background: rgba(76,201,240,0.12);
-    }
-    .tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      padding: 2px 7px;
-      border-radius: 999px;
-      font-size: 10px;
-      border: 1px solid rgba(148,163,184,0.4);
-      color: var(--muted);
-    }
-    .tag-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 999px;
-      background: rgba(148,163,184,0.9);
-    }
-    .tag.safe .tag-dot { background: var(--success); }
-    .tag.warn .tag-dot { background: #facc15; }
-    .tag.danger .tag-dot { background: var(--danger); }
-    .file-detail {
-      display: none;
-      margin-top: 8px;
-      padding: 10px;
-      border-radius: 10px;
-      border: 1px solid rgba(148,163,184,0.35);
-      background: radial-gradient(circle at top, rgba(15,23,42,0.95), rgba(3,7,18,0.98));
-    }
-    .file-detail.visible { display: block; }
-    .file-detail-title {
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-    .file-detail-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-bottom: 6px;
-      font-size: 11px;
-      color: var(--muted);
-    }
-    .file-detail-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 6px;
-    }
-    .btn {
-      border-radius: 999px;
-      border: 1px solid rgba(148,163,184,0.5);
-      background: radial-gradient(circle at top left, rgba(76,201,240,0.2), rgba(15,23,42,0.95));
-      color: var(--text);
-      font-size: 12px;
-      padding: 6px 12px;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.15s ease-out;
-    }
-    .btn:hover {
-      box-shadow: 0 0 0 1px rgba(76,201,240,0.5), 0 0 20px rgba(76,201,240,0.35);
-      transform: translateY(-0.5px);
-    }
-    .btn.secondary {
-      background: linear-gradient(135deg, rgba(15,23,42,0.95), rgba(15,23,42,0.7));
-    }
-    .btn.danger {
-      border-color: rgba(248,113,113,0.7);
-      background: radial-gradient(circle at top left, rgba(248,113,113,0.2), rgba(15,23,42,0.95));
-    }
-    .status-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      margin-top: 6px;
-      font-size: 11px;
-      color: var(--muted);
-    }
-    .status-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 3px 8px;
-      border-radius: 999px;
-      border: 1px solid rgba(148,163,184,0.4);
-      background: linear-gradient(135deg, rgba(15,23,42,0.9), rgba(15,23,42,0.4));
-    }
-    .status-pill-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 999px;
-      background: var(--success);
-      box-shadow: 0 0 10px rgba(74,222,128,0.8);
-    }
-    .status-pill-dot.offline {
-      background: #f97373;
-      box-shadow: 0 0 10px rgba(248,113,113,0.8);
-    }
-    .status-pill-dot.syncing {
-      background: #facc15;
-      box-shadow: 0 0 10px rgba(250,204,21,0.8);
-    }
-    .chat-container {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      height: 260px;
-    }
-    .chat-messages {
-      flex: 1;
-      border-radius: 10px;
-      border: 1px solid rgba(148,163,184,0.35);
-      background: radial-gradient(circle at top, rgba(15,23,42,0.95), rgba(3,7,18,0.98));
-      padding: 8px;
-      overflow-y: auto;
-      font-size: 12px;
-    }
-    .chat-message {
-      margin-bottom: 6px;
-      padding: 5px 7px;
-      border-radius: 8px;
-      background: rgba(15,23,42,0.9);
-      border: 1px solid rgba(31,41,55,0.9);
-    }
-    .chat-message-header {
-      display: flex;
-      justify-content: space-between;
-      font-size: 10px;
-      color: var(--muted);
-      margin-bottom: 2px;
-    }
-    .chat-message-user {
-      font-weight: 600;
-      color: #e5e7eb;
-    }
-    .chat-input-row {
-      display: flex;
-      gap: 6px;
-      align-items: center;
-    }
-    .input,
-    .select {
-      border-radius: 999px;
-      border: 1px solid rgba(148,163,184,0.5);
-      background: rgba(15,23,42,0.95);
-      color: var(--text);
-      font-size: 12px;
-      padding: 6px 10px;
-      outline: none;
-      width: 100%;
-    }
-    .input::placeholder {
-      color: rgba(148,163,184,0.7);
-    }
-    .select {
-      padding-right: 26px;
-    }
-    .settings-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.1fr);
-      gap: 10px;
-      margin-top: 6px;
-    }
-    @media (max-width: 700px) {
-      .settings-grid { grid-template-columns: minmax(0, 1fr); }
-    }
-    .settings-item-label {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--muted);
-      margin-bottom: 4px;
-    }
-    .settings-note {
-      font-size: 11px;
-      color: var(--muted);
-      margin-top: 4px;
-    }
-    .chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 4px;
-    }
-    .chip {
-      font-size: 10px;
-      padding: 3px 8px;
-      border-radius: 999px;
-      border: 1px solid rgba(148,163,184,0.4);
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-    }
-    .news-list {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      margin-top: 4px;
-      font-size: 12px;
-    }
-    .news-item {
-      padding: 6px 8px;
-      border-radius: 8px;
-      border: 1px solid rgba(31,41,55,0.9);
-      background: rgba(15,23,42,0.95);
-    }
-    .news-title {
-      font-size: 12px;
-      font-weight: 600;
-      margin-bottom: 2px;
-    }
-    .news-meta {
-      font-size: 10px;
-      color: var(--muted);
-      margin-bottom: 2px;
-    }
-    .news-body {
-      font-size: 12px;
-      color: #e5e7eb;
-    }
-    .hidden { display: none !important; }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:Tahoma,Segoe UI,system-ui,sans-serif;
+      background:#008080 url("https://i.imgur.com/0vZ5F.png") repeat;
+      color:#000;
+    }
+    .desktop{
+      max-width:1100px;
+      margin:20px auto;
+    }
+    .window{
+      background:#c0c0c0;
+      border:2px solid #000;
+      border-right-color:#fff;
+      border-bottom-color:#fff;
+      box-shadow:2px 2px 0 #000;
+      margin-bottom:14px;
+    }
+    .titlebar{
+      background:linear-gradient(90deg,#000080,#1084d0);
+      color:#fff;
+      padding:3px 6px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      font-size:12px;
+      font-weight:bold;
+    }
+    .titlebar-buttons{
+      display:flex;
+      gap:2px;
+    }
+    .title-btn{
+      width:16px;
+      height:14px;
+      border:1px solid #000;
+      background:#c0c0c0;
+      box-shadow:1px 1px 0 #fff inset, -1px -1px 0 #808080 inset;
+      font-size:10px;
+      text-align:center;
+      line-height:12px;
+      cursor:default;
+    }
+    .window-body{
+      padding:6px;
+      border-top:2px solid #fff;
+      border-left:2px solid #fff;
+      border-right:2px solid #808080;
+      border-bottom:2px solid #808080;
+      background:#e0e0e0;
+      font-size:12px;
+    }
+    .menubar{
+      display:flex;
+      gap:10px;
+      margin-bottom:6px;
+      font-size:11px;
+    }
+    .menubar span{
+      cursor:default;
+    }
+    .toolbar{
+      margin-bottom:6px;
+      padding:3px;
+      border:2px solid #808080;
+      border-right-color:#fff;
+      border-bottom-color:#fff;
+      background:#d4d0c8;
+      display:flex;
+      gap:4px;
+      flex-wrap:wrap;
+    }
+    .toolbar button{
+      font-size:11px;
+      padding:2px 8px;
+      border:2px solid #fff;
+      border-right-color:#404040;
+      border-bottom-color:#404040;
+      background:#d4d0c8;
+      cursor:pointer;
+    }
+    .toolbar button.active{
+      background:#000080;
+      color:#fff;
+    }
+    .main-layout{
+      display:grid;
+      grid-template-columns:2fr 1.4fr;
+      gap:8px;
+    }
+    @media(max-width:900px){
+      .main-layout{grid-template-columns:1fr}
+    }
+    .panel{
+      border:2px solid #808080;
+      border-right-color:#fff;
+      border-bottom-color:#fff;
+      background:#d4d0c8;
+      padding:4px;
+      margin-bottom:6px;
+    }
+    .panel-title{
+      font-weight:bold;
+      margin-bottom:4px;
+      border-bottom:1px solid #808080;
+      padding-bottom:2px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+    .status-strip{
+      font-size:11px;
+      margin-top:4px;
+      padding:2px 4px;
+      border-top:1px solid #fff;
+      border-left:1px solid #fff;
+      border-right:1px solid #808080;
+      border-bottom:1px solid #808080;
+      background:#d4d0c8;
+      display:flex;
+      justify-content:space-between;
+    }
+    .status-led{
+      display:inline-block;
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      margin-right:4px;
+      background:#0a0;
+    }
+    .status-led.offline{background:#a00}
+    .status-led.sync{background:#cc0}
+    table{
+      width:100%;
+      border-collapse:collapse;
+      font-size:11px;
+      background:#fff;
+    }
+    th,td{
+      border:1px solid #808080;
+      padding:3px 4px;
+      white-space:nowrap;
+      text-overflow:ellipsis;
+      overflow:hidden;
+    }
+    th{
+      background:#000080;
+      color:#fff;
+      text-align:left;
+    }
+    tr:hover{
+      background:#cfe7ff;
+    }
+    tr.selected{
+      background:#99c0ff;
+    }
+    .tag{
+      display:inline-block;
+      padding:1px 4px;
+      border:1px solid #808080;
+      background:#e0e0e0;
+      font-size:10px;
+    }
+    .tag.safe{background:#c0ffc0}
+    .tag.warn{background:#fff0b3}
+    .tag.danger{background:#ffc0c0}
+    .file-detail{
+      margin-top:4px;
+      border:2px solid #808080;
+      border-right-color:#fff;
+      border-bottom-color:#fff;
+      background:#d4d0c8;
+      padding:4px;
+      display:none;
+    }
+    .file-detail.visible{display:block}
+    .file-detail h3{
+      font-size:13px;
+      margin-bottom:4px;
+    }
+    .file-meta{
+      font-size:11px;
+      margin-bottom:4px;
+    }
+    .file-meta span{
+      display:inline-block;
+      margin-right:8px;
+    }
+    .file-notes{
+      font-size:11px;
+      margin-bottom:4px;
+    }
+    .btn{
+      font-size:11px;
+      padding:2px 8px;
+      border:2px solid #fff;
+      border-right-color:#404040;
+      border-bottom-color:#404040;
+      background:#d4d0c8;
+      cursor:pointer;
+      margin-right:4px;
+      margin-top:2px;
+    }
+    .btn-danger{
+      background:#ffc0c0;
+    }
+    .news-item{
+      border:1px solid #808080;
+      background:#fff;
+      padding:4px;
+      margin-bottom:4px;
+    }
+    .news-title{
+      font-weight:bold;
+      margin-bottom:2px;
+    }
+    .news-meta{
+      font-size:10px;
+      color:#555;
+      margin-bottom:2px;
+    }
+    .news-body{
+      font-size:11px;
+    }
+    .chat-box{
+      border:2px solid #808080;
+      border-right-color:#fff;
+      border-bottom-color:#fff;
+      background:#fff;
+      display:flex;
+      flex-direction:column;
+      height:260px;
+    }
+    .chat-messages{
+      flex:1;
+      padding:4px;
+      overflow-y:auto;
+      font-size:11px;
+      background:#fff;
+    }
+    .chat-message{
+      border-bottom:1px solid #e0e0e0;
+      padding:2px 0;
+    }
+    .chat-header{
+      display:flex;
+      justify-content:space-between;
+      font-size:10px;
+      color:#555;
+    }
+    .chat-user{
+      font-weight:bold;
+    }
+    .chat-input{
+      border-top:1px solid #808080;
+      padding:3px;
+      background:#d4d0c8;
+      display:flex;
+      gap:4px;
+    }
+    .input,select{
+      font-size:11px;
+      padding:2px 4px;
+      border:1px solid #808080;
+      background:#fff;
+      flex:1;
+    }
+    .input-small{
+      max-width:120px;
+    }
+    .settings-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:6px;
+      font-size:11px;
+    }
+    @media(max-width:700px){
+      .settings-grid{grid-template-columns:1fr}
+    }
+    .settings-block{
+      border:1px solid #808080;
+      background:#fff;
+      padding:4px;
+    }
+    .settings-title{
+      font-weight:bold;
+      margin-bottom:2px;
+    }
+    .settings-note{
+      font-size:10px;
+      color:#555;
+      margin-top:2px;
+    }
+    .chip{
+      display:inline-block;
+      padding:1px 6px;
+      border:1px solid #808080;
+      background:#e0e0e0;
+      font-size:10px;
+      margin-right:3px;
+      margin-top:2px;
+    }
+    .hidden{display:none!important}
+    /* LOGIN WINDOW */
+    .overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,0.4);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      z-index:1000;
+    }
+    .login-window{
+      width:320px;
+    }
+    .login-body{
+      padding:8px;
+      border-top:2px solid #fff;
+      border-left:2px solid #fff;
+      border-right:2px solid #808080;
+      border-bottom:2px solid #808080;
+      background:#e0e0e0;
+      font-size:12px;
+    }
+    .login-body label{
+      display:block;
+      margin-top:4px;
+      margin-bottom:2px;
+      font-size:11px;
+    }
+    .login-actions{
+      margin-top:6px;
+      text-align:right;
+    }
+    .account-info{
+      font-size:11px;
+    }
   </style>
 </head>
 <body>
-<div class="app-shell">
-  <header>
-    <div class="brand">
-      <div class="brand-logo">MS</div>
-      <div>
-        <div class="brand-text-title">MATTEOSHARE</div>
-        <div class="brand-text-sub" id="brandSubtitle">SOCIAL 3.0 · SMART AUTO UPDATE</div>
+<div class="desktop">
+
+  <!-- LOGIN / ACCOUNT LOCAL -->
+  <div class="overlay" id="loginOverlay">
+    <div class="window login-window">
+      <div class="titlebar">
+        <span>MatteoShare - Accesso account locale</span>
+        <div class="titlebar-buttons">
+          <div class="title-btn">?</div>
+        </div>
+      </div>
+      <div class="login-body">
+        <div style="margin-bottom:4px;">
+          Benvenuto in <b>MatteoShare · Social 3.0</b>.<br>
+          Crea o accedi a un <b>account locale</b> per usare il sito.
+        </div>
+        <label for="loginUsername">Nome utente</label>
+        <input id="loginUsername" class="input" type="text" placeholder="Es. Matteo">
+        <label for="loginMode">Modalità</label>
+        <select id="loginMode" class="input">
+          <option value="login">Accedi a un account esistente</option>
+          <option value="create">Crea un nuovo account</option>
+        </select>
+        <div class="login-actions">
+          <button class="btn" id="loginConfirmBtn">OK</button>
+        </div>
       </div>
     </div>
-    <div class="pill">
-      <span class="pill-dot"></span>
-      <span id="statusOnlineLabel">Sistema online</span>
+  </div>
+
+  <!-- MAIN WINDOW -->
+  <div class="window">
+    <div class="titlebar">
+      <span>MatteoShare - Social 3.0</span>
+      <div class="titlebar-buttons">
+        <div class="title-btn">_</div>
+        <div class="title-btn">□</div>
+        <div class="title-btn">X</div>
+      </div>
     </div>
-  </header>
+    <div class="window-body">
+      <div class="menubar">
+        <span>File</span>
+        <span>Modifica</span>
+        <span>Visualizza</span>
+        <span>Social</span>
+        <span>Aiuto</span>
+      </div>
 
-  <nav>
-    <button class="tab-btn active" data-tab="files">
-      <span class="icon">📂</span><span id="tabFilesLabel">File</span>
-    </button>
-    <button class="tab-btn" data-tab="news">
-      <span class="icon">📰</span><span id="tabNewsLabel">News</span>
-    </button>
-    <button class="tab-btn" data-tab="social">
-      <span class="icon">💬</span><span id="tabSocialLabel">Social 3.0</span>
-    </button>
-    <button class="tab-btn" data-tab="settings">
-      <span class="icon">⚙️</span><span id="tabSettingsLabel">Impostazioni</span>
-    </button>
-  </nav>
+      <div class="toolbar">
+        <button class="active" data-tab="files" id="tabFilesBtn">File</button>
+        <button data-tab="news" id="tabNewsBtn">News</button>
+        <button data-tab="social" id="tabSocialBtn">Social 3.0</button>
+        <button data-tab="settings" id="tabSettingsBtn">Impostazioni</button>
+      </div>
 
-  <div class="layout">
-    <!-- LEFT COLUMN -->
-    <div>
-      <!-- FILES CARD -->
-      <section class="card tab-panel" data-tab-panel="files">
-        <div class="card-header">
-          <div class="card-title">
-            <span>Archivio File</span>
-            <span class="card-title-pill" id="filesSubtitle">Migliorare la grafica · Sicurezza · Auto update</span>
-          </div>
-          <span class="badge">
-            <span class="badge-dot"></span>
-            <span id="filesBadgeLabel">Foglio Google collegato</span>
-          </span>
+      <div class="status-strip">
+        <div>
+          <span class="status-led" id="globalStatusLed"></span>
+          <span id="globalStatusText">Sistema online · Account locale non configurato</span>
         </div>
-        <div class="card-body">
-          <div class="status-bar">
-            <div class="status-pill" id="syncStatusPill">
-              <span class="status-pill-dot syncing" id="syncStatusDot"></span>
-              <span id="syncStatusText">Sincronizzazione intelligente in corso…</span>
-            </div>
-            <div style="font-size:11px;">
-              <span id="filesCountLabel">File caricati:</span>
-              <span id="filesCountValue">0</span>
-            </div>
-          </div>
-
-          <table class="files-table" id="filesTable">
-            <thead>
-            <tr>
-              <th id="thName">Nome</th>
-              <th id="thCategory">Categoria</th>
-              <th id="thSize">Peso</th>
-              <th id="thSecurity">Sicurezza</th>
-            </tr>
-            </thead>
-            <tbody id="filesTableBody">
-            <!-- Popolato da JS -->
-            </tbody>
-          </table>
-
-          <div class="file-detail" id="fileDetail">
-            <div class="file-detail-title" id="fileDetailName">Seleziona un file…</div>
-            <div class="file-detail-meta">
-              <span id="fileDetailCategory"></span>
-              <span id="fileDetailSize"></span>
-              <span id="fileDetailHash"></span>
-              <span id="fileDetailSecurity"></span>
-            </div>
-            <div id="fileDetailNotes" style="font-size:12px; margin-bottom:6px;"></div>
-            <div class="file-detail-actions">
-              <button class="btn" id="fileDownloadBtn">
-                ⬇️ <span id="downloadBtnLabel">Scarica file</span>
-              </button>
-              <button class="btn secondary" id="fileOpenUrlBtn">
-                🌐 <span id="openLinkBtnLabel">Apri link diretto</span>
-              </button>
-              <button class="btn danger" id="fileReportBtn">
-                🚩 <span id="reportBtnLabel">Segnala file</span>
-              </button>
-            </div>
-          </div>
+        <div class="account-info">
+          Utente: <span id="accountNameLabel">-</span>
         </div>
-      </section>
+      </div>
 
-      <!-- NEWS CARD -->
-      <section class="card tab-panel hidden" data-tab-panel="news">
-        <div class="card-header">
-          <div class="card-title">
-            <span id="newsTitle">News & Aggiornamenti</span>
-            <span class="card-title-pill" id="newsSubtitle">Aggiornamenti Social · Sicurezza · Funzioni</span>
-          </div>
-          <span class="badge">
-            <span class="badge-dot"></span>
-            <span id="newsBadgeLabel">News automatiche</span>
-          </span>
-        </div>
-        <div class="card-body">
-          <div class="news-list" id="newsList">
-            <!-- Esempio statico, puoi collegare un altro Google Sheets se vuoi -->
-            <div class="news-item">
-              <div class="news-title" id="newsItem1Title">Social 3.0 attivo</div>
-              <div class="news-meta" id="newsItem1Meta">Sistema di chat globale collegato a Google Sheets</div>
-              <div class="news-body" id="newsItem1Body">
-                La chat globale ora scrive e legge direttamente dal tuo foglio Google, con aggiornamento automatico intelligente.
+      <div class="main-layout">
+        <!-- LEFT SIDE -->
+        <div>
+          <!-- FILES PANEL -->
+          <div class="panel tab-panel" data-tab-panel="files">
+            <div class="panel-title">
+              <span id="filesTitle">Archivio file collegato a Google Sheets</span>
+              <span style="font-size:11px;" id="filesBadge">Foglio: nome, url, size, hash, categoria, note, sicurezza</span>
+            </div>
+            <table id="filesTable">
+              <thead>
+              <tr>
+                <th id="thName">Nome</th>
+                <th id="thCategory">Categoria</th>
+                <th id="thSize">Peso</th>
+                <th id="thSecurity">Sicurezza</th>
+              </tr>
+              </thead>
+              <tbody id="filesTableBody">
+              </tbody>
+            </table>
+            <div class="file-detail" id="fileDetail">
+              <h3 id="fileDetailName">Seleziona un file…</h3>
+              <div class="file-meta">
+                <span id="fileDetailCategory"></span>
+                <span id="fileDetailSize"></span>
+                <span id="fileDetailHash"></span>
+                <span id="fileDetailSecurity"></span>
+              </div>
+              <div class="file-notes" id="fileDetailNotes"></div>
+              <div>
+                <button class="btn" id="fileDownloadBtn">Scarica file</button>
+                <button class="btn" id="fileOpenUrlBtn">Apri link diretto</button>
+                <button class="btn btn-danger" id="fileReportBtn">Segnala file</button>
               </div>
             </div>
-            <div class="news-item">
-              <div class="news-title" id="newsItem2Title">Sistema di aggiornamento automatico “intelligente”</div>
-              <div class="news-meta" id="newsItem2Meta">Rilevamento cambiamenti sul foglio file</div>
-              <div class="news-body" id="newsItem2Body">
-                L’archivio file si aggiorna da solo quando rileva modifiche sul foglio, senza ricaricare l’intero sito.
+            <div class="status-strip">
+              <div>
+                <span class="status-led sync" id="filesStatusLed"></span>
+                <span id="filesStatusText">Sincronizzazione intelligente in corso…</span>
+              </div>
+              <div>
+                File: <span id="filesCountValue">0</span>
               </div>
             </div>
           </div>
-        </div>
-      </section>
-    </div>
 
-    <!-- RIGHT COLUMN -->
-    <div>
-      <!-- SOCIAL 3.0 / CHAT GLOBALE -->
-      <section class="card tab-panel" data-tab-panel="social">
-        <div class="card-header">
-          <div class="card-title">
-            <span id="socialTitle">Social 3.0 · Chat Globale</span>
-            <span class="card-title-pill" id="socialSubtitle">Collegata a Google Sheets</span>
-          </div>
-          <span class="badge">
-            <span class="badge-dot"></span>
-            <span id="socialBadgeLabel">Chat globale attiva</span>
-          </span>
-        </div>
-        <div class="card-body">
-          <div class="chat-container">
-            <div class="chat-messages" id="chatMessages"></div>
-            <div class="chat-input-row">
-              <input class="input" id="chatUserInput" placeholder="Nome utente (es. Matteo)">
-              <input class="input" id="chatMessageInput" placeholder="Scrivi un messaggio globale…">
-              <button class="btn" id="chatSendBtn">➤</button>
+          <!-- NEWS PANEL -->
+          <div class="panel tab-panel hidden" data-tab-panel="news">
+            <div class="panel-title">
+              <span id="newsTitle">News & aggiornamenti</span>
+              <span style="font-size:11px;" id="newsBadge">Social 3.0 · Sicurezza · Funzioni</span>
             </div>
-            <div class="status-bar">
-              <div class="status-pill" id="chatStatusPill">
-                <span class="status-pill-dot" id="chatStatusDot"></span>
+            <div id="newsList">
+              <!-- Static fallback, puoi collegare un foglio in JS -->
+              <div class="news-item">
+                <div class="news-title" id="newsItem1Title">Social 3.0 attivo</div>
+                <div class="news-meta" id="newsItem1Meta">Chat globale collegata a Google Sheets</div>
+                <div class="news-body" id="newsItem1Body">
+                  La chat globale scrive e legge direttamente dal tuo foglio Google, con aggiornamento automatico.
+                </div>
+              </div>
+              <div class="news-item">
+                <div class="news-title" id="newsItem2Title">Sistema di auto update intelligente</div>
+                <div class="news-meta" id="newsItem2Meta">Rilevamento modifiche sul foglio file</div>
+                <div class="news-body" id="newsItem2Body">
+                  L’archivio file si aggiorna quando rileva cambiamenti sul foglio, senza ricaricare il sito.
+                </div>
+              </div>
+            </div>
+            <div class="status-strip">
+              <div>
+                <span class="status-led" id="newsStatusLed"></span>
+                <span id="newsStatusText">News statiche · Foglio news opzionale</span>
+              </div>
+              <div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT SIDE -->
+        <div>
+          <!-- SOCIAL 3.0 / CHAT GLOBALE -->
+          <div class="panel tab-panel" data-tab-panel="social">
+            <div class="panel-title">
+              <span id="socialTitle">Social 3.0 · Chat globale</span>
+              <span style="font-size:11px;" id="socialBadge">Collegata a Google Sheets</span>
+            </div>
+            <div class="chat-box">
+              <div class="chat-messages" id="chatMessages"></div>
+              <div class="chat-input">
+                <input id="chatUserInput" class="input input-small" placeholder="Nome utente">
+                <input id="chatMessageInput" class="input" placeholder="Scrivi un messaggio globale…">
+                <button class="btn" id="chatSendBtn">Invia</button>
+              </div>
+            </div>
+            <div class="status-strip">
+              <div>
+                <span class="status-led" id="chatStatusLed"></span>
                 <span id="chatStatusText">Chat globale connessa</span>
               </div>
-              <div style="font-size:11px;">
-                <span id="chatMessagesCountLabel">Messaggi:</span>
-                <span id="chatMessagesCountValue">0</span>
+              <div>
+                Messaggi: <span id="chatMessagesCountValue">0</span>
               </div>
             </div>
           </div>
-        </div>
-      </section>
 
-      <!-- SETTINGS -->
-      <section class="card tab-panel hidden" data-tab-panel="settings">
-        <div class="card-header">
-          <div class="card-title">
-            <span id="settingsTitle">Impostazioni</span>
-            <span class="card-title-pill" id="settingsSubtitle">Lingua · Social 3.0 · Sistema</span>
-          </div>
-          <span class="badge">
-            <span class="badge-dot"></span>
-            <span id="settingsBadgeLabel">Profilo locale</span>
-          </span>
-        </div>
-        <div class="card-body">
-          <div class="settings-grid">
-            <div>
-              <div class="settings-item-label" id="settingsLanguageLabel">Lingua interfaccia</div>
-              <select class="select" id="languageSelect">
-                <option value="it">Italiano (predefinito)</option>
-                <option value="en">English</option>
-                <option value="ro">Română</option>
-                <option value="ru">Русский</option>
-              </select>
-              <div class="settings-note" id="settingsLanguageNote">
-                La lingua cambia solo l’interfaccia, non i contenuti dei file o della chat.
+          <!-- SETTINGS -->
+          <div class="panel tab-panel hidden" data-tab-panel="settings">
+            <div class="panel-title">
+              <span id="settingsTitle">Impostazioni</span>
+              <span style="font-size:11px;" id="settingsBadge">Lingua · Social 3.0 · Sistema</span>
+            </div>
+            <div class="settings-grid">
+              <div class="settings-block">
+                <div class="settings-title" id="settingsLanguageLabel">Lingua interfaccia</div>
+                <select id="languageSelect" class="input">
+                  <option value="it">Italiano (predefinito)</option>
+                  <option value="en">English</option>
+                  <option value="ro">Română</option>
+                  <option value="ru">Русский</option>
+                </select>
+                <div class="settings-note" id="settingsLanguageNote">
+                  La lingua cambia solo l’interfaccia, non i contenuti dei file o della chat.
+                </div>
+              </div>
+              <div class="settings-block">
+                <div class="settings-title" id="settingsSystemLabel">Sistema</div>
+                <div>
+                  <span class="chip" id="chipAutoUpdate">Auto update intelligente</span>
+                  <span class="chip" id="chipSocial">Social 3.0</span>
+                  <span class="chip" id="chipSecurity">Monitor sicurezza</span>
+                </div>
+                <div class="settings-note" id="settingsSystemNote">
+                  Il sistema controlla periodicamente i fogli Google per aggiornare file, news e chat senza ricaricare la pagina.
+                </div>
               </div>
             </div>
-            <div>
-              <div class="settings-item-label" id="settingsSystemLabel">Sistema</div>
-              <div class="chips">
-                <span class="chip" id="chipAutoUpdate">Auto update intelligente</span>
-                <span class="chip" id="chipSocial">Social 3.0</span>
-                <span class="chip" id="chipSecurity">Monitor sicurezza</span>
-              </div>
-              <div class="settings-note" id="settingsSystemNote">
-                Il sistema controlla periodicamente il foglio Google per aggiornare file, news e chat senza ricaricare la pagina.
+            <div class="settings-block" style="margin-top:6px;">
+              <div class="settings-title">Account locale</div>
+              <div class="settings-note">
+                Utente corrente: <b><span id="settingsAccountName">-</span></b><br>
+                <button class="btn" id="changeAccountBtn">Cambia / reimposta account locale</button>
               </div>
             </div>
           </div>
         </div>
-      </section>
+      </div> <!-- main-layout -->
     </div>
   </div>
 </div>
@@ -672,9 +568,10 @@
   // =========================
   // CONFIG
   // =========================
-  const GOOGLE_SHEETS_FILES_URL = "INSERISCI_QUI_LA_TUA_URL_DI_EXPORT_JSON_O_GVIZ_PER_I_FILE";
+  // Se vuoi collegare il foglio file, metti qui l'URL di export (JSON/CSV/gviz) e adatta il parser sotto.
+  const GOOGLE_SHEETS_FILES_URL = ""; // opzionale, il sito funziona anche senza
   const GLOBAL_CHAT_ENDPOINT = "https://script.google.com/macros/s/AKfycbxMfTpIoNC6VVsFNO5JjX8SX0vwVFz2wLrTFRxcNlO6Kk8kA-hOZiJ1V3j0NJFKt_3F1A/exec";
-  const FILE_REPORT_EMAIL = "report@matteoshare.local"; // cambia questo con la tua email reale
+  const FILE_REPORT_EMAIL = "report@matteoshare.local";
 
   // =========================
   // STATO
@@ -686,364 +583,294 @@
   let chatMessages = [];
   let chatPollingInterval = null;
   let filesPollingInterval = null;
+  let localAccount = null;
 
   // =========================
   // I18N
   // =========================
   const i18n = {
-    it: {
-      brandSubtitle: "SOCIAL 3.0 · SMART AUTO UPDATE",
-      statusOnlineLabel: "Sistema online",
-      tabFilesLabel: "File",
-      tabNewsLabel: "News",
-      tabSocialLabel: "Social 3.0",
-      tabSettingsLabel: "Impostazioni",
-      filesSubtitle: "Migliorare la grafica · Sicurezza · Auto update",
-      filesBadgeLabel: "Foglio Google collegato",
-      filesCountLabel: "File caricati:",
-      thName: "Nome",
-      thCategory: "Categoria",
-      thSize: "Peso",
-      thSecurity: "Sicurezza",
-      syncStatusSyncing: "Sincronizzazione intelligente in corso…",
-      syncStatusIdle: "Archivio aggiornato",
-      syncStatusOffline: "Offline: uso cache locale",
-      fileDetailPlaceholder: "Seleziona un file…",
-      downloadBtnLabel: "Scarica file",
-      openLinkBtnLabel: "Apri link diretto",
-      reportBtnLabel: "Segnala file",
-      newsTitle: "News & Aggiornamenti",
-      newsSubtitle: "Aggiornamenti Social · Sicurezza · Funzioni",
-      newsBadgeLabel: "News automatiche",
-      newsItem1Title: "Social 3.0 attivo",
-      newsItem1Meta: "Sistema di chat globale collegato a Google Sheets",
-      newsItem1Body: "La chat globale ora scrive e legge direttamente dal tuo foglio Google, con aggiornamento automatico intelligente.",
-      newsItem2Title: "Sistema di aggiornamento automatico “intelligente”",
-      newsItem2Meta: "Rilevamento cambiamenti sul foglio file",
-      newsItem2Body: "L’archivio file si aggiorna da solo quando rileva modifiche sul foglio, senza ricaricare l’intero sito.",
-      socialTitle: "Social 3.0 · Chat Globale",
-      socialSubtitle: "Collegata a Google Sheets",
-      socialBadgeLabel: "Chat globale attiva",
-      chatStatusConnected: "Chat globale connessa",
-      chatStatusError: "Errore chat globale",
-      chatStatusSyncing: "Aggiornamento messaggi…",
-      chatMessagesCountLabel: "Messaggi:",
-      settingsTitle: "Impostazioni",
-      settingsSubtitle: "Lingua · Social 3.0 · Sistema",
-      settingsBadgeLabel: "Profilo locale",
-      settingsLanguageLabel: "Lingua interfaccia",
-      settingsLanguageNote: "La lingua cambia solo l’interfaccia, non i contenuti dei file o della chat.",
-      settingsSystemLabel: "Sistema",
-      settingsSystemNote: "Il sistema controlla periodicamente il foglio Google per aggiornare file, news e chat senza ricaricare la pagina.",
-      chipAutoUpdate: "Auto update intelligente",
-      chipSocial: "Social 3.0",
-      chipSecurity: "Monitor sicurezza"
+    it:{
+      globalStatusNoAccount:"Sistema online · Account locale non configurato",
+      globalStatusWithAccount:"Sistema online · Account locale attivo",
+      filesTitle:"Archivio file collegato a Google Sheets",
+      filesBadge:"Foglio: nome, url, size, hash, categoria, note, sicurezza",
+      thName:"Nome",
+      thCategory:"Categoria",
+      thSize:"Peso",
+      thSecurity:"Sicurezza",
+      filesSyncing:"Sincronizzazione intelligente in corso…",
+      filesIdle:"Archivio aggiornato",
+      filesOffline:"Offline: uso cache locale",
+      fileDetailPlaceholder:"Seleziona un file…",
+      downloadBtn:"Scarica file",
+      openBtn:"Apri link diretto",
+      reportBtn:"Segnala file",
+      newsTitle:"News & aggiornamenti",
+      newsBadge:"Social 3.0 · Sicurezza · Funzioni",
+      newsItem1Title:"Social 3.0 attivo",
+      newsItem1Meta:"Chat globale collegata a Google Sheets",
+      newsItem1Body:"La chat globale scrive e legge direttamente dal tuo foglio Google, con aggiornamento automatico.",
+      newsItem2Title:"Sistema di auto update intelligente",
+      newsItem2Meta:"Rilevamento modifiche sul foglio file",
+      newsItem2Body:"L’archivio file si aggiorna quando rileva cambiamenti sul foglio, senza ricaricare il sito.",
+      socialTitle:"Social 3.0 · Chat globale",
+      socialBadge:"Collegata a Google Sheets",
+      chatConnected:"Chat globale connessa",
+      chatError:"Errore chat globale",
+      chatSyncing:"Aggiornamento messaggi…",
+      settingsTitle:"Impostazioni",
+      settingsBadge:"Lingua · Social 3.0 · Sistema",
+      settingsLanguageLabel:"Lingua interfaccia",
+      settingsLanguageNote:"La lingua cambia solo l’interfaccia, non i contenuti dei file o della chat.",
+      settingsSystemLabel:"Sistema",
+      settingsSystemNote:"Il sistema controlla periodicamente i fogli Google per aggiornare file, news e chat senza ricaricare la pagina.",
+      chipAutoUpdate:"Auto update intelligente",
+      chipSocial:"Social 3.0",
+      chipSecurity:"Monitor sicurezza"
     },
-    en: {
-      brandSubtitle: "SOCIAL 3.0 · SMART AUTO UPDATE",
-      statusOnlineLabel: "System online",
-      tabFilesLabel: "Files",
-      tabNewsLabel: "News",
-      tabSocialLabel: "Social 3.0",
-      tabSettingsLabel: "Settings",
-      filesSubtitle: "Graphics · Security · Auto update",
-      filesBadgeLabel: "Google Sheet connected",
-      filesCountLabel: "Loaded files:",
-      thName: "Name",
-      thCategory: "Category",
-      thSize: "Size",
-      thSecurity: "Security",
-      syncStatusSyncing: "Smart sync in progress…",
-      syncStatusIdle: "Archive up to date",
-      syncStatusOffline: "Offline: using local cache",
-      fileDetailPlaceholder: "Select a file…",
-      downloadBtnLabel: "Download file",
-      openLinkBtnLabel: "Open direct link",
-      reportBtnLabel: "Report file",
-      newsTitle: "News & Updates",
-      newsSubtitle: "Social updates · Security · Features",
-      newsBadgeLabel: "Automatic news",
-      newsItem1Title: "Social 3.0 enabled",
-      newsItem1Meta: "Global chat system linked to Google Sheets",
-      newsItem1Body: "Global chat now writes and reads directly from your Google Sheet, with smart auto update.",
-      newsItem2Title: "“Smart” auto update system",
-      newsItem2Meta: "Change detection on files sheet",
-      newsItem2Body: "The file archive updates itself when it detects changes on the sheet, without reloading the whole site.",
-      socialTitle: "Social 3.0 · Global Chat",
-      socialSubtitle: "Linked to Google Sheets",
-      socialBadgeLabel: "Global chat active",
-      chatStatusConnected: "Global chat connected",
-      chatStatusError: "Global chat error",
-      chatStatusSyncing: "Updating messages…",
-      chatMessagesCountLabel: "Messages:",
-      settingsTitle: "Settings",
-      settingsSubtitle: "Language · Social 3.0 · System",
-      settingsBadgeLabel: "Local profile",
-      settingsLanguageLabel: "Interface language",
-      settingsLanguageNote: "Language changes only the interface, not file or chat contents.",
-      settingsSystemLabel: "System",
-      settingsSystemNote: "The system periodically checks the Google Sheet to update files, news and chat without reloading the page.",
-      chipAutoUpdate: "Smart auto update",
-      chipSocial: "Social 3.0",
-      chipSecurity: "Security monitor"
+    en:{
+      globalStatusNoAccount:"System online · Local account not configured",
+      globalStatusWithAccount:"System online · Local account active",
+      filesTitle:"File archive linked to Google Sheets",
+      filesBadge:"Sheet: name, url, size, hash, category, note, security",
+      thName:"Name",
+      thCategory:"Category",
+      thSize:"Size",
+      thSecurity:"Security",
+      filesSyncing:"Smart sync in progress…",
+      filesIdle:"Archive up to date",
+      filesOffline:"Offline: using local cache",
+      fileDetailPlaceholder:"Select a file…",
+      downloadBtn:"Download file",
+      openBtn:"Open direct link",
+      reportBtn:"Report file",
+      newsTitle:"News & updates",
+      newsBadge:"Social 3.0 · Security · Features",
+      newsItem1Title:"Social 3.0 enabled",
+      newsItem1Meta:"Global chat linked to Google Sheets",
+      newsItem1Body:"Global chat writes and reads directly from your Google Sheet, with automatic updates.",
+      newsItem2Title:"Smart auto update system",
+      newsItem2Meta:"Change detection on files sheet",
+      newsItem2Body:"The file archive updates when it detects changes on the sheet, without reloading the site.",
+      socialTitle:"Social 3.0 · Global chat",
+      socialBadge:"Linked to Google Sheets",
+      chatConnected:"Global chat connected",
+      chatError:"Global chat error",
+      chatSyncing:"Updating messages…",
+      settingsTitle:"Settings",
+      settingsBadge:"Language · Social 3.0 · System",
+      settingsLanguageLabel:"Interface language",
+      settingsLanguageNote:"Language changes only the interface, not file or chat contents.",
+      settingsSystemLabel:"System",
+      settingsSystemNote:"The system periodically checks the sheets to update files, news and chat without reloading.",
+      chipAutoUpdate:"Smart auto update",
+      chipSocial:"Social 3.0",
+      chipSecurity:"Security monitor"
     },
-    ro: {
-      brandSubtitle: "SOCIAL 3.0 · ACTUALIZARE INTELIGENTĂ",
-      statusOnlineLabel: "Sistem online",
-      tabFilesLabel: "Fișiere",
-      tabNewsLabel: "Știri",
-      tabSocialLabel: "Social 3.0",
-      tabSettingsLabel: "Setări",
-      filesSubtitle: "Grafică · Securitate · Auto update",
-      filesBadgeLabel: "Google Sheet conectat",
-      filesCountLabel: "Fișiere încărcate:",
-      thName: "Nume",
-      thCategory: "Categorie",
-      thSize: "Dimensiune",
-      thSecurity: "Securitate",
-      syncStatusSyncing: "Sincronizare inteligentă…",
-      syncStatusIdle: "Arhivă actualizată",
-      syncStatusOffline: "Offline: folosesc cache local",
-      fileDetailPlaceholder: "Selectează un fișier…",
-      downloadBtnLabel: "Descarcă fișier",
-      openLinkBtnLabel: "Deschide link direct",
-      reportBtnLabel: "Raportează fișier",
-      newsTitle: "Știri & Actualizări",
-      newsSubtitle: "Social · Securitate · Funcții",
-      newsBadgeLabel: "Știri automate",
-      newsItem1Title: "Social 3.0 activ",
-      newsItem1Meta: "Chat global legat de Google Sheets",
-      newsItem1Body: "Chatul global scrie și citește direct din Google Sheet, cu actualizare inteligentă.",
-      newsItem2Title: "Sistem de auto update „inteligent”",
-      newsItem2Meta: "Detectare modificări în foaia de fișiere",
-      newsItem2Body: "Arhiva de fișiere se actualizează singură când detectează modificări în foaie.",
-      socialTitle: "Social 3.0 · Chat Global",
-      socialSubtitle: "Legat de Google Sheets",
-      socialBadgeLabel: "Chat global activ",
-      chatStatusConnected: "Chat global conectat",
-      chatStatusError: "Eroare chat global",
-      chatStatusSyncing: "Actualizare mesaje…",
-      chatMessagesCountLabel: "Mesaje:",
-      settingsTitle: "Setări",
-      settingsSubtitle: "Limbă · Social 3.0 · Sistem",
-      settingsBadgeLabel: "Profil local",
-      settingsLanguageLabel: "Limba interfeței",
-      settingsLanguageNote: "Limba schimbă doar interfața, nu conținutul fișierelor sau al chatului.",
-      settingsSystemLabel: "Sistem",
-      settingsSystemNote: "Sistemul verifică periodic foaia Google pentru a actualiza fișierele, știrile și chatul fără reîncărcare.",
-      chipAutoUpdate: "Auto update inteligent",
-      chipSocial: "Social 3.0",
-      chipSecurity: "Monitor securitate"
+    ro:{
+      globalStatusNoAccount:"Sistem online · Cont local neconfigurat",
+      globalStatusWithAccount:"Sistem online · Cont local activ",
+      filesTitle:"Arhivă fișiere legată de Google Sheets",
+      filesBadge:"Foaie: nume, url, size, hash, categorie, note, securitate",
+      thName:"Nume",
+      thCategory:"Categorie",
+      thSize:"Dimensiune",
+      thSecurity:"Securitate",
+      filesSyncing:"Sincronizare inteligentă…",
+      filesIdle:"Arhivă actualizată",
+      filesOffline:"Offline: folosesc cache local",
+      fileDetailPlaceholder:"Selectează un fișier…",
+      downloadBtn:"Descarcă fișier",
+      openBtn:"Deschide link direct",
+      reportBtn:"Raportează fișier",
+      newsTitle:"Știri & actualizări",
+      newsBadge:"Social 3.0 · Securitate · Funcții",
+      newsItem1Title:"Social 3.0 activ",
+      newsItem1Meta:"Chat global legat de Google Sheets",
+      newsItem1Body:"Chatul global scrie și citește direct din Google Sheet, cu actualizare automată.",
+      newsItem2Title:"Sistem de auto update inteligent",
+      newsItem2Meta:"Detectare modificări în foaia de fișiere",
+      newsItem2Body:"Arhiva de fișiere se actualizează când detectează modificări în foaie.",
+      socialTitle:"Social 3.0 · Chat global",
+      socialBadge:"Legat de Google Sheets",
+      chatConnected:"Chat global conectat",
+      chatError:"Eroare chat global",
+      chatSyncing:"Actualizare mesaje…",
+      settingsTitle:"Setări",
+      settingsBadge:"Limbă · Social 3.0 · Sistem",
+      settingsLanguageLabel:"Limba interfeței",
+      settingsLanguageNote:"Limba schimbă doar interfața, nu conținutul fișierelor sau al chatului.",
+      settingsSystemLabel:"Sistem",
+      settingsSystemNote:"Sistemul verifică periodic foile pentru a actualiza fișierele, știrile și chatul fără reîncărcare.",
+      chipAutoUpdate:"Auto update inteligent",
+      chipSocial:"Social 3.0",
+      chipSecurity:"Monitor securitate"
     },
-    ru: {
-      brandSubtitle: "SOCIAL 3.0 · УМНОЕ ОБНОВЛЕНИЕ",
-      statusOnlineLabel: "Система онлайн",
-      tabFilesLabel: "Файлы",
-      tabNewsLabel: "Новости",
-      tabSocialLabel: "Social 3.0",
-      tabSettingsLabel: "Настройки",
-      filesSubtitle: "Графика · Безопасность · Автообновление",
-      filesBadgeLabel: "Google Sheet подключен",
-      filesCountLabel: "Загружено файлов:",
-      thName: "Имя",
-      thCategory: "Категория",
-      thSize: "Размер",
-      thSecurity: "Безопасность",
-      syncStatusSyncing: "Умная синхронизация…",
-      syncStatusIdle: "Архив актуален",
-      syncStatusOffline: "Оффлайн: используется локальный кэш",
-      fileDetailPlaceholder: "Выберите файл…",
-      downloadBtnLabel: "Скачать файл",
-      openLinkBtnLabel: "Открыть прямую ссылку",
-      reportBtnLabel: "Пожаловаться на файл",
-      newsTitle: "Новости и обновления",
-      newsSubtitle: "Social · Безопасность · Функции",
-      newsBadgeLabel: "Авто новости",
-      newsItem1Title: "Social 3.0 активен",
-      newsItem1Meta: "Глобальный чат, связанный с Google Sheets",
-      newsItem1Body: "Глобальный чат пишет и читает напрямую из Google Sheets с умным автообновлением.",
-      newsItem2Title: "Система «умного» автообновления",
-      newsItem2Meta: "Отслеживание изменений в листе файлов",
-      newsItem2Body: "Архив файлов обновляется сам при изменениях в листе, без перезагрузки сайта.",
-      socialTitle: "Social 3.0 · Глобальный чат",
-      socialSubtitle: "Связан с Google Sheets",
-      socialBadgeLabel: "Глобальный чат активен",
-      chatStatusConnected: "Глобальный чат подключен",
-      chatStatusError: "Ошибка глобального чата",
-      chatStatusSyncing: "Обновление сообщений…",
-      chatMessagesCountLabel: "Сообщения:",
-      settingsTitle: "Настройки",
-      settingsSubtitle: "Язык · Social 3.0 · Система",
-      settingsBadgeLabel: "Локальный профиль",
-      settingsLanguageLabel: "Язык интерфейса",
-      settingsLanguageNote: "Язык меняет только интерфейс, не содержимое файлов или чата.",
-      settingsSystemLabel: "Система",
-      settingsSystemNote: "Система периодически проверяет Google Sheet, чтобы обновлять файлы, новости и чат без перезагрузки.",
-      chipAutoUpdate: "Умное автообновление",
-      chipSocial: "Social 3.0",
-      chipSecurity: "Монитор безопасности"
+    ru:{
+      globalStatusNoAccount:"Система онлайн · Локальный аккаунт не настроен",
+      globalStatusWithAccount:"Система онлайн · Локальный аккаунт активен",
+      filesTitle:"Архив файлов, связанный с Google Sheets",
+      filesBadge:"Лист: name, url, size, hash, category, note, security",
+      thName:"Имя",
+      thCategory:"Категория",
+      thSize:"Размер",
+      thSecurity:"Безопасность",
+      filesSyncing:"Умная синхронизация…",
+      filesIdle:"Архив актуален",
+      filesOffline:"Оффлайн: используется локальный кэш",
+      fileDetailPlaceholder:"Выберите файл…",
+      downloadBtn:"Скачать файл",
+      openBtn:"Открыть прямую ссылку",
+      reportBtn:"Пожаловаться на файл",
+      newsTitle:"Новости и обновления",
+      newsBadge:"Social 3.0 · Безопасность · Функции",
+      newsItem1Title:"Social 3.0 активен",
+      newsItem1Meta:"Глобальный чат, связанный с Google Sheets",
+      newsItem1Body:"Глобальный чат пишет и читает напрямую из Google Sheets с автообновлением.",
+      newsItem2Title:"Система умного автообновления",
+      newsItem2Meta:"Отслеживание изменений в листе файлов",
+      newsItem2Body:"Архив файлов обновляется при изменениях в листе, без перезагрузки сайта.",
+      socialTitle:"Social 3.0 · Глобальный чат",
+      socialBadge:"Связан с Google Sheets",
+      chatConnected:"Глобальный чат подключен",
+      chatError:"Ошибка глобального чата",
+      chatSyncing:"Обновление сообщений…",
+      settingsTitle:"Настройки",
+      settingsBadge:"Язык · Social 3.0 · Система",
+      settingsLanguageLabel:"Язык интерфейса",
+      settingsLanguageNote:"Язык меняет только интерфейс, не содержимое файлов или чата.",
+      settingsSystemLabel:"Система",
+      settingsSystemNote:"Система периодически проверяет листы, чтобы обновлять файлы, новости и чат без перезагрузки.",
+      chipAutoUpdate:"Умное автообновление",
+      chipSocial:"Social 3.0",
+      chipSecurity:"Монитор безопасности"
     }
   };
 
-  function applyLanguage(lang) {
-    const t = i18n[lang] || i18n.it;
-    currentLanguage = lang;
-    localStorage.setItem("matteoshare_lang", lang);
+  function applyLanguage(lang){
+    const t=i18n[lang]||i18n.it;
+    currentLanguage=lang;
+    localStorage.setItem("matteoshare_lang",lang);
 
-    document.getElementById("brandSubtitle").textContent = t.brandSubtitle;
-    document.getElementById("statusOnlineLabel").textContent = t.statusOnlineLabel;
-    document.getElementById("tabFilesLabel").textContent = t.tabFilesLabel;
-    document.getElementById("tabNewsLabel").textContent = t.tabNewsLabel;
-    document.getElementById("tabSocialLabel").textContent = t.tabSocialLabel;
-    document.getElementById("tabSettingsLabel").textContent = t.tabSettingsLabel;
-    document.getElementById("filesSubtitle").textContent = t.filesSubtitle;
-    document.getElementById("filesBadgeLabel").textContent = t.filesBadgeLabel;
-    document.getElementById("filesCountLabel").textContent = t.filesCountLabel;
-    document.getElementById("thName").textContent = t.thName;
-    document.getElementById("thCategory").textContent = t.thCategory;
-    document.getElementById("thSize").textContent = t.thSize;
-    document.getElementById("thSecurity").textContent = t.thSecurity;
-    document.getElementById("syncStatusText").textContent = t.syncStatusIdle;
-    document.getElementById("fileDetailName").textContent = t.fileDetailPlaceholder;
-    document.getElementById("downloadBtnLabel").textContent = t.downloadBtnLabel;
-    document.getElementById("openLinkBtnLabel").textContent = t.openLinkBtnLabel;
-    document.getElementById("reportBtnLabel").textContent = t.reportBtnLabel;
-    document.getElementById("newsTitle").textContent = t.newsTitle;
-    document.getElementById("newsSubtitle").textContent = t.newsSubtitle;
-    document.getElementById("newsBadgeLabel").textContent = t.newsBadgeLabel;
-    document.getElementById("newsItem1Title").textContent = t.newsItem1Title;
-    document.getElementById("newsItem1Meta").textContent = t.newsItem1Meta;
-    document.getElementById("newsItem1Body").textContent = t.newsItem1Body;
-    document.getElementById("newsItem2Title").textContent = t.newsItem2Title;
-    document.getElementById("newsItem2Meta").textContent = t.newsItem2Meta;
-    document.getElementById("newsItem2Body").textContent = t.newsItem2Body;
-    document.getElementById("socialTitle").textContent = t.socialTitle;
-    document.getElementById("socialSubtitle").textContent = t.socialSubtitle;
-    document.getElementById("socialBadgeLabel").textContent = t.socialBadgeLabel;
-    document.getElementById("chatStatusText").textContent = t.chatStatusConnected;
-    document.getElementById("chatMessagesCountLabel").textContent = t.chatMessagesCountLabel;
-    document.getElementById("settingsTitle").textContent = t.settingsTitle;
-    document.getElementById("settingsSubtitle").textContent = t.settingsSubtitle;
-    document.getElementById("settingsBadgeLabel").textContent = t.settingsBadgeLabel;
-    document.getElementById("settingsLanguageLabel").textContent = t.settingsLanguageLabel;
-    document.getElementById("settingsLanguageNote").textContent = t.settingsLanguageNote;
-    document.getElementById("settingsSystemLabel").textContent = t.settingsSystemLabel;
-    document.getElementById("settingsSystemNote").textContent = t.settingsSystemNote;
-    document.getElementById("chipAutoUpdate").textContent = t.chipAutoUpdate;
-    document.getElementById("chipSocial").textContent = t.chipSocial;
-    document.getElementById("chipSecurity").textContent = t.chipSecurity;
+    document.getElementById("filesTitle").textContent=t.filesTitle;
+    document.getElementById("filesBadge").textContent=t.filesBadge;
+    document.getElementById("thName").textContent=t.thName;
+    document.getElementById("thCategory").textContent=t.thCategory;
+    document.getElementById("thSize").textContent=t.thSize;
+    document.getElementById("thSecurity").textContent=t.thSecurity;
+    document.getElementById("filesStatusText").textContent=t.filesIdle;
+    document.getElementById("fileDetailName").textContent=t.fileDetailPlaceholder;
+    document.getElementById("fileDownloadBtn").textContent=t.downloadBtn;
+    document.getElementById("fileOpenUrlBtn").textContent=t.openBtn;
+    document.getElementById("fileReportBtn").textContent=t.reportBtn;
+
+    document.getElementById("newsTitle").textContent=t.newsTitle;
+    document.getElementById("newsBadge").textContent=t.newsBadge;
+    document.getElementById("newsItem1Title").textContent=t.newsItem1Title;
+    document.getElementById("newsItem1Meta").textContent=t.newsItem1Meta;
+    document.getElementById("newsItem1Body").textContent=t.newsItem1Body;
+    document.getElementById("newsItem2Title").textContent=t.newsItem2Title;
+    document.getElementById("newsItem2Meta").textContent=t.newsItem2Meta;
+    document.getElementById("newsItem2Body").textContent=t.newsItem2Body;
+
+    document.getElementById("socialTitle").textContent=t.socialTitle;
+    document.getElementById("socialBadge").textContent=t.socialBadge;
+    document.getElementById("chatStatusText").textContent=t.chatConnected;
+
+    document.getElementById("settingsTitle").textContent=t.settingsTitle;
+    document.getElementById("settingsBadge").textContent=t.settingsBadge;
+    document.getElementById("settingsLanguageLabel").textContent=t.settingsLanguageLabel;
+    document.getElementById("settingsLanguageNote").textContent=t.settingsLanguageNote;
+    document.getElementById("settingsSystemLabel").textContent=t.settingsSystemLabel;
+    document.getElementById("settingsSystemNote").textContent=t.settingsSystemNote;
+    document.getElementById("chipAutoUpdate").textContent=t.chipAutoUpdate;
+    document.getElementById("chipSocial").textContent=t.chipSocial;
+    document.getElementById("chipSecurity").textContent=t.chipSecurity;
+
+    updateGlobalStatus();
+  }
+
+  // =========================
+  // ACCOUNT LOCALE
+  // =========================
+  function loadLocalAccount(){
+    const raw=localStorage.getItem("matteoshare_account");
+    if(!raw) return null;
+    try{return JSON.parse(raw);}catch(e){return null;}
+  }
+  function saveLocalAccount(acc){
+    localAccount=acc;
+    localStorage.setItem("matteoshare_account",JSON.stringify(acc));
+    document.getElementById("accountNameLabel").textContent=acc.username;
+    document.getElementById("settingsAccountName").textContent=acc.username;
+    const chatUserInput=document.getElementById("chatUserInput");
+    if(chatUserInput && !chatUserInput.value) chatUserInput.value=acc.username;
+    updateGlobalStatus();
+  }
+  function updateGlobalStatus(){
+    const t=i18n[currentLanguage]||i18n.it;
+    const led=document.getElementById("globalStatusLed");
+    const label=document.getElementById("globalStatusText");
+    led.classList.remove("offline","sync");
+    if(localAccount){
+      label.textContent=t.globalStatusWithAccount;
+    }else{
+      label.textContent=t.globalStatusNoAccount;
+    }
+  }
+
+  function showLoginOverlay(){
+    document.getElementById("loginOverlay").classList.remove("hidden");
+  }
+  function hideLoginOverlay(){
+    document.getElementById("loginOverlay").classList.add("hidden");
   }
 
   // =========================
   // TABS
   // =========================
-  document.querySelectorAll(".tab-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+  document.querySelectorAll(".toolbar button").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      document.querySelectorAll(".toolbar button").forEach(b=>b.classList.remove("active"));
       btn.classList.add("active");
-      const tab = btn.getAttribute("data-tab");
-      document.querySelectorAll(".tab-panel").forEach(panel => {
-        panel.classList.toggle("hidden", panel.getAttribute("data-tab-panel") !== tab);
+      const tab=btn.getAttribute("data-tab");
+      document.querySelectorAll(".tab-panel").forEach(p=>{
+        p.classList.toggle("hidden",p.getAttribute("data-tab-panel")!==tab);
       });
     });
   });
 
   // =========================
-  // FILES: LETTURA GOOGLE SHEETS
+  // FILES
   // =========================
-  async function fetchFilesFromSheet() {
-    if (!GOOGLE_SHEETS_FILES_URL || GOOGLE_SHEETS_FILES_URL.startsWith("INSERISCI_QUI")) {
-      console.warn("Configura GOOGLE_SHEETS_FILES_URL nel codice.");
-      return [];
-    }
-    try {
-      document.getElementById("syncStatusDot").classList.remove("offline");
-      document.getElementById("syncStatusDot").classList.add("syncing");
-      document.getElementById("syncStatusText").textContent = i18n[currentLanguage].syncStatusSyncing;
-
-      const res = await fetch(GOOGLE_SHEETS_FILES_URL);
-      const text = await res.text();
-
-      // Adatta qui al formato del tuo export (JSON, CSV, gviz, ecc.)
-      // ESEMPIO per gviz:
-      // const json = JSON.parse(text.substr(47).slice(0, -2));
-      // const rows = json.table.rows;
-
-      // Per semplicità, supponiamo JSON array con chiavi: nome,url,size,hash,categoria,note,sicurezza
-      let data;
-      try {
-        data = JSON.parse(text);
-      } catch (e) {
-        console.error("Impossibile fare parse JSON. Adatta il parser al formato del tuo foglio.", e);
-        return filesData;
-      }
-
-      const mapped = data.map(row => ({
-        nome: row.nome || row.Nome || "",
-        url: row.url || row.URL || "",
-        size: row.size || row.peso || "",
-        hash: row.hash || "",
-        categoria: row.categoria || "",
-        note: row.note || "",
-        sicurezza: row.sicurezza || ""
-      }));
-
-      return mapped;
-    } catch (err) {
-      console.error("Errore caricamento file:", err);
-      document.getElementById("syncStatusDot").classList.remove("syncing");
-      document.getElementById("syncStatusDot").classList.add("offline");
-      document.getElementById("syncStatusText").textContent = i18n[currentLanguage].syncStatusOffline;
-      return filesData;
-    }
-  }
-
-  function signatureForFiles(files) {
-    return JSON.stringify(files.map(f => ({
-      nome: f.nome,
-      url: f.url,
-      size: f.size,
-      hash: f.hash,
-      categoria: f.categoria,
-      sicurezza: f.sicurezza,
-      note: f.note
+  function signatureForFiles(files){
+    return JSON.stringify(files.map(f=>({
+      nome:f.nome,url:f.url,size:f.size,hash:f.hash,categoria:f.categoria,sicurezza:f.sicurezza,note:f.note
     })));
   }
 
-  function renderFilesTable() {
-    const tbody = document.getElementById("filesTableBody");
-    tbody.innerHTML = "";
-    filesData.forEach((file, index) => {
-      const tr = document.createElement("tr");
-      tr.dataset.index = index;
-      if (index === selectedFileIndex) tr.classList.add("selected");
+  function renderFilesTable(){
+    const tbody=document.getElementById("filesTableBody");
+    tbody.innerHTML="";
+    filesData.forEach((file,index)=>{
+      const tr=document.createElement("tr");
+      tr.dataset.index=index;
+      if(index===selectedFileIndex) tr.classList.add("selected");
 
-      const tdName = document.createElement("td");
-      tdName.textContent = file.nome || "(senza nome)";
-
-      const tdCat = document.createElement("td");
-      tdCat.textContent = file.categoria || "-";
-
-      const tdSize = document.createElement("td");
-      tdSize.textContent = file.size || "-";
-
-      const tdSec = document.createElement("td");
-      const tag = document.createElement("span");
-      tag.className = "tag";
-      const dot = document.createElement("span");
-      dot.className = "tag-dot";
-      const secText = (file.sicurezza || "").toLowerCase();
-      if (secText.includes("sicuro") || secText.includes("safe")) {
-        tag.classList.add("safe");
-      } else if (secText.includes("attenzione") || secText.includes("warning")) {
-        tag.classList.add("warn");
-      } else if (secText.includes("pericoloso") || secText.includes("danger")) {
-        tag.classList.add("danger");
-      }
-      const label = document.createElement("span");
-      label.textContent = file.sicurezza || "-";
-      tag.appendChild(dot);
-      tag.appendChild(label);
+      const tdName=document.createElement("td");
+      tdName.textContent=file.nome||"(senza nome)";
+      const tdCat=document.createElement("td");
+      tdCat.textContent=file.categoria||"-";
+      const tdSize=document.createElement("td");
+      tdSize.textContent=file.size||"-";
+      const tdSec=document.createElement("td");
+      const tag=document.createElement("span");
+      tag.className="tag";
+      const sec=(file.sicurezza||"").toLowerCase();
+      if(sec.includes("sicuro")||sec.includes("safe")) tag.classList.add("safe");
+      else if(sec.includes("attenzione")||sec.includes("warn")) tag.classList.add("warn");
+      else if(sec.includes("pericoloso")||sec.includes("danger")) tag.classList.add("danger");
+      tag.textContent=file.sicurezza||"-";
       tdSec.appendChild(tag);
 
       tr.appendChild(tdName);
@@ -1051,199 +878,244 @@
       tr.appendChild(tdSize);
       tr.appendChild(tdSec);
 
-      tr.addEventListener("click", () => {
-        selectedFileIndex = index;
-        document.querySelectorAll("#filesTableBody tr").forEach(r => r.classList.remove("selected"));
+      tr.addEventListener("click",()=>{
+        selectedFileIndex=index;
+        document.querySelectorAll("#filesTableBody tr").forEach(r=>r.classList.remove("selected"));
         tr.classList.add("selected");
         renderFileDetail(file);
       });
 
       tbody.appendChild(tr);
     });
-
-    document.getElementById("filesCountValue").textContent = filesData.length.toString();
+    document.getElementById("filesCountValue").textContent=filesData.length.toString();
   }
 
-  function renderFileDetail(file) {
-    const t = i18n[currentLanguage];
-    const detail = document.getElementById("fileDetail");
+  function renderFileDetail(file){
+    const t=i18n[currentLanguage]||i18n.it;
+    const detail=document.getElementById("fileDetail");
     detail.classList.add("visible");
-    document.getElementById("fileDetailName").textContent = file.nome || t.fileDetailPlaceholder;
-    document.getElementById("fileDetailCategory").textContent = file.categoria ? `Categoria: ${file.categoria}` : "";
-    document.getElementById("fileDetailSize").textContent = file.size ? `Peso: ${file.size}` : "";
-    document.getElementById("fileDetailHash").textContent = file.hash ? `Hash: ${file.hash}` : "";
-    document.getElementById("fileDetailSecurity").textContent = file.sicurezza ? `Sicurezza: ${file.sicurezza}` : "";
-    document.getElementById("fileDetailNotes").textContent = file.note || "";
+    document.getElementById("fileDetailName").textContent=file.nome||t.fileDetailPlaceholder;
+    document.getElementById("fileDetailCategory").textContent=file.categoria?("Categoria: "+file.categoria):"";
+    document.getElementById("fileDetailSize").textContent=file.size?("Peso: "+file.size):"";
+    document.getElementById("fileDetailHash").textContent=file.hash?("Hash: "+file.hash):"";
+    document.getElementById("fileDetailSecurity").textContent=file.sicurezza?("Sicurezza: "+file.sicurezza):"";
+    document.getElementById("fileDetailNotes").textContent=file.note||"";
 
-    const downloadBtn = document.getElementById("fileDownloadBtn");
-    const openBtn = document.getElementById("fileOpenUrlBtn");
-    const reportBtn = document.getElementById("fileReportBtn");
-
-    const url = file.url || "";
-    downloadBtn.onclick = () => {
-      if (!url) return;
-      window.open(url, "_blank");
-    };
-    openBtn.onclick = () => {
-      if (!url) return;
-      window.open(url, "_blank");
-    };
-    reportBtn.onclick = () => {
-      const subject = encodeURIComponent(`[MatteoShare] Segnalazione file: ${file.nome || ""}`);
-      const body = encodeURIComponent(
-        `Ciao,\n\nVorrei segnalare questo file:\n\n` +
-        `Nome: ${file.nome || ""}\n` +
-        `URL: ${file.url || ""}\n` +
-        `Categoria: ${file.categoria || ""}\n` +
-        `Peso: ${file.size || ""}\n` +
-        `Sicurezza: ${file.sicurezza || ""}\n` +
-        `Note: ${file.note || ""}\n\n` +
-        `Motivo della segnalazione:\n[Scrivi qui]\n`
+    const url=file.url||"";
+    document.getElementById("fileDownloadBtn").onclick=()=>{if(url)window.open(url,"_blank");};
+    document.getElementById("fileOpenUrlBtn").onclick=()=>{if(url)window.open(url,"_blank");};
+    document.getElementById("fileReportBtn").onclick=()=>{
+      const subject=encodeURIComponent("[MatteoShare] Segnalazione file: "+(file.nome||""));
+      const body=encodeURIComponent(
+        "Ciao,\n\nVorrei segnalare questo file:\n\n"+
+        "Nome: "+(file.nome||"")+"\n"+
+        "URL: "+(file.url||"")+"\n"+
+        "Categoria: "+(file.categoria||"")+"\n"+
+        "Peso: "+(file.size||"")+"\n"+
+        "Sicurezza: "+(file.sicurezza||"")+"\n"+
+        "Note: "+(file.note||"")+"\n\n"+
+        "Motivo della segnalazione:\n[Scrivi qui]\n"
       );
-      window.location.href = `mailto:${FILE_REPORT_EMAIL}?subject=${subject}&body=${body}`;
+      window.location.href=`mailto:${FILE_REPORT_EMAIL}?subject=${subject}&body=${body}`;
     };
   }
 
-  async function smartFilesUpdate() {
-    const newFiles = await fetchFilesFromSheet();
-    if (!newFiles || !Array.isArray(newFiles)) return;
-
-    const newSignature = signatureForFiles(newFiles);
-    if (newSignature !== lastFilesSignature) {
-      filesData = newFiles;
-      lastFilesSignature = newSignature;
-      renderFilesTable();
-      document.getElementById("syncStatusDot").classList.remove("syncing", "offline");
-      document.getElementById("syncStatusText").textContent = i18n[currentLanguage].syncStatusIdle;
-      localStorage.setItem("matteoshare_files_cache", JSON.stringify(filesData));
-      localStorage.setItem("matteoshare_files_signature", lastFilesSignature);
-    } else {
-      document.getElementById("syncStatusDot").classList.remove("syncing", "offline");
-      document.getElementById("syncStatusText").textContent = i18n[currentLanguage].syncStatusIdle;
-    }
-  }
-
-  function loadFilesFromCache() {
-    try {
-      const cache = localStorage.getItem("matteoshare_files_cache");
-      const sig = localStorage.getItem("matteoshare_files_signature");
-      if (cache && sig) {
-        filesData = JSON.parse(cache);
-        lastFilesSignature = sig;
+  function loadFilesFromCache(){
+    try{
+      const cache=localStorage.getItem("matteoshare_files_cache");
+      const sig=localStorage.getItem("matteoshare_files_signature");
+      if(cache && sig){
+        filesData=JSON.parse(cache);
+        lastFilesSignature=sig;
         renderFilesTable();
+      }else{
+        // fallback demo se non hai ancora collegato il foglio
+        if(!GOOGLE_SHEETS_FILES_URL){
+          filesData=[
+            {nome:"Esempio - Tema XP.zip",url:"#",size:"12 MB",hash:"ABC123",categoria:"Tema",note:"Esempio locale, collega il tuo foglio per dati reali.",sicurezza:"Sicuro"},
+            {nome:"Strumento manutenzione.exe",url:"#",size:"3 MB",hash:"DEF456",categoria:"Tool",note:"Solo dimostrazione.",sicurezza:"Attenzione"}
+          ];
+          lastFilesSignature=signatureForFiles(filesData);
+          renderFilesTable();
+        }
       }
-    } catch (e) {
-      console.warn("Errore cache file:", e);
+    }catch(e){}
+  }
+
+  async function fetchFilesFromSheet(){
+    if(!GOOGLE_SHEETS_FILES_URL){
+      document.getElementById("filesStatusLed").classList.remove("offline","sync");
+      document.getElementById("filesStatusText").textContent=i18n[currentLanguage].filesIdle;
+      return filesData;
+    }
+    try{
+      document.getElementById("filesStatusLed").classList.add("sync");
+      document.getElementById("filesStatusText").textContent=i18n[currentLanguage].filesSyncing;
+      const res=await fetch(GOOGLE_SHEETS_FILES_URL);
+      const text=await res.text();
+
+      // ADATTA QUI al formato del tuo export.
+      // Esempio: se usi JSON diretto con chiavi nome,url,size,hash,categoria,note,sicurezza:
+      let data;
+      try{
+        data=JSON.parse(text);
+      }catch(e){
+        console.error("Adatta il parser al formato del tuo foglio.",e);
+        return filesData;
+      }
+      const mapped=data.map(row=>({
+        nome:row.nome||row.Nome||"",
+        url:row.url||row.URL||"",
+        size:row.size||row.peso||"",
+        hash:row.hash||"",
+        categoria:row.categoria||"",
+        note:row.note||"",
+        sicurezza:row.sicurezza||""
+      }));
+      return mapped;
+    }catch(err){
+      console.error("Errore caricamento file:",err);
+      document.getElementById("filesStatusLed").classList.add("offline");
+      document.getElementById("filesStatusText").textContent=i18n[currentLanguage].filesOffline;
+      return filesData;
+    }
+  }
+
+  async function smartFilesUpdate(){
+    const newFiles=await fetchFilesFromSheet();
+    if(!newFiles || !Array.isArray(newFiles))return;
+    const newSig=signatureForFiles(newFiles);
+    if(newSig!==lastFilesSignature){
+      filesData=newFiles;
+      lastFilesSignature=newSig;
+      renderFilesTable();
+      document.getElementById("filesStatusLed").classList.remove("offline","sync");
+      document.getElementById("filesStatusText").textContent=i18n[currentLanguage].filesIdle;
+      localStorage.setItem("matteoshare_files_cache",JSON.stringify(filesData));
+      localStorage.setItem("matteoshare_files_signature",lastFilesSignature);
+    }else{
+      document.getElementById("filesStatusLed").classList.remove("offline","sync");
+      document.getElementById("filesStatusText").textContent=i18n[currentLanguage].filesIdle;
     }
   }
 
   // =========================
-  // CHAT GLOBALE (Social 3.0)
+  // CHAT GLOBALE
   // =========================
-  async function fetchChatMessages() {
-    try {
-      document.getElementById("chatStatusDot").classList.remove("offline");
-      document.getElementById("chatStatusDot").classList.add("syncing");
-      document.getElementById("chatStatusText").textContent = i18n[currentLanguage].chatStatusSyncing;
-
-      const res = await fetch(GLOBAL_CHAT_ENDPOINT);
-      const data = await res.json();
-      chatMessages = Array.isArray(data) ? data : [];
+  async function fetchChatMessages(){
+    try{
+      document.getElementById("chatStatusLed").classList.add("sync");
+      document.getElementById("chatStatusText").textContent=i18n[currentLanguage].chatSyncing;
+      const res=await fetch(GLOBAL_CHAT_ENDPOINT);
+      const data=await res.json();
+      chatMessages=Array.isArray(data)?data:[];
       renderChatMessages();
-      document.getElementById("chatStatusDot").classList.remove("syncing");
-      document.getElementById("chatStatusDot").classList.remove("offline");
-      document.getElementById("chatStatusText").textContent = i18n[currentLanguage].chatStatusConnected;
-    } catch (err) {
-      console.error("Errore chat globale:", err);
-      document.getElementById("chatStatusDot").classList.add("offline");
-      document.getElementById("chatStatusText").textContent = i18n[currentLanguage].chatStatusError;
+      document.getElementById("chatStatusLed").classList.remove("offline","sync");
+      document.getElementById("chatStatusText").textContent=i18n[currentLanguage].chatConnected;
+    }catch(err){
+      console.error("Errore chat globale:",err);
+      document.getElementById("chatStatusLed").classList.add("offline");
+      document.getElementById("chatStatusText").textContent=i18n[currentLanguage].chatError;
     }
   }
 
-  function renderChatMessages() {
-    const container = document.getElementById("chatMessages");
-    container.innerHTML = "";
-    chatMessages.forEach(msg => {
-      const div = document.createElement("div");
-      div.className = "chat-message";
-
-      const header = document.createElement("div");
-      header.className = "chat-message-header";
-
-      const userSpan = document.createElement("span");
-      userSpan.className = "chat-message-user";
-      userSpan.textContent = msg.user || "Anonimo";
-
-      const timeSpan = document.createElement("span");
-      const ts = msg.timestamp ? new Date(msg.timestamp) : null;
-      timeSpan.textContent = ts && !isNaN(ts.getTime()) ? ts.toLocaleString() : "";
-
+  function renderChatMessages(){
+    const container=document.getElementById("chatMessages");
+    container.innerHTML="";
+    chatMessages.forEach(msg=>{
+      const div=document.createElement("div");
+      div.className="chat-message";
+      const header=document.createElement("div");
+      header.className="chat-header";
+      const userSpan=document.createElement("span");
+      userSpan.className="chat-user";
+      userSpan.textContent=msg.user||"Anonimo";
+      const timeSpan=document.createElement("span");
+      const ts=msg.timestamp?new Date(msg.timestamp):null;
+      timeSpan.textContent=ts && !isNaN(ts.getTime())?ts.toLocaleString():"";
       header.appendChild(userSpan);
       header.appendChild(timeSpan);
-
-      const body = document.createElement("div");
-      body.textContent = msg.message || "";
-
+      const body=document.createElement("div");
+      body.textContent=msg.message||"";
       div.appendChild(header);
       div.appendChild(body);
       container.appendChild(div);
     });
-    container.scrollTop = container.scrollHeight;
-    document.getElementById("chatMessagesCountValue").textContent = chatMessages.length.toString();
+    container.scrollTop=container.scrollHeight;
+    document.getElementById("chatMessagesCountValue").textContent=chatMessages.length.toString();
   }
 
-  async function sendChatMessage() {
-    const userInput = document.getElementById("chatUserInput");
-    const msgInput = document.getElementById("chatMessageInput");
-    const user = (userInput.value || "").trim() || "Anonimo";
-    const message = (msgInput.value || "").trim();
-    if (!message) return;
-
-    try {
-      document.getElementById("chatStatusDot").classList.add("syncing");
-      document.getElementById("chatStatusText").textContent = i18n[currentLanguage].chatStatusSyncing;
-
-      await fetch(GLOBAL_CHAT_ENDPOINT, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ user, message })
+  async function sendChatMessage(){
+    const userInput=document.getElementById("chatUserInput");
+    const msgInput=document.getElementById("chatMessageInput");
+    const user=(userInput.value||"").trim()||(localAccount?localAccount.username:"Anonimo");
+    const message=(msgInput.value||"").trim();
+    if(!message)return;
+    try{
+      document.getElementById("chatStatusLed").classList.add("sync");
+      document.getElementById("chatStatusText").textContent=i18n[currentLanguage].chatSyncing;
+      await fetch(GLOBAL_CHAT_ENDPOINT,{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({user,message})
       });
-
-      msgInput.value = "";
+      msgInput.value="";
       await fetchChatMessages();
-    } catch (err) {
-      console.error("Errore invio messaggio:", err);
-      document.getElementById("chatStatusDot").classList.add("offline");
-      document.getElementById("chatStatusText").textContent = i18n[currentLanguage].chatStatusError;
+    }catch(err){
+      console.error("Errore invio messaggio:",err);
+      document.getElementById("chatStatusLed").classList.add("offline");
+      document.getElementById("chatStatusText").textContent=i18n[currentLanguage].chatError;
     }
   }
 
   // =========================
   // INIT
   // =========================
-  document.addEventListener("DOMContentLoaded", () => {
-    // Lingua
-    document.getElementById("languageSelect").value = currentLanguage;
+  document.addEventListener("DOMContentLoaded",()=>{
+    // lingua
+    document.getElementById("languageSelect").value=currentLanguage;
     applyLanguage(currentLanguage);
-    document.getElementById("languageSelect").addEventListener("change", e => {
+    document.getElementById("languageSelect").addEventListener("change",e=>{
       applyLanguage(e.target.value);
-      // Risincronizza testi di stato
-      document.getElementById("syncStatusText").textContent = i18n[currentLanguage].syncStatusIdle;
-      document.getElementById("chatStatusText").textContent = i18n[currentLanguage].chatStatusConnected;
     });
 
-    // Cache file
+    // account
+    const acc=loadLocalAccount();
+    if(acc){
+      saveLocalAccount(acc);
+      hideLoginOverlay();
+    }else{
+      showLoginOverlay();
+    }
+
+    document.getElementById("loginConfirmBtn").addEventListener("click",()=>{
+      const username=(document.getElementById("loginUsername").value||"").trim();
+      const mode=document.getElementById("loginMode").value;
+      if(!username)return;
+      const accObj={username,createdAt:Date.now(),mode};
+      saveLocalAccount(accObj);
+      hideLoginOverlay();
+    });
+
+    document.getElementById("changeAccountBtn").addEventListener("click",()=>{
+      localStorage.removeItem("matteoshare_account");
+      localAccount=null;
+      document.getElementById("accountNameLabel").textContent="-";
+      document.getElementById("settingsAccountName").textContent="-";
+      showLoginOverlay();
+    });
+
+    // files
     loadFilesFromCache();
     smartFilesUpdate();
-    filesPollingInterval = setInterval(smartFilesUpdate, 60000); // ogni 60s
+    filesPollingInterval=setInterval(smartFilesUpdate,60000);
 
-    // Chat
+    // chat
     fetchChatMessages();
-    chatPollingInterval = setInterval(fetchChatMessages, 5000); // ogni 5s
-
-    document.getElementById("chatSendBtn").addEventListener("click", sendChatMessage);
-    document.getElementById("chatMessageInput").addEventListener("keydown", e => {
-      if (e.key === "Enter") sendChatMessage();
+    chatPollingInterval=setInterval(fetchChatMessages,5000);
+    document.getElementById("chatSendBtn").addEventListener("click",sendChatMessage);
+    document.getElementById("chatMessageInput").addEventListener("keydown",e=>{
+      if(e.key==="Enter")sendChatMessage();
     });
   });
 </script>
