@@ -1,1180 +1,2655 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <title>MatteoShare · Social 3.0</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{
-      font-family:Verdana,Arial,Helvetica,sans-serif;
-      background:#e5e5e5 url("https://rutracker.org/forum/styles/rutracker/theme/images/bg.gif") repeat;
-      color:#000;
-    }
-    a{color:#004b91;text-decoration:none}
-    a:hover{text-decoration:underline}
-    .page{
-      max-width:1180px;
-      margin:10px auto 30px;
-      background:#f5f5f5;
-      border:1px solid #b0b0b0;
-      box-shadow:0 0 4px rgba(0,0,0,0.2);
-    }
-    .header{
-      background:#2f5b93 url("https://rutracker.org/forum/styles/rutracker/theme/images/bg_header.gif") repeat-x;
-      color:#fff;
-      padding:8px 12px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-    }
-    .header-left{
-      font-size:18px;
-      font-weight:bold;
-    }
-    .header-right{
-      font-size:11px;
-      text-align:right;
-    }
-    .header-right span{
-      display:block;
-    }
-    .nav-bar{
-      background:#d6dde5;
-      border-top:1px solid #b0b0b0;
-      border-bottom:1px solid #b0b0b0;
-      padding:4px 8px;
-      font-size:11px;
-      display:flex;
-      justify-content:space-between;
-      flex-wrap:wrap;
-      gap:4px;
-    }
-    .nav-links a{
-      margin-right:8px;
-      font-weight:bold;
-    }
-    .nav-status{
-      font-size:11px;
-      color:#333;
-    }
-    .nav-status span.label{font-weight:bold}
-    .content{
-      padding:8px;
-    }
-    .tabs{
-      margin-bottom:8px;
-      border-bottom:1px solid #b0b0b0;
-      display:flex;
-      flex-wrap:wrap;
-      gap:2px;
-    }
-    .tab-btn{
-      font-size:11px;
-      padding:4px 10px;
-      border:1px solid #b0b0b0;
-      border-bottom:none;
-      background:#d6dde5;
-      cursor:pointer;
-      border-radius:4px 4px 0 0;
-    }
-    .tab-btn.active{
-      background:#ffffff;
-      font-weight:bold;
-      border-bottom:1px solid #ffffff;
-    }
-    .tab-panel{display:none}
-    .tab-panel.active{display:block}
-    .two-cols{
-      display:grid;
-      grid-template-columns:2.1fr 1.4fr;
-      gap:8px;
-    }
-    @media(max-width:900px){
-      .two-cols{grid-template-columns:1fr}
-    }
-    .block{
-      border:1px solid #b0b0b0;
-      background:#ffffff;
-      margin-bottom:8px;
-    }
-    .block-header{
-      background:#d6dde5;
-      padding:4px 6px;
-      font-size:11px;
-      font-weight:bold;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-    }
-    .block-header small{font-weight:normal;color:#555}
-    .block-body{
-      padding:6px;
-      font-size:11px;
-    }
-    .block-footer{
-      padding:4px 6px;
-      font-size:10px;
-      background:#f0f0f0;
-      border-top:1px solid #d0d0d0;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-    }
-    .status-led{
-      display:inline-block;
-      width:8px;
-      height:8px;
-      border-radius:50%;
-      margin-right:4px;
-      background:#0a0;
-    }
-    .status-led.offline{background:#a00}
-    .status-led.sync{background:#cc0}
-    table.forum-table{
-      width:100%;
-      border-collapse:collapse;
-      font-size:11px;
-    }
-    .forum-table th,
-    .forum-table td{
-      border:1px solid #d0d0d0;
-      padding:3px 4px;
-      vertical-align:middle;
-    }
-    .forum-table th{
-      background:#d6dde5;
-      color:#000;
-      text-align:left;
-      white-space:nowrap;
-    }
-    .forum-table tr:nth-child(even){
-      background:#f7f7f7;
-    }
-    .forum-table tr:hover{
-      background:#e3f1ff;
-    }
-    .forum-table tr.selected{
-      background:#c7e1ff;
-    }
-    .tag{
-      display:inline-block;
-      padding:1px 4px;
-      border-radius:3px;
-      border:1px solid #b0b0b0;
-      background:#f0f0f0;
-      font-size:10px;
-    }
-    .tag.safe{background:#dfffdc;border-color:#9acb8a}
-    .tag.warn{background:#fff6d6;border-color:#d8b45a}
-    .tag.danger{background:#ffe0e0;border-color:#d88a8a}
-    .file-detail{
-      margin-top:6px;
-      border-top:1px dashed #d0d0d0;
-      padding-top:6px;
-      display:none;
-    }
-    .file-detail.visible{display:block}
-    .file-detail-title{
-      font-size:12px;
-      font-weight:bold;
-      margin-bottom:4px;
-    }
-    .file-meta span{
-      display:inline-block;
-      margin-right:10px;
-      margin-bottom:2px;
-    }
-    .file-notes{
-      margin-top:4px;
-      font-size:11px;
-    }
-    .btn{
-      font-size:11px;
-      padding:2px 8px;
-      border:1px solid #b0b0b0;
-      background:#e5e5e5;
-      cursor:pointer;
-      border-radius:3px;
-      margin-right:4px;
-      margin-top:2px;
-    }
-    .btn:hover{
-      background:#d6dde5;
-    }
-    .btn-danger{
-      background:#ffe0e0;
-      border-color:#d88a8a;
-    }
-    .btn-danger:hover{
-      background:#ffd0d0;
-    }
-    .news-item{
-      border-bottom:1px solid #e0e0e0;
-      padding:4px 0;
-    }
-    .news-title{
-      font-weight:bold;
-      margin-bottom:2px;
-    }
-    .news-meta{
-      font-size:10px;
-      color:#777;
-      margin-bottom:2px;
-    }
-    .news-body{
-      font-size:11px;
-    }
-    .chat-box{
-      border:1px solid #d0d0d0;
-      background:#ffffff;
-      display:flex;
-      flex-direction:column;
-      height:260px;
-    }
-    .chat-messages{
-      flex:1;
-      padding:4px;
-      overflow-y:auto;
-      font-size:11px;
-      background:#ffffff;
-    }
-    .chat-message{
-      border-bottom:1px solid #f0f0f0;
-      padding:2px 0;
-    }
-    .chat-header{
-      display:flex;
-      justify-content:space-between;
-      font-size:10px;
-      color:#777;
-    }
-    .chat-user{font-weight:bold}
-    .chat-input{
-      border-top:1px solid #d0d0d0;
-      padding:4px;
-      background:#f5f5f5;
-      display:flex;
-      gap:4px;
-      flex-wrap:wrap;
-    }
-    .input,select{
-      font-size:11px;
-      padding:2px 4px;
-      border:1px solid #b0b0b0;
-      background:#ffffff;
-      border-radius:3px;
-    }
-    .input-small{max-width:120px}
-    .settings-grid{
-      display:grid;
-      grid-template-columns:1.2fr 1.2fr;
-      gap:8px;
-    }
-    @media(max-width:800px){
-      .settings-grid{grid-template-columns:1fr}
-    }
-    .settings-block{
-      border:1px solid #d0d0d0;
-      background:#ffffff;
-      padding:6px;
-      font-size:11px;
-    }
-    .settings-title{
-      font-weight:bold;
-      margin-bottom:4px;
-    }
-    .settings-note{
-      font-size:10px;
-      color:#666;
-      margin-top:4px;
-    }
-    .chip{
-      display:inline-block;
-      padding:1px 6px;
-      border-radius:10px;
-      border:1px solid #b0b0b0;
-      background:#f0f0f0;
-      font-size:10px;
-      margin-right:4px;
-      margin-top:2px;
-    }
-    .hidden{display:none!important}
-    .overlay{
-      position:fixed;
-      inset:0;
-      background:rgba(0,0,0,0.45);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      z-index:1000;
-    }
-    .login-box{
-      width:360px;
-      background:#f5f5f5;
-      border:1px solid #b0b0b0;
-      box-shadow:0 0 6px rgba(0,0,0,0.4);
-    }
-    .login-header{
-      background:#2f5b93;
-      color:#fff;
-      padding:6px 8px;
-      font-size:12px;
-      font-weight:bold;
-    }
-    .login-body{
-      padding:8px;
-      font-size:11px;
-    }
-    .login-body label{
-      display:block;
-      margin-top:4px;
-      margin-bottom:2px;
-    }
-    .login-actions{
-      margin-top:8px;
-      text-align:right;
-    }
-    .login-error{
-      color:#a00;
-      font-size:10px;
-      margin-top:4px;
-      display:none;
-    }
-    .footer{
-      padding:6px 8px;
-      font-size:10px;
-      color:#666;
-      border-top:1px solid #d0d0d0;
-      background:#f0f0f0;
-      text-align:right;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>MatteoShare Web – Versione Completa 100% (Compatibile Google Sheets)</title>
+    <style>
+        :root {
+            --bg-main: #141b2b;
+            --bg-panel: #f3f2f0;
+            --bg-sidebar: #e0ded8;
+            --bg-header-top: #1f5fa9;
+            --bg-header-bottom: #0e3f7a;
+            --border-dark: #404040;
+            --border-light: #ffffff;
+            --text-main: #000000;
+            --accent: #ffcc00;
+        }
+
+        body.theme-default {
+            --bg-main: #141b2b;
+            --bg-panel: #f3f2f0;
+            --bg-sidebar: #e0ded8;
+            --bg-header-top: #1f5fa9;
+            --bg-header-bottom: #0e3f7a;
+            --text-main: #000000;
+            --accent: #ffcc00;
+        }
+
+        body.theme-dark {
+            --bg-main: #05060a;
+            --bg-panel: #1f1f24;
+            --bg-sidebar: #18181d;
+            --bg-header-top: #303f9f;
+            --bg-header-bottom: #1a237e;
+            --text-main: #f0f0f0;
+            --accent: #ff9800;
+        }
+
+        body.theme-neon {
+            --bg-main: #020014;
+            --bg-panel: #050520;
+            --bg-sidebar: #050515;
+            --bg-header-top: #00bcd4;
+            --bg-header-bottom: #00838f;
+            --text-main: #e0ffff;
+            --accent: #ffea00;
+        }
+
+        body.theme-terminal {
+            --bg-main: #000000;
+            --bg-panel: #001800;
+            --bg-sidebar: #001000;
+            --bg-header-top: #003300;
+            --bg-header-bottom: #001a00;
+            --text-main: #00ff00;
+            --accent: #00ff00;
+        }
+
+        body {
+            background: radial-gradient(circle at top, #2b3f6b 0, var(--bg-main) 45%, #000 100%);
+            color: var(--text-main);
+            font-family: Tahoma, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: linear-gradient(to bottom, var(--bg-header-top), var(--bg-header-bottom));
+            color: white;
+            padding: 8px 12px;
+            border-bottom: 2px solid #002d5c;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+        }
+
+        header .title-block {
+            display: flex;
+            flex-direction: column;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 22px;
+            font-weight: bold;
+            text-shadow: 1px 1px 3px #000;
+        }
+
+        header p {
+            margin: 2px 0 0;
+            font-size: 11px;
+            color: #d0e4ff;
+        }
+
+        header .account-info {
+            font-size: 11px;
+            text-align: right;
+        }
+
+        header .account-info span {
+            display: block;
+        }
+
+        .version-label {
+            font-size: 10px;
+            color: #ffe082;
+        }
+
+        .main {
+            display: flex;
+            height: calc(100vh - 52px);
+        }
+
+        .sidebar {
+            width: 240px;
+            background: linear-gradient(180deg, var(--bg-sidebar), #c9c7c0);
+            border-right: 2px solid var(--border-dark);
+            padding: 8px;
+            box-sizing: border-box;
+            font-size: 12px;
+            box-shadow: 2px 0 6px rgba(0,0,0,0.4);
+        }
+
+        .sidebar h3 {
+            margin-top: 0;
+            font-size: 13px;
+            color: #0e3f7a;
+            text-shadow: 0 1px 0 #fff;
+        }
+
+        .sidebar button {
+            width: 100%;
+            text-align: left;
+            margin-bottom: 4px;
+        }
+
+        .content {
+            flex: 1;
+            padding: 8px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+
+        .panel {
+            background: var(--bg-panel);
+            border-radius: 6px;
+            border: 1px solid rgba(0,0,0,0.25);
+            padding: 8px;
+            margin-bottom: 8px;
+            font-size: 12px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+            backdrop-filter: blur(4px);
+        }
+
+        .panel h2 {
+            margin-top: 0;
+            font-size: 15px;
+            color: #0e3f7a;
+        }
+
+        .panel h2::after {
+            content: "";
+            display: block;
+            width: 60px;
+            height: 2px;
+            margin-top: 2px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(255,255,255,0.96);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        table th {
+            background: linear-gradient(180deg, #e4e2da, #c9c7c0);
+            padding: 5px;
+            border-bottom: 1px solid #a7a6aa;
+            text-align: left;
+            font-size: 11px;
+        }
+
+        table td {
+            padding: 5px;
+            border-bottom: 1px solid #d0cfcb;
+            font-size: 11px;
+        }
+
+        table tr:nth-child(even) td {
+            background: #f7f6f4;
+        }
+
+        button {
+            background: linear-gradient(180deg, #f5f4f2, #d4d0c8);
+            border-radius: 3px;
+            border: 1px solid #8c8a85;
+            padding: 3px 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 11px;
+            box-shadow: 0 1px 0 #fff inset, 0 1px 2px rgba(0,0,0,0.4);
+        }
+
+        button:hover {
+            filter: brightness(1.05);
+        }
+
+        button:active {
+            box-shadow: 0 0 0 #fff inset;
+            transform: translateY(1px);
+        }
+
+        input, select, textarea {
+            padding: 3px;
+            border-radius: 3px;
+            border: 1px solid #a7a6aa;
+            background: #fdfdfd;
+            font-family: Tahoma;
+            font-size: 11px;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        .window {
+            display:none;
+            position:fixed;
+            top:15%;
+            left:25%;
+            width:50%;
+            background: var(--bg-panel);
+            border-radius: 6px;
+            border:1px solid rgba(0,0,0,0.4);
+            z-index:9999;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+            animation: winOpen 0.15s ease-out;
+        }
+
+        .window-header {
+            background: linear-gradient(to bottom, var(--bg-header-top), var(--bg-header-bottom));
+            color:white;
+            padding:4px 8px;
+            font-size:11px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            border-radius:6px 6px 0 0;
+        }
+
+        .window-header span {
+            font-weight:bold;
+        }
+
+        .window-header button {
+            padding:0 6px;
+            font-size:9px;
+        }
+
+        .window-body {
+            padding:8px;
+            font-size:11px;
+        }
+
+        #chatMessages {
+            height: 220px;
+            overflow-y: auto;
+            background:white;
+            border-radius:4px;
+            border:1px solid #a7a6aa;
+            padding:4px;
+            font-size:11px;
+        }
+
+        #peersList {
+            height: 220px;
+            overflow-y: auto;
+            background:white;
+            border-radius:4px;
+            border:1px solid #a7a6aa;
+            padding:4px;
+            font-size:11px;
+        }
+
+        .peer-item {
+            display:flex;
+            justify-content:space-between;
+            border-bottom:1px solid #ddd;
+            padding:2px 0;
+        }
+
+        .status-online {
+            color:#00c853;
+            font-weight:bold;
+        }
+
+        .status-offline {
+            color:#e53935;
+            font-weight:bold;
+        }
+
+        .account-field {
+            margin-bottom:5px;
+        }
+
+        .account-field label {
+            display:block;
+            font-size:11px;
+            margin-bottom:2px;
+        }
+
+        .filters {
+            margin-bottom:6px;
+            display:flex;
+            flex-wrap:wrap;
+            gap:4px;
+            align-items:center;
+        }
+
+        .filters label {
+            font-size:11px;
+        }
+
+        #notifyBox {
+            position:fixed;
+            right:10px;
+            bottom:10px;
+            background:rgba(236,233,216,0.98);
+            border-radius:4px;
+            border:1px solid #a7a6aa;
+            padding:4px 8px;
+            font-size:10px;
+            display:none;
+            box-shadow:0 2px 6px rgba(0,0,0,0.4);
+        }
+
+        #miniPlayer {
+            width:260px;
+            right:10px;
+            left:auto;
+            top:10px;
+        }
+
+        #miniChat {
+            height:120px;
+            overflow-y:auto;
+            background:white;
+            border-radius:4px;
+            border:1px solid #a7a6aa;
+            font-size:10px;
+            padding:3px;
+        }
+
+        .offline-banner {
+            background:#b71c1c;
+            color:white;
+            text-align:center;
+            font-size:10px;
+            padding:2px 0;
+            display:none;
+        }
+
+        .avatar-box {
+            width:44px;
+            height:44px;
+            border-radius:6px;
+            border:1px solid #404040;
+            background:radial-gradient(circle at 30% 20%, #fff, #cfd8dc);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:14px;
+            margin-bottom:5px;
+            box-shadow:0 2px 4px rgba(0,0,0,0.4);
+        }
+
+        .avatar-editor {
+            display:grid;
+            grid-template-columns:repeat(4,16px);
+            grid-template-rows:repeat(4,16px);
+            gap:2px;
+            margin-bottom:6px;
+        }
+
+        .avatar-pixel {
+            width:16px;
+            height:16px;
+            border-radius:2px;
+            border:1px solid #404040;
+            cursor:pointer;
+        }
+
+        .badge-list div {
+            font-size:11px;
+            margin-bottom:2px;
+        }
+
+        .badge-unlocked {
+            color:#2e7d32;
+            font-weight:bold;
+        }
+
+        .badge-locked {
+            color:gray;
+        }
+
+        .mention {
+            background: #fff59d;
+            font-weight:bold;
+        }
+
+        .reaction-btn {
+            font-size:9px;
+            padding:1px 4px;
+            margin-left:2px;
+        }
+
+        .server-stats {
+            font-size:11px;
+            margin-top:6px;
+            background:white;
+            border-radius:4px;
+            border:1px solid #a7a6aa;
+            padding:4px;
+            max-height:120px;
+            overflow-y:auto;
+        }
+
+        .rep-score {
+            font-weight:bold;
+            color:#1f5fa9;
+        }
+
+        .verified-server {
+            color:#2e7d32;
+            font-weight:bold;
+        }
+
+        .unverified-server {
+            color:#555;
+        }
+
+        .security-log {
+            font-size:10px;
+            background:white;
+            border-radius:4px;
+            border:1px solid #a7a6aa;
+            padding:4px;
+            max-height:150px;
+            overflow-y:auto;
+        }
+
+        .profile-wall {
+            background:white;
+            border-radius:4px;
+            border:1px solid #a7a6aa;
+            padding:4px;
+            max-height:180px;
+            overflow-y:auto;
+            font-size:11px;
+        }
+
+        .friend-item {
+            font-size:11px;
+            margin-bottom:3px;
+        }
+
+        .news-list {
+            background:white;
+            border-radius:4px;
+            border:1px solid #a7a6aa;
+            padding:4px;
+            max-height:260px;
+            overflow-y:auto;
+            font-size:11px;
+        }
+
+        .news-item {
+            border-bottom:1px solid #ddd;
+            margin-bottom:4px;
+            padding-bottom:3px;
+        }
+
+        .news-title {
+            font-weight:bold;
+        }
+
+        .news-date {
+            font-size:10px;
+            color:#555;
+        }
+
+        .auto-update-label {
+            font-size:10px;
+            color:#555;
+        }
+
+        .file-new td {
+            background:#e8f5e9 !important;
+        }
+
+        .file-removed td {
+            background:#ffebee !important;
+        }
+
+        .file-changed td {
+            background:#fffde7 !important;
+        }
+
+        .file-detail-label {
+            font-weight:bold;
+        }
+
+        .xp-bar {
+            width:100%;
+            height:10px;
+            border-radius:4px;
+            border:1px solid #404040;
+            background:#f0f0f0;
+            overflow:hidden;
+        }
+
+        .xp-bar-inner {
+            height:100%;
+            background:linear-gradient(90deg,#1f5fa9,#42a5f5);
+            width:0%;
+        }
+
+        @keyframes winOpen {
+            from { transform:scale(0.9); opacity:0; }
+            to { transform:scale(1); opacity:1; }
+        }
+    </style>
 </head>
-<body>
-<div class="page">
+<body class="theme-default">
 
-  <!-- LOGIN / REGISTRAZIONE LOCALE -->
-  <div class="overlay" id="loginOverlay">
-    <div class="login-box">
-      <div class="login-header">MatteoShare · Accesso account locale</div>
-      <div class="login-body">
-        <div style="margin-bottom:6px;">
-          Benvenuto in <b>MatteoShare · Social 3.0</b>.<br>
-          Crea o accedi a un <b>account locale</b> per usare il sito e la chat globale.
-        </div>
-        <label for="loginMode">Modalità</label>
-        <select id="loginMode" class="input" style="width:100%;">
-          <option value="login">Login (account esistente)</option>
-          <option value="create">Crea nuovo account</option>
-        </select>
-        <label for="loginUsername">Nome utente</label>
-        <input id="loginUsername" class="input" type="text" style="width:100%;" placeholder="Es. Matteo">
-        <label for="loginPassword">Password</label>
-        <input id="loginPassword" class="input" type="password" style="width:100%;" placeholder="Password">
-        <div class="login-error" id="loginError"></div>
-        <div class="login-actions">
-          <button class="btn" id="loginConfirmBtn">OK</button>
-        </div>
-      </div>
-    </div>
-  </div>
+<div id="offlineBanner" class="offline-banner">Modalità offline: alcune funzioni potrebbero non essere disponibili.</div>
 
-  <!-- HEADER -->
-  <div class="header">
-    <div class="header-left">
-      MatteoShare · Social 3.0
+<header>
+    <div class="title-block">
+        <h1>MatteoShare Web</h1>
+        <p>Programmed by <strong>Angelini Matteo</strong> – Social 3.0, Sicurezza & Auto‑Update Intelligente</p>
+        <span class="version-label" id="versionLabel">Build 2.0.0 – Compatibile con Google Sheets (nome, url, size, hash, categoria, note, sicurezza)</span>
     </div>
-    <div class="header-right">
-      <span>Archivio file · Chat globale · News</span>
-      <span>Interfaccia stile forum (tipo rutracker)</span>
+    <div class="account-info">
+        <span id="accountNameLabel">Account: (nessun account)</span>
+        <span id="accountIdLabel">ID: -</span>
+        <span id="accountStatusLabel">Stato: OFFLINE</span>
+        <span>
+            Tema:
+            <select id="themeSelect" onchange="changeTheme()">
+                <option value="default">Default</option>
+                <option value="dark">Dark Retro</option>
+                <option value="neon">Neon</option>
+                <option value="terminal">Terminale</option>
+            </select>
+        </span>
+        <span id="xpLabel">XP: 0 (Lv. 1)</span>
+        <div class="xp-bar"><div id="xpBarInner" class="xp-bar-inner"></div></div>
     </div>
-  </div>
+</header>
 
-  <!-- NAV BAR -->
-  <div class="nav-bar">
-    <div class="nav-links">
-      <a href="javascript:void(0)">Indice</a>
-      <a href="javascript:void(0)">File</a>
-      <a href="javascript:void(0)">Social 3.0</a>
-      <a href="javascript:void(0)">Impostazioni</a>
-      <a href="javascript:void(0)">Aiuto</a>
-    </div>
-    <div class="nav-status">
-      <span class="label">Utente:</span> <span id="accountNameLabel">-</span> ·
-      <span class="label">Stato:</span> <span id="globalStatusText">Sistema online · Account locale non configurato</span>
-    </div>
-  </div>
-
-  <!-- CONTENT -->
-  <div class="content">
-
-    <!-- TABS -->
-    <div class="tabs">
-      <button class="tab-btn active" data-tab="files">File</button>
-      <button class="tab-btn" data-tab="news">News</button>
-      <button class="tab-btn" data-tab="social">Social 3.0</button>
-      <button class="tab-btn" data-tab="settings">Impostazioni</button>
+<div class="main">
+    <div class="sidebar">
+        <h3>Menu</h3>
+        <button onclick="navigateTo('files')">File Condivisi</button>
+        <button onclick="navigateTo('news')">News</button>
+        <button onclick="navigateTo('request')">Richiesta Pubblicazione</button>
+        <button onclick="navigateTo('chat')">Chat Globale</button>
+        <button onclick="navigateTo('peers')">Peer / Profili</button>
+        <button onclick="navigateTo('social')">Social 3.0</button>
+        <button onclick="navigateTo('history')">Cronologia Download</button>
+        <button onclick="navigateTo('favorites')">Preferiti</button>
+        <button onclick="navigateTo('badges')">Badge</button>
+        <button onclick="navigateTo('stats')">Statistiche</button>
+        <button onclick="navigateTo('security')">Sicurezza & Integrità</button>
+        <button onclick="navigateTo('account')">Account Locale</button>
+        <button onclick="navigateTo('admin')">Pannello Admin</button>
+        <button onclick="navigateTo('plugins')">Plugin</button>
+        <button onclick="navigateTo('server')">Server</button>
+        <hr>
+        <button onclick="openMiniPlayer()">Mini Player</button>
+        <hr>
+        <button id="connectBtn" onclick="toggleConnection()">Connetti</button>
+        <p class="auto-update-label">
+            Auto‑update: <span id="autoUpdateStatus">ON (intelligente)</span><br>
+            Ultimo refresh: <span id="lastRefreshLabel">-</span>
+        </p>
     </div>
 
-    <!-- PANELS -->
-    <div class="tab-panel active" data-tab-panel="files">
-      <div class="two-cols">
-        <div>
-          <div class="block">
-            <div class="block-header">
-              <span id="filesTitle">Archivio file collegato a Google Sheets</span>
-              <small id="filesBadge">Foglio: nome, url, size, hash, categoria, note, sicurezza</small>
+    <div class="content">
+
+        <!-- FILE LISTA -->
+        <div id="section-files" class="panel">
+            <h2>File Condivisi (lettura completa Google Sheets)</h2>
+
+            <div class="filters">
+                <label>Nome:
+                    <input type="text" id="filterName" placeholder="Cerca per nome">
+                </label>
+                <label>Tipo:
+                    <select id="filterType">
+                        <option value="all">Tutti</option>
+                        <option value="local">Locali</option>
+                        <option value="cloud">Cloud</option>
+                    </select>
+                </label>
+                <label>Sicurezza:
+                    <select id="filterSec">
+                        <option value="all">Tutti</option>
+                        <option value="VERIFICATO">Verificati</option>
+                        <option value="NON VERIFICATO">Non verificati</option>
+                    </select>
+                </label>
+                <label>Ordina per:
+                    <select id="sortBy">
+                        <option value="name">Nome</option>
+                        <option value="size">Peso</option>
+                        <option value="security">Sicurezza</option>
+                    </select>
+                </label>
+                <button onclick="applyFilters()">Applica</button>
             </div>
-            <div class="block-body">
-              <table class="forum-table" id="filesTable">
+
+            <table id="filesTable">
                 <thead>
-                <tr>
-                  <th id="thName">Nome</th>
-                  <th id="thCategory">Categoria</th>
-                  <th id="thSize">Peso</th>
-                  <th id="thSecurity">Sicurezza</th>
-                </tr>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Descrizione</th>
+                        <th>Peso</th>
+                        <th>Sicurezza</th>
+                        <th>Tipo</th>
+                        <th>Tag</th>
+                        <th>Server</th>
+                        <th>Segnala</th>
+                    </tr>
                 </thead>
-                <tbody id="filesTableBody"></tbody>
-              </table>
-
-              <div class="file-detail" id="fileDetail">
-                <div class="file-detail-title" id="fileDetailName">Seleziona un file…</div>
-                <div class="file-meta">
-                  <span id="fileDetailCategory"></span>
-                  <span id="fileDetailSize"></span>
-                  <span id="fileDetailHash"></span>
-                  <span id="fileDetailSecurity"></span>
-                </div>
-                <div class="file-notes" id="fileDetailNotes"></div>
-                <div style="margin-top:4px;">
-                  <button class="btn" id="fileDownloadBtn">Scarica file</button>
-                  <button class="btn" id="fileOpenUrlBtn">Apri link diretto</button>
-                  <button class="btn btn-danger" id="fileReportBtn">Segnala file</button>
-                </div>
-              </div>
-            </div>
-            <div class="block-footer">
-              <div>
-                <span class="status-led sync" id="filesStatusLed"></span>
-                <span id="filesStatusText">Sincronizzazione intelligente in corso…</span>
-              </div>
-              <div>File: <span id="filesCountValue">0</span></div>
-            </div>
-          </div>
+                <tbody></tbody>
+            </table>
+            <p style="font-size:10px;margin-top:4px;">
+                I file nuovi sono evidenziati in verde, quelli modificati in giallo. I file rimossi sono mostrati solo nel log interno.
+            </p>
         </div>
 
-        <div>
-          <div class="block">
-            <div class="block-header">
-              <span id="newsTitle">News & aggiornamenti</span>
-              <small id="newsBadge">Social 3.0 · Sicurezza · Funzioni</small>
+        <!-- PAGINA DETTAGLIO FILE -->
+        <div id="section-filedetail" class="panel" style="display:none;">
+            <h2>Dettaglio file</h2>
+            <div id="fileDetailBox" style="background:white;border-radius:4px;border:1px solid #a7a6aa;padding:6px;font-size:11px;"></div>
+            <div style="margin-top:6px;">
+                <button onclick="goBackToFiles()">Torna alla lista</button>
             </div>
-            <div class="block-body" id="newsList">
-              <div class="news-item">
-                <div class="news-title" id="newsItem1Title">Social 3.0 attivo</div>
-                <div class="news-meta" id="newsItem1Meta">Chat globale collegata a Google Sheets</div>
-                <div class="news-body" id="newsItem1Body">
-                  La chat globale scrive e legge direttamente dal tuo foglio Google, con aggiornamento automatico.
-                </div>
-              </div>
-              <div class="news-item">
-                <div class="news-title" id="newsItem2Title">Sistema di auto update intelligente</div>
-                <div class="news-meta" id="newsItem2Meta">Rilevamento modifiche sul foglio file</div>
-                <div class="news-body" id="newsItem2Body">
-                  L’archivio file si aggiorna quando rileva cambiamenti sul foglio, senza ricaricare il sito.
-                </div>
-              </div>
-            </div>
-            <div class="block-footer">
-              <div>
-                <span class="status-led" id="newsStatusLed"></span>
-                <span id="newsStatusText">News statiche · Foglio news opzionale</span>
-              </div>
-              <div></div>
-            </div>
-          </div>
         </div>
-      </div>
+
+        <!-- NEWS -->
+        <div id="section-news" class="panel" style="display:none;">
+            <h2>News / Messaggi del creatore (Google Sheets)</h2>
+            <p style="font-size:11px;">Il sito legge <strong>tutte le righe</strong> della tua tavola Google Sheets delle news.</p>
+            <div id="newsList" class="news-list"></div>
+        </div>
+
+        <!-- RICHIESTA PUBBLICAZIONE -->
+        <div id="section-request" class="panel" style="display:none;">
+            <h2>Richiesta Pubblicazione</h2>
+            <p>Solo il creatore può modificare il Google Sheets dei file. Qui puoi generare una richiesta pronta da inviare.</p>
+            <button onclick="openRequestWindow()">Apri finestra richiesta</button>
+        </div>
+
+        <!-- CHAT GLOBALE -->
+        <div id="section-chat" class="panel" style="display:none;">
+            <h2>Chat Globale – Social 3.0</h2>
+            <div style="margin-bottom:4px;">
+                <label>Canale:
+                    <select id="chatChannel" onchange="renderChat()">
+                        <option value="generale">#generale</option>
+                        <option value="supporto">#supporto</option>
+                        <option value="gaming">#gaming</option>
+                    </select>
+                </label>
+            </div>
+            <div id="chatMessages"></div>
+            <div style="margin-top:4px;">
+                <input type="text" id="chatInput" placeholder="Scrivi un messaggio... usa @nome per mention" style="width:70%;">
+                <button onclick="sendChatMessage()">Invia</button>
+            </div>
+            <p style="font-size:10px; margin-top:4px;">Chat simulata locale: mention, reazioni, moderazione admin, XP e reputazione sono gestiti solo sul tuo browser.</p>
+        </div>
+
+        <!-- PEER / PROFILI -->
+        <div id="section-peers" class="panel" style="display:none;">
+            <h2>Peer Online & Profili</h2>
+            <div id="peersList"></div>
+            <p style="font-size:10px;">I peer sono simulati localmente. Il tuo profilo appare ONLINE quando il tasto Connetti è attivo.</p>
+        </div>
+
+        <!-- SOCIAL 3.0 -->
+        <div id="section-social" class="panel" style="display:none;">
+            <h2>Social 3.0 – Stato, Bacheca, Amici, XP</h2>
+            <div style="display:flex; gap:10px;">
+                <div style="flex:1;">
+                    <h3 style="font-size:13px;">Stato & Bacheca</h3>
+                    <div class="account-field">
+                        <label>Stato personalizzato</label>
+                        <input id="socialStatus" style="width:100%;" placeholder="Es: Giocando, Occupato, AFK...">
+                    </div>
+                    <div class="account-field">
+                        <label>Nuovo post sulla bacheca</label>
+                        <textarea id="socialPost" rows="3" style="width:100%;"></textarea>
+                    </div>
+                    <button onclick="saveSocialStatus()">Salva stato</button>
+                    <button onclick="addWallPost()">Pubblica post (XP)</button>
+                    <h4 style="font-size:12px; margin-top:8px;">La tua bacheca</h4>
+                    <div id="wallBox" class="profile-wall"></div>
+                </div>
+                <div style="flex:1;">
+                    <h3 style="font-size:13px;">Amici & Reputazione</h3>
+                    <div class="account-field">
+                        <label>Aggiungi amico (ID)</label>
+                        <input id="friendId" style="width:100%;" placeholder="ID peer">
+                    </div>
+                    <button onclick="addFriend()">Aggiungi amico (XP)</button>
+                    <h4 style="font-size:12px; margin-top:8px;">Lista amici</h4>
+                    <div id="friendsBox" style="background:white; border-radius:4px; border:1px solid #a7a6aa; padding:4px; max-height:180px; overflow-y:auto;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CRONOLOGIA -->
+        <div id="section-history" class="panel" style="display:none;">
+            <h2>Cronologia Download</h2>
+            <div id="historyList" style="max-height:200px; overflow-y:auto; background:white; border-radius:4px; border:1px solid #a7a6aa; padding:4px; font-size:11px;"></div>
+            <button onclick="clearHistory()">Svuota cronologia</button>
+        </div>
+
+        <!-- PREFERITI -->
+        <div id="section-favorites" class="panel" style="display:none;">
+            <h2>Preferiti</h2>
+            <div id="favoritesList" style="max-height:200px; overflow-y:auto; background:white; border-radius:4px; border:1px solid #a7a6aa; padding:4px; font-size:11px;"></div>
+        </div>
+
+        <!-- BADGE -->
+        <div id="section-badges" class="panel" style="display:none;">
+            <h2>Badge / Achievements</h2>
+            <div class="badge-list" id="badgeList"></div>
+        </div>
+
+        <!-- STATISTICHE -->
+        <div id="section-stats" class="panel" style="display:none;">
+            <h2>Statistiche</h2>
+            <div id="statsBox" style="font-size:11px;"></div>
+            <h3 style="font-size:12px; margin-top:8px;">Analisi server</h3>
+            <div id="serverStatsBox" class="server-stats"></div>
+        </div>
+
+        <!-- SICUREZZA & INTEGRITÀ -->
+        <div id="section-security" class="panel" style="display:none;">
+            <h2>Sicurezza & Integrità – Aggiornamenti avanzati</h2>
+            <div class="account-field">
+                <label><input type="checkbox" id="safeMode" onchange="toggleSafeMode()"> Modalità Safe Mode (solo server verificati)</label>
+            </div>
+            <div class="account-field">
+                <label><input type="checkbox" id="onlyVerifiedFiles" onchange="toggleOnlyVerifiedFiles()"> Mostra solo file verificati</label>
+            </div>
+            <div class="account-field">
+                <label><input type="checkbox" id="obfuscateProtocol" onchange="toggleObfuscateProtocol()"> Offusca protocollo nei link (https → hxxps)</label>
+            </div>
+            <div class="account-field">
+                <label>Server bannati (uno per riga)</label>
+                <textarea id="bannedServers" rows="4" style="width:100%;"></textarea>
+                <button onclick="saveBannedServers()">Salva lista server bannati</button>
+            </div>
+            <div class="account-field">
+                <label>Verifica integrità file (hash simulato)</label>
+                <input id="verifyHashInput" style="width:100%;" placeholder="Incolla hash atteso">
+                <button onclick="verifyHash()">Verifica hash selezionato</button>
+                <div id="verifyHashResult" style="font-size:11px; margin-top:4px;"></div>
+            </div>
+            <h3 style="font-size:12px; margin-top:8px;">Log sicurezza locale</h3>
+            <div id="securityLog" class="security-log"></div>
+        </div>
+
+        <!-- ACCOUNT -->
+        <div id="section-account" class="panel" style="display:none;">
+            <h2>Account Locale</h2>
+
+            <div style="display:flex; gap:8px; align-items:flex-start;">
+                <div>
+                    <div class="avatar-box" id="avatarBox">MS</div>
+                    <div class="account-field">
+                        <label>Editor avatar (pixel‑art 4×4)</label>
+                        <div class="avatar-editor" id="avatarEditor"></div>
+                    </div>
+                </div>
+                <div style="flex:1;">
+                    <div class="account-field">
+                        <label>Nome utente</label>
+                        <input type="text" id="accName" placeholder="Il tuo nome" style="width:100%;">
+                    </div>
+
+                    <div class="account-field">
+                        <label>ID (generato automaticamente se vuoto)</label>
+                        <input type="text" id="accId" placeholder="ID univoco" style="width:100%;">
+                    </div>
+
+                    <div class="account-field">
+                        <label>Bio</label>
+                        <textarea id="accBio" rows="3" style="width:100%;"></textarea>
+                    </div>
+
+                    <div class="account-field">
+                        <label>Preferenze</label>
+                        <label><input type="checkbox" id="accSounds"> Suoni attivi</label>
+                        <label><input type="checkbox" id="accDark"> Tema scuro retro (shortcut)</label>
+                        <label><input type="checkbox" id="accAdmin"> Modalità admin chat locale</label>
+                    </div>
+
+                    <button onclick="saveAccount()">Salva account</button>
+                    <button onclick="exportAccount()">Esporta account</button>
+                    <input type="file" id="importFile" style="display:none;" onchange="importAccountFile(event)">
+                    <button onclick="document.getElementById('importFile').click()">Importa account</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ADMIN -->
+        <div id="section-admin" class="panel" style="display:none;">
+            <h2>Pannello Admin (locale)</h2>
+            <p>Se l'account ha la modalità admin attiva, in chat compariranno pulsanti per moderare i messaggi (solo localmente) e assegnare reputazione ai peer.</p>
+            <p>La moderazione reale richiederebbe un backend: qui è tutto simulato sul tuo browser.</p>
+        </div>
+
+        <!-- PLUGIN -->
+        <div id="section-plugins" class="panel" style="display:none;">
+            <h2>Plugin MatteoShare</h2>
+            <p>Carica un file JSON plugin con campi: <code>name</code>, <code>css</code>, <code>js</code>.</p>
+            <input type="file" id="pluginFile" onchange="loadPluginFile(event)">
+            <div id="pluginList" style="margin-top:6px; font-size:11px;"></div>
+        </div>
+
+        <!-- SERVER -->
+        <div id="section-server" class="panel" style="display:none;">
+            <h2>Server (Google Sheets CSV)</h2>
+
+            <h3 style="font-size:13px;">Aggiungi nuovo server</h3>
+            <input type="text" id="newServerUrl" placeholder="Incolla qui il link CSV (Google Sheets → Pubblica su web → CSV)" style="width:100%;">
+            <button onclick="addServer()">Aggiungi server</button>
+
+            <h3 style="font-size:13px; margin-top:10px;">Server configurati</h3>
+            <div id="serverList" style="font-size:11px;"></div>
+
+            <button style="margin-top:6px;" onclick="reloadAllServers()">Ricarica tutti i server</button>
+            <p style="font-size:10px; margin-top:4px;">MatteoShare legge <strong>tutte le righe</strong> dei tuoi Google Sheets CSV compatibili (file) e delle news.</p>
+        </div>
+
     </div>
-
-    <div class="tab-panel" data-tab-panel="news">
-      <div class="block">
-        <div class="block-header">
-          <span id="newsTitle2">News & aggiornamenti</span>
-          <small id="newsBadge2">Social 3.0 · Sicurezza · Funzioni</small>
-        </div>
-        <div class="block-body" id="newsList2">
-          <!-- Riutilizzo le stesse news -->
-          <div class="news-item">
-            <div class="news-title" id="news2Item1Title">Social 3.0 attivo</div>
-            <div class="news-meta" id="news2Item1Meta">Chat globale collegata a Google Sheets</div>
-            <div class="news-body" id="news2Item1Body">
-              La chat globale scrive e legge direttamente dal tuo foglio Google, con aggiornamento automatico.
-            </div>
-          </div>
-          <div class="news-item">
-            <div class="news-title" id="news2Item2Title">Sistema di auto update intelligente</div>
-            <div class="news-meta" id="news2Item2Meta">Rilevamento modifiche sul foglio file</div>
-            <div class="news-body" id="news2Item2Body">
-              L’archivio file si aggiorna quando rileva cambiamenti sul foglio, senza ricaricare il sito.
-            </div>
-          </div>
-        </div>
-        <div class="block-footer">
-          <div>
-            <span class="status-led" id="newsStatusLed2"></span>
-            <span id="newsStatusText2">News statiche · Foglio news opzionale</span>
-          </div>
-          <div></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="tab-panel" data-tab-panel="social">
-      <div class="two-cols">
-        <div>
-          <div class="block">
-            <div class="block-header">
-              <span id="socialTitle">Social 3.0 · Chat globale</span>
-              <small id="socialBadge">Collegata a Google Sheets</small>
-            </div>
-            <div class="block-body">
-              <div class="chat-box">
-                <div class="chat-messages" id="chatMessages"></div>
-                <div class="chat-input">
-                  <input id="chatUserInput" class="input input-small" placeholder="Nome utente">
-                  <input id="chatMessageInput" class="input" style="flex:1;" placeholder="Scrivi un messaggio globale…">
-                  <button class="btn" id="chatSendBtn">Invia</button>
-                </div>
-              </div>
-            </div>
-            <div class="block-footer">
-              <div>
-                <span class="status-led" id="chatStatusLed"></span>
-                <span id="chatStatusText">Chat globale connessa</span>
-              </div>
-              <div>Messaggi: <span id="chatMessagesCountValue">0</span></div>
-            </div>
-          </div>
-        </div>
-        <div>
-          <div class="block">
-            <div class="block-header">
-              <span>Info Social 3.0</span>
-              <small>Chat globale + account locale</small>
-            </div>
-            <div class="block-body">
-              <p>
-                La chat globale è collegata al tuo Google Sheets tramite Google Apps Script.<br>
-                Ogni messaggio viene salvato nel foglio e letto da tutti gli utenti collegati.
-              </p>
-              <p style="margin-top:4px;">
-                Il nome visualizzato nella chat usa il tuo <b>account locale</b> (username).
-              </p>
-              <p style="margin-top:4px;">
-                L’aggiornamento è automatico ogni pochi secondi, in stile “chat globale” condivisa.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="tab-panel" data-tab-panel="settings">
-      <div class="block">
-        <div class="block-header">
-          <span id="settingsTitle">Impostazioni</span>
-          <small id="settingsBadge">Lingua · Social 3.0 · Sistema</small>
-        </div>
-        <div class="block-body">
-          <div class="settings-grid">
-            <div class="settings-block">
-              <div class="settings-title" id="settingsLanguageLabel">Lingua interfaccia</div>
-              <select id="languageSelect" class="input" style="width:100%;">
-                <option value="it">Italiano (predefinito)</option>
-                <option value="en">English</option>
-                <option value="ro">Română</option>
-                <option value="ru">Русский</option>
-              </select>
-              <div class="settings-note" id="settingsLanguageNote">
-                La lingua cambia solo l’interfaccia, non i contenuti dei file o della chat.
-              </div>
-            </div>
-            <div class="settings-block">
-              <div class="settings-title" id="settingsSystemLabel">Sistema</div>
-              <div>
-                <span class="chip" id="chipAutoUpdate">Auto update intelligente</span>
-                <span class="chip" id="chipSocial">Social 3.0</span>
-                <span class="chip" id="chipSecurity">Monitor sicurezza</span>
-              </div>
-              <div class="settings-note" id="settingsSystemNote">
-                Il sistema controlla periodicamente i fogli Google per aggiornare file, news e chat senza ricaricare la pagina.
-              </div>
-            </div>
-          </div>
-          <div class="settings-block" style="margin-top:8px;">
-            <div class="settings-title">Account locale</div>
-            <div class="settings-note">
-              Utente corrente: <b><span id="settingsAccountName">-</span></b><br>
-              <button class="btn" id="changeAccountBtn" style="margin-top:4px;">Cambia / reimposta account locale</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="footer">
-    MatteoShare · Social 3.0 · Interfaccia stile forum · Powered by Google Sheets + Google Apps Script
-  </div>
 </div>
 
+<!-- FINESTRA RICHIESTA -->
+<div id="requestWindow" class="window">
+    <div class="window-header">
+        <span>Richiesta pubblicazione</span>
+        <button onclick="closeRequestWindow()">X</button>
+    </div>
+    <div class="window-body">
+        <div class="account-field">
+            <label>Nome file</label>
+            <input id="reqName" style="width:98%;">
+        </div>
+        <div class="account-field">
+            <label>Descrizione</label>
+            <input id="reqDesc" style="width:98%;">
+        </div>
+        <div class="account-field">
+            <label>Peso (es: 1.2 GB)</label>
+            <input id="reqSize" style="width:98%;">
+        </div>
+        <div class="account-field">
+            <label>Sicurezza</label>
+            <select id="reqSec" style="width:98%;">
+                <option value="VERIFICATO">VERIFICATO</option>
+                <option value="NON VERIFICATO">NON VERIFICATO</option>
+            </select>
+        </div>
+        <div class="account-field">
+            <label>Link (Google Drive / Mega / GitHub / altro)</label>
+            <input id="reqLink" style="width:98%;">
+        </div>
+
+        <div class="account-field">
+            <label>Anteprima messaggio</label>
+            <textarea id="reqPreview" style="width:98%; height:100px;" readonly></textarea>
+        </div>
+
+        <button onclick="updateRequestPreview()">Aggiorna anteprima</button>
+        <button onclick="copyRequestPreview()">Copia testo</button>
+        <button onclick="sendRequestEmail()">Invia richiesta</button>
+        <button onclick="closeRequestWindow()">Annulla</button>
+    </div>
+</div>
+
+<!-- MINI PLAYER -->
+<div id="miniPlayer" class="window" style="display:none;">
+    <div class="window-header">
+        <span>MatteoShare Mini</span>
+        <button onclick="closeMiniPlayer()">X</button>
+    </div>
+    <div class="window-body">
+        <div id="miniChat"></div>
+        <input id="miniInput" style="width:80%; font-size:10px;" placeholder="Msg...">
+        <button onclick="sendMiniChat()" style="font-size:10px;">OK</button>
+    </div>
+</div>
+
+<!-- CHAT PRIVATA -->
+<div id="privateChatWindow" class="window" style="display:none; width:320px; left:calc(50% - 160px);">
+    <div class="window-header">
+        <span id="privateChatTitle">Chat privata</span>
+        <button onclick="closePrivateChat()">X</button>
+    </div>
+    <div class="window-body">
+        <div id="privateChatMessages" style="height:180px; overflow-y:auto; background:white; border-radius:4px; border:1px solid #a7a6aa; padding:4px;"></div>
+        <input id="privateChatInput" style="width:80%;">
+        <button onclick="sendPrivateChat()">Invia</button>
+    </div>
+</div>
+
+<!-- DOWNLOAD MANAGER -->
+<div id="downloadWindow" class="window" style="width:300px; left:calc(50% - 150px);">
+    <div class="window-header">
+        <span>Download in corso</span>
+        <button onclick="closeDownloadWindow()">X</button>
+    </div>
+    <div class="window-body">
+        <div id="downloadFileName" style="font-size:11px; margin-bottom:4px;"></div>
+        <div style="width:100%; height:14px; border-radius:4px; border:1px solid #404040; background:#f0f0f0; overflow:hidden;">
+            <div id="downloadBar" style="height:100%; width:0%; background:linear-gradient(90deg,#1f5fa9,#42a5f5);"></div>
+        </div>
+        <div id="downloadStatus" style="font-size:10px; margin-top:3px;">Preparazione...</div>
+    </div>
+</div>
+
+<div id="notifyBox"></div>
+
 <script>
-  // CONFIG
-  const GOOGLE_SHEETS_FILES_URL = ""; // opzionale: URL export del foglio file (JSON/CSV/gviz) da adattare nel parser
-  const GLOBAL_CHAT_ENDPOINT = "https://script.google.com/macros/s/AKfycbxMfTpIoNC6VVsFNO5JjX8SX0vwVFz2wLrTFRxcNlO6Kk8kA-hOZiJ1V3j0NJFKt_3F1A/exec";
-  const FILE_REPORT_EMAIL = "report@matteoshare.local";
+/* COSTANTI – COMPATIBILI CON LE TUE TAVOLE GOOGLE SHEETS */
+const DEFAULT_SERVER_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR0JBmDzlXu9-Mr4hG1TSr5lkuHf8vJjBtkljZ-Kqa8gFoRx84r5EJ-xFfB0fE7vqlB06aW8jmYBUrg/pub?gid=0&single=true&output=csv";
+const NEWS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSOlGHBjwu4fcWoNNXfgS_cZWR2O7lQyzwPxTA9BRZ6N-DXJXeWMRn6hfJfzaba-JpWWmnfRu0or2iP/pub?gid=0&single=true&output=csv";
 
-  let currentLanguage = localStorage.getItem("matteoshare_lang") || "it";
-  let filesData = [];
-  let lastFilesSignature = null;
-  let selectedFileIndex = null;
-  let chatMessages = [];
-  let chatPollingInterval = null;
-  let filesPollingInterval = null;
-  let localAccount = null;
+/* GLOBALI */
+let allFiles = [];
+let previousFilesSnapshot = [];
+let downloadTimer = null;
+let downloadQueue = [];
+let activeDownload = null;
 
-  const i18n = {
-    it:{
-      globalStatusNoAccount:"Sistema online · Account locale non configurato",
-      globalStatusWithAccount:"Sistema online · Account locale attivo",
-      filesTitle:"Archivio file collegato a Google Sheets",
-      filesBadge:"Foglio: nome, url, size, hash, categoria, note, sicurezza",
-      thName:"Nome",
-      thCategory:"Categoria",
-      thSize:"Peso",
-      thSecurity:"Sicurezza",
-      filesSyncing:"Sincronizzazione intelligente in corso…",
-      filesIdle:"Archivio aggiornato",
-      filesOffline:"Offline: uso cache locale",
-      fileDetailPlaceholder:"Seleziona un file…",
-      downloadBtn:"Scarica file",
-      openBtn:"Apri link diretto",
-      reportBtn:"Segnala file",
-      newsTitle:"News & aggiornamenti",
-      newsBadge:"Social 3.0 · Sicurezza · Funzioni",
-      newsItem1Title:"Social 3.0 attivo",
-      newsItem1Meta:"Chat globale collegata a Google Sheets",
-      newsItem1Body:"La chat globale scrive e legge direttamente dal tuo foglio Google, con aggiornamento automatico.",
-      newsItem2Title:"Sistema di auto update intelligente",
-      newsItem2Meta:"Rilevamento modifiche sul foglio file",
-      newsItem2Body:"L’archivio file si aggiorna quando rileva cambiamenti sul foglio, senza ricaricare il sito.",
-      socialTitle:"Social 3.0 · Chat globale",
-      socialBadge:"Collegata a Google Sheets",
-      chatConnected:"Chat globale connessa",
-      chatError:"Errore chat globale",
-      chatSyncing:"Aggiornamento messaggi…",
-      settingsTitle:"Impostazioni",
-      settingsBadge:"Lingua · Social 3.0 · Sistema",
-      settingsLanguageLabel:"Lingua interfaccia",
-      settingsLanguageNote:"La lingua cambia solo l’interfaccia, non i contenuti dei file o della chat.",
-      settingsSystemLabel:"Sistema",
-      settingsSystemNote:"Il sistema controlla periodicamente i fogli Google per aggiornare file, news e chat senza ricaricare la pagina.",
-      chipAutoUpdate:"Auto update intelligente",
-      chipSocial:"Social 3.0",
-      chipSecurity:"Monitor sicurezza"
-    },
-    en:{
-      globalStatusNoAccount:"System online · Local account not configured",
-      globalStatusWithAccount:"System online · Local account active",
-      filesTitle:"File archive linked to Google Sheets",
-      filesBadge:"Sheet: name, url, size, hash, category, note, security",
-      thName:"Name",
-      thCategory:"Category",
-      thSize:"Size",
-      thSecurity:"Security",
-      filesSyncing:"Smart sync in progress…",
-      filesIdle:"Archive up to date",
-      filesOffline:"Offline: using local cache",
-      fileDetailPlaceholder:"Select a file…",
-      downloadBtn:"Download file",
-      openBtn:"Open direct link",
-      reportBtn:"Report file",
-      newsTitle:"News & updates",
-      newsBadge:"Social 3.0 · Security · Features",
-      newsItem1Title:"Social 3.0 enabled",
-      newsItem1Meta:"Global chat linked to Google Sheets",
-      newsItem1Body:"Global chat writes and reads directly from your Google Sheet, with automatic updates.",
-      newsItem2Title:"Smart auto update system",
-      newsItem2Meta:"Change detection on files sheet",
-      newsItem2Body:"The file archive updates when it detects changes on the sheet, without reloading the site.",
-      socialTitle:"Social 3.0 · Global chat",
-      socialBadge:"Linked to Google Sheets",
-      chatConnected:"Global chat connected",
-      chatError:"Global chat error",
-      chatSyncing:"Updating messages…",
-      settingsTitle:"Settings",
-      settingsBadge:"Language · Social 3.0 · System",
-      settingsLanguageLabel:"Interface language",
-      settingsLanguageNote:"Language changes only the interface, not file or chat contents.",
-      settingsSystemLabel:"System",
-      settingsSystemNote:"The system periodically checks the sheets to update files, news and chat without reloading.",
-      chipAutoUpdate:"Smart auto update",
-      chipSocial:"Social 3.0",
-      chipSecurity:"Security monitor"
-    },
-    ro:{
-      globalStatusNoAccount:"Sistem online · Cont local neconfigurat",
-      globalStatusWithAccount:"Sistem online · Cont local activ",
-      filesTitle:"Arhivă fișiere legată de Google Sheets",
-      filesBadge:"Foaie: nume, url, size, hash, categorie, note, securitate",
-      thName:"Nume",
-      thCategory:"Categorie",
-      thSize:"Dimensiune",
-      thSecurity:"Securitate",
-      filesSyncing:"Sincronizare inteligentă…",
-      filesIdle:"Arhivă actualizată",
-      filesOffline:"Offline: folosesc cache local",
-      fileDetailPlaceholder:"Selectează un fișier…",
-      downloadBtn:"Descarcă fișier",
-      openBtn:"Deschide link direct",
-      reportBtn:"Raportează fișier",
-      newsTitle:"Știri & actualizări",
-      newsBadge:"Social 3.0 · Securitate · Funcții",
-      newsItem1Title:"Social 3.0 activ",
-      newsItem1Meta:"Chat global legat de Google Sheets",
-      newsItem1Body:"Chatul global scrie și citește direct din Google Sheet, cu actualizare automată.",
-      newsItem2Title:"Sistem de auto update inteligent",
-      newsItem2Meta:"Detectare modificări în foaia de fișiere",
-      newsItem2Body:"Arhiva de fișiere se actualizează când detectează modificări în foaie.",
-      socialTitle:"Social 3.0 · Chat global",
-      socialBadge:"Legat de Google Sheets",
-      chatConnected:"Chat global conectat",
-      chatError:"Eroare chat global",
-      chatSyncing:"Actualizare mesaje…",
-      settingsTitle:"Setări",
-      settingsBadge:"Limbă · Social 3.0 · Sistem",
-      settingsLanguageLabel:"Limba interfeței",
-      settingsLanguageNote:"Limba schimbă doar interfața, nu conținutul fișierelor sau al chatului.",
-      settingsSystemLabel:"Sistem",
-      settingsSystemNote:"Sistemul verifică periodic foile pentru a actualiza fișierele, știrile și chatul fără reîncărcare.",
-      chipAutoUpdate:"Auto update inteligent",
-      chipSocial:"Social 3.0",
-      chipSecurity:"Monitor securitate"
-    },
-    ru:{
-      globalStatusNoAccount:"Система онлайн · Локальный аккаунт не настроен",
-      globalStatusWithAccount:"Система онлайн · Локальный аккаунт активен",
-      filesTitle:"Архив файлов, связанный с Google Sheets",
-      filesBadge:"Лист: name, url, size, hash, category, note, security",
-      thName:"Имя",
-      thCategory:"Категория",
-      thSize:"Размер",
-      thSecurity:"Безопасность",
-      filesSyncing:"Умная синхронизация…",
-      filesIdle:"Архив актуален",
-      filesOffline:"Оффлайн: используется локальный кэш",
-      fileDetailPlaceholder:"Выберите файл…",
-      downloadBtn:"Скачать файл",
-      openBtn:"Открыть прямую ссылку",
-      reportBtn:"Пожаловаться на файл",
-      newsTitle:"Новости и обновления",
-      newsBadge:"Social 3.0 · Безопасность · Функции",
-      newsItem1Title:"Social 3.0 активен",
-      newsItem1Meta:"Глобальный чат, связанный с Google Sheets",
-      newsItem1Body:"Глобальный чат пишет и читает напрямую из Google Sheets с автообновлением.",
-      newsItem2Title:"Система умного автообновления",
-      newsItem2Meta:"Отслеживание изменений в листе файлов",
-      newsItem2Body:"Архив файлов обновляется при изменениях в листе, без перезагрузки сайта.",
-      socialTitle:"Social 3.0 · Глобальный чат",
-      socialBadge:"Связан с Google Sheets",
-      chatConnected:"Глобальный чат подключен",
-      chatError:"Ошибка глобального чата",
-      chatSyncing:"Обновление сообщений…",
-      settingsTitle:"Настройки",
-      settingsBadge:"Язык · Social 3.0 · Система",
-      settingsLanguageLabel:"Язык интерфейса",
-      settingsLanguageNote:"Язык меняет только интерфейс, не содержимое файлов или чата.",
-      settingsSystemLabel:"Система",
-      settingsSystemNote:"Система периодически проверяет листы, чтобы обновлять файлы, новости и чат без перезагрузки.",
-      chipAutoUpdate:"Умное автообновление",
-      chipSocial:"Social 3.0",
-      chipSecurity:"Монитор безопасности"
+let chatMessages = [];
+let privateChats = {};
+let currentPrivatePeer = null;
+
+let avatarColors = ["#f7f7f7", "#000000", "#1f5fa9", "#ff0000", "#00aa00", "#ffaa00"];
+
+let selectedHashForVerify = null;
+let onlyVerifiedFilesFlag = false;
+let obfuscateProtocolFlag = false;
+
+let autoUpdateTimer = null;
+const AUTO_UPDATE_INTERVAL_MS = 30000;
+
+let xpData = { xp: 0, level: 1 };
+
+function navigateTo(section) {
+    if (section === "files") {
+        location.hash = "#files";
+    } else if (section === "news") {
+        location.hash = "#news";
+    } else if (section === "request") {
+        location.hash = "#request";
+    } else if (section === "chat") {
+        location.hash = "#chat";
+    } else if (section === "peers") {
+        location.hash = "#peers";
+    } else if (section === "social") {
+        location.hash = "#social";
+    } else if (section === "history") {
+        location.hash = "#history";
+    } else if (section === "favorites") {
+        location.hash = "#favorites";
+    } else if (section === "badges") {
+        location.hash = "#badges";
+    } else if (section === "stats") {
+        location.hash = "#stats";
+    } else if (section === "security") {
+        location.hash = "#security";
+    } else if (section === "account") {
+        location.hash = "#account";
+    } else if (section === "admin") {
+        location.hash = "#admin";
+    } else if (section === "plugins") {
+        location.hash = "#plugins";
+    } else if (section === "server") {
+        location.hash = "#server";
     }
-  };
+}
 
-  function applyLanguage(lang){
-    const t=i18n[lang]||i18n.it;
-    currentLanguage=lang;
-    localStorage.setItem("matteoshare_lang",lang);
-
-    document.getElementById("filesTitle").textContent=t.filesTitle;
-    document.getElementById("filesBadge").textContent=t.filesBadge;
-    document.getElementById("thName").textContent=t.thName;
-    document.getElementById("thCategory").textContent=t.thCategory;
-    document.getElementById("thSize").textContent=t.thSize;
-    document.getElementById("thSecurity").textContent=t.thSecurity;
-    document.getElementById("filesStatusText").textContent=t.filesIdle;
-    document.getElementById("fileDetailName").textContent=t.fileDetailPlaceholder;
-    document.getElementById("fileDownloadBtn").textContent=t.downloadBtn;
-    document.getElementById("fileOpenUrlBtn").textContent=t.openBtn;
-    document.getElementById("fileReportBtn").textContent=t.reportBtn;
-
-    document.getElementById("newsTitle").textContent=t.newsTitle;
-    document.getElementById("newsBadge").textContent=t.newsBadge;
-    document.getElementById("newsItem1Title").textContent=t.newsItem1Title;
-    document.getElementById("newsItem1Meta").textContent=t.newsItem1Meta;
-    document.getElementById("newsItem1Body").textContent=t.newsItem1Body;
-    document.getElementById("newsItem2Title").textContent=t.newsItem2Title;
-    document.getElementById("newsItem2Meta").textContent=t.newsItem2Meta;
-    document.getElementById("newsItem2Body").textContent=t.newsItem2Body;
-
-    document.getElementById("newsTitle2").textContent=t.newsTitle;
-    document.getElementById("newsBadge2").textContent=t.newsBadge;
-    document.getElementById("news2Item1Title").textContent=t.newsItem1Title;
-    document.getElementById("news2Item1Meta").textContent=t.newsItem1Meta;
-    document.getElementById("news2Item1Body").textContent=t.newsItem1Body;
-    document.getElementById("news2Item2Title").textContent=t.newsItem2Title;
-    document.getElementById("news2Item2Meta").textContent=t.newsItem2Meta;
-    document.getElementById("news2Item2Body").textContent=t.newsItem2Body;
-
-    document.getElementById("socialTitle").textContent=t.socialTitle;
-    document.getElementById("socialBadge").textContent=t.socialBadge;
-    document.getElementById("chatStatusText").textContent=t.chatConnected;
-
-    document.getElementById("settingsTitle").textContent=t.settingsTitle;
-    document.getElementById("settingsBadge").textContent=t.settingsBadge;
-    document.getElementById("settingsLanguageLabel").textContent=t.settingsLanguageLabel;
-    document.getElementById("settingsLanguageNote").textContent=t.settingsLanguageNote;
-    document.getElementById("settingsSystemLabel").textContent=t.settingsSystemLabel;
-    document.getElementById("settingsSystemNote").textContent=t.settingsSystemNote;
-    document.getElementById("chipAutoUpdate").textContent=t.chipAutoUpdate;
-    document.getElementById("chipSocial").textContent=t.chipSocial;
-    document.getElementById("chipSecurity").textContent=t.chipSecurity;
-
-    updateGlobalStatus();
-  }
-
-  function loadLocalAccount(){
-    const raw=localStorage.getItem("matteoshare_account");
-    if(!raw)return null;
-    try{return JSON.parse(raw);}catch(e){return null;}
-  }
-  function saveLocalAccount(acc){
-    localAccount=acc;
-    localStorage.setItem("matteoshare_account",JSON.stringify(acc));
-    document.getElementById("accountNameLabel").textContent=acc.username;
-    document.getElementById("settingsAccountName").textContent=acc.username;
-    const chatUserInput=document.getElementById("chatUserInput");
-    if(chatUserInput && !chatUserInput.value) chatUserInput.value=acc.username;
-    updateGlobalStatus();
-  }
-  function updateGlobalStatus(){
-    const t=i18n[currentLanguage]||i18n.it;
-    const label=document.getElementById("globalStatusText");
-    if(localAccount){
-      label.textContent=t.globalStatusWithAccount;
-    }else{
-      label.textContent=t.globalStatusNoAccount;
-    }
-  }
-  function showLoginOverlay(){
-    document.getElementById("loginOverlay").classList.remove("hidden");
-  }
-  function hideLoginOverlay(){
-    document.getElementById("loginOverlay").classList.add("hidden");
-  }
-
-  async function hashPassword(password){
-    const enc=new TextEncoder().encode(password);
-    const buf=await crypto.subtle.digest("SHA-256",enc);
-    return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,"0")).join("");
-  }
-
-  document.querySelectorAll(".tab-btn").forEach(btn=>{
-    btn.addEventListener("click",()=>{
-      document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
-      btn.classList.add("active");
-      const tab=btn.getAttribute("data-tab");
-      document.querySelectorAll(".tab-panel").forEach(p=>{
-        p.classList.toggle("active",p.getAttribute("data-tab-panel")===tab);
-      });
-    });
-  });
-
-  function signatureForFiles(files){
-    return JSON.stringify(files.map(f=>({
-      nome:f.nome,url:f.url,size:f.size,hash:f.hash,categoria:f.categoria,sicurezza:f.sicurezza,note:f.note
-    })));
-  }
-  function renderFilesTable(){
-    const tbody=document.getElementById("filesTableBody");
-    tbody.innerHTML="";
-    filesData.forEach((file,index)=>{
-      const tr=document.createElement("tr");
-      tr.dataset.index=index;
-      if(index===selectedFileIndex) tr.classList.add("selected");
-      const tdName=document.createElement("td");
-      tdName.textContent=file.nome||"(senza nome)";
-      const tdCat=document.createElement("td");
-      tdCat.textContent=file.categoria||"-";
-      const tdSize=document.createElement("td");
-      tdSize.textContent=file.size||"-";
-      const tdSec=document.createElement("td");
-      const tag=document.createElement("span");
-      tag.className="tag";
-      const sec=(file.sicurezza||"").toLowerCase();
-      if(sec.includes("sicuro")||sec.includes("safe")) tag.classList.add("safe");
-      else if(sec.includes("attenzione")||sec.includes("warn")) tag.classList.add("warn");
-      else if(sec.includes("pericoloso")||sec.includes("danger")) tag.classList.add("danger");
-      tag.textContent=file.sicurezza||"-";
-      tdSec.appendChild(tag);
-      tr.appendChild(tdName);
-      tr.appendChild(tdCat);
-      tr.appendChild(tdSize);
-      tr.appendChild(tdSec);
-      tr.addEventListener("click",()=>{
-        selectedFileIndex=index;
-        document.querySelectorAll("#filesTableBody tr").forEach(r=>r.classList.remove("selected"));
-        tr.classList.add("selected");
-        renderFileDetail(file);
-      });
-      tbody.appendChild(tr);
-    });
-    document.getElementById("filesCountValue").textContent=filesData.length.toString();
-  }
-  function renderFileDetail(file){
-    const t=i18n[currentLanguage]||i18n.it;
-    const detail=document.getElementById("fileDetail");
-    detail.classList.add("visible");
-    document.getElementById("fileDetailName").textContent=file.nome||t.fileDetailPlaceholder;
-    document.getElementById("fileDetailCategory").textContent=file.categoria?("Categoria: "+file.categoria):"";
-    document.getElementById("fileDetailSize").textContent=file.size?("Peso: "+file.size):"";
-    document.getElementById("fileDetailHash").textContent=file.hash?("Hash: "+file.hash):"";
-    document.getElementById("fileDetailSecurity").textContent=file.sicurezza?("Sicurezza: "+file.sicurezza):"";
-    document.getElementById("fileDetailNotes").textContent=file.note||"";
-    const url=file.url||"";
-    document.getElementById("fileDownloadBtn").onclick=()=>{if(url)window.open(url,"_blank");};
-    document.getElementById("fileOpenUrlBtn").onclick=()=>{if(url)window.open(url,"_blank");};
-    document.getElementById("fileReportBtn").onclick=()=>{
-      const subject=encodeURIComponent("[MatteoShare] Segnalazione file: "+(file.nome||""));
-      const body=encodeURIComponent(
-        "Ciao,\n\nVorrei segnalare questo file:\n\n"+
-        "Nome: "+(file.nome||"")+"\n"+
-        "URL: "+(file.url||"")+"\n"+
-        "Categoria: "+(file.categoria||"")+"\n"+
-        "Peso: "+(file.size||"")+"\n"+
-        "Sicurezza: "+(file.sicurezza||"")+"\n"+
-        "Note: "+(file.note||"")+"\n\n"+
-        "Motivo della segnalazione:\n[Scrivi qui]\n"
-      );
-      window.location.href=`mailto:${FILE_REPORT_EMAIL}?subject=${subject}&body=${body}`;
-    };
-  }
-  function loadFilesFromCache(){
-    try{
-      const cache=localStorage.getItem("matteoshare_files_cache");
-      const sig=localStorage.getItem("matteoshare_files_signature");
-      if(cache && sig){
-        filesData=JSON.parse(cache);
-        lastFilesSignature=sig;
-        renderFilesTable();
-      }else{
-        if(!GOOGLE_SHEETS_FILES_URL){
-          filesData=[
-            {nome:"Esempio - Tema forum.zip",url:"#",size:"12 MB",hash:"ABC123",categoria:"Tema",note:"Esempio locale, collega il tuo foglio per dati reali.",sicurezza:"Sicuro"},
-            {nome:"Strumento manutenzione.exe",url:"#",size:"3 MB",hash:"DEF456",categoria:"Tool",note:"Solo dimostrazione.",sicurezza:"Attenzione"}
-          ];
-          lastFilesSignature=signatureForFiles(filesData);
-          renderFilesTable();
-        }
-      }
-    }catch(e){}
-  }
-  async function fetchFilesFromSheet(){
-    if(!GOOGLE_SHEETS_FILES_URL){
-      document.getElementById("filesStatusLed").classList.remove("offline","sync");
-      document.getElementById("filesStatusText").textContent=i18n[currentLanguage].filesIdle;
-      return filesData;
-    }
-    try{
-      document.getElementById("filesStatusLed").classList.add("sync");
-      document.getElementById("filesStatusText").textContent=i18n[currentLanguage].filesSyncing;
-      const res=await fetch(GOOGLE_SHEETS_FILES_URL);
-      const text=await res.text();
-      let data;
-      try{
-        data=JSON.parse(text);
-      }catch(e){
-        console.error("Adatta il parser al formato del tuo foglio.",e);
-        return filesData;
-      }
-      const mapped=data.map(row=>({
-        nome:row.nome||row.Nome||"",
-        url:row.url||row.URL||"",
-        size:row.size||row.peso||"",
-        hash:row.hash||"",
-        categoria:row.categoria||"",
-        note:row.note||"",
-        sicurezza:row.sicurezza||""
-      }));
-      return mapped;
-    }catch(err){
-      console.error("Errore caricamento file:",err);
-      document.getElementById("filesStatusLed").classList.add("offline");
-      document.getElementById("filesStatusText").textContent=i18n[currentLanguage].filesOffline;
-      return filesData;
-    }
-  }
-  async function smartFilesUpdate(){
-    const newFiles=await fetchFilesFromSheet();
-    if(!newFiles || !Array.isArray(newFiles))return;
-    const newSig=signatureForFiles(newFiles);
-    if(newSig!==lastFilesSignature){
-      filesData=newFiles;
-      lastFilesSignature=newSig;
-      renderFilesTable();
-      document.getElementById("filesStatusLed").classList.remove("offline","sync");
-      document.getElementById("filesStatusText").textContent=i18n[currentLanguage].filesIdle;
-      localStorage.setItem("matteoshare_files_cache",JSON.stringify(filesData));
-      localStorage.setItem("matteoshare_files_signature",lastFilesSignature);
-    }else{
-      document.getElementById("filesStatusLed").classList.remove("offline","sync");
-      document.getElementById("filesStatusText").textContent=i18n[currentLanguage].filesIdle;
-    }
-  }
-
-  async function fetchChatMessages(){
-    try{
-      document.getElementById("chatStatusLed").classList.add("sync");
-      document.getElementById("chatStatusText").textContent=i18n[currentLanguage].chatSyncing;
-      const res=await fetch(GLOBAL_CHAT_ENDPOINT);
-      const data=await res.json();
-      chatMessages=Array.isArray(data)?data:[];
-      renderChatMessages();
-      document.getElementById("chatStatusLed").classList.remove("offline","sync");
-      document.getElementById("chatStatusText").textContent=i18n[currentLanguage].chatConnected;
-    }catch(err){
-      console.error("Errore chat globale:",err);
-      document.getElementById("chatStatusLed").classList.add("offline");
-      document.getElementById("chatStatusText").textContent=i18n[currentLanguage].chatError;
-    }
-  }
-  function renderChatMessages(){
-    const container=document.getElementById("chatMessages");
-    container.innerHTML="";
-    chatMessages.forEach(msg=>{
-      const div=document.createElement("div");
-      div.className="chat-message";
-      const header=document.createElement("div");
-      header.className="chat-header";
-      const userSpan=document.createElement("span");
-      userSpan.className="chat-user";
-      userSpan.textContent=msg.user||"Anonimo";
-      const timeSpan=document.createElement("span");
-      const ts=msg.timestamp?new Date(msg.timestamp):null;
-      timeSpan.textContent=ts && !isNaN(ts.getTime())?ts.toLocaleString():"";
-      header.appendChild(userSpan);
-      header.appendChild(timeSpan);
-      const body=document.createElement("div");
-      body.textContent=msg.message||"";
-      div.appendChild(header);
-      div.appendChild(body);
-      container.appendChild(div);
-    });
-    container.scrollTop=container.scrollHeight;
-    document.getElementById("chatMessagesCountValue").textContent=chatMessages.length.toString();
-  }
-  async function sendChatMessage(){
-    const userInput=document.getElementById("chatUserInput");
-    const msgInput=document.getElementById("chatMessageInput");
-    const user=(userInput.value||"").trim()||(localAccount?localAccount.username:"Anonimo");
-    const message=(msgInput.value||"").trim();
-    if(!message)return;
-    try{
-      document.getElementById("chatStatusLed").classList.add("sync");
-      document.getElementById("chatStatusText").textContent=i18n[currentLanguage].chatSyncing;
-      await fetch(GLOBAL_CHAT_ENDPOINT,{
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({user,message})
-      });
-      msgInput.value="";
-      await fetchChatMessages();
-    }catch(err){
-      console.error("Errore invio messaggio:",err);
-      document.getElementById("chatStatusLed").classList.add("offline");
-      document.getElementById("chatStatusText").textContent=i18n[currentLanguage].chatError;
-    }
-  }
-
-  document.addEventListener("DOMContentLoaded",()=>{
-    document.getElementById("languageSelect").value=currentLanguage;
-    applyLanguage(currentLanguage);
-    document.getElementById("languageSelect").addEventListener("change",e=>{
-      applyLanguage(e.target.value);
-    });
-
-    const acc=loadLocalAccount();
-    if(acc){
-      localAccount=acc;
-      saveLocalAccount(acc);
-      hideLoginOverlay();
-    }else{
-      showLoginOverlay();
-    }
-
-    document.getElementById("loginConfirmBtn").addEventListener("click",async()=>{
-      const mode=document.getElementById("loginMode").value;
-      const username=(document.getElementById("loginUsername").value||"").trim();
-      const password=document.getElementById("loginPassword").value||"";
-      const errorEl=document.getElementById("loginError");
-      errorEl.style.display="none";
-      errorEl.textContent="";
-      if(!username || !password){
-        errorEl.textContent="Inserisci nome utente e password.";
-        errorEl.style.display="block";
+/* ROUTER */
+function router() {
+    const hash = location.hash || "#files";
+    if (hash.startsWith("#file:")) {
+        const id = decodeURIComponent(hash.substring(6));
+        showFileDetailByHash(id);
         return;
-      }
-      const passHash=await hashPassword(password);
-      const existing=loadLocalAccount();
-      if(mode==="create"){
-        const accObj={username,passwordHash:passHash,createdAt:Date.now()};
-        saveLocalAccount(accObj);
-        hideLoginOverlay();
-      }else{
-        if(!existing || existing.username!==username || existing.passwordHash!==passHash){
-          errorEl.textContent="Credenziali non valide. Controlla nome utente e password.";
-          errorEl.style.display="block";
-          return;
+    }
+
+    const map = {
+        "#files": "files",
+        "#news": "news",
+        "#request": "request",
+        "#chat": "chat",
+        "#peers": "peers",
+        "#social": "social",
+        "#history": "history",
+        "#favorites": "favorites",
+        "#badges": "badges",
+        "#stats": "stats",
+        "#security": "security",
+        "#account": "account",
+        "#admin": "admin",
+        "#plugins": "plugins",
+        "#server": "server"
+    };
+    const section = map[hash] || "files";
+    showSection(section);
+}
+
+/* SEZIONI */
+function showSection(name) {
+    const ids = ["files","filedetail","news","request","chat","peers","social","history","favorites","badges","stats","security","account","admin","plugins","server"];
+    ids.forEach(id => {
+        document.getElementById("section-" + id).style.display = (id === name) ? "block" : "none";
+    });
+}
+
+/* NOTIFICHE */
+function showNotify(msg) {
+    const box = document.getElementById("notifyBox");
+    box.textContent = msg;
+    box.style.display = "block";
+    setTimeout(() => box.style.display = "none", 4000);
+}
+
+/* CSV */
+function parseCSV(text) {
+    const lines = text.split(/\r?\n/).filter(l => l.trim() !== "");
+    if (lines.length === 0) return [];
+    const headers = lines[0].split(",").map(h => h.trim());
+    const rows = lines.slice(1);
+    return rows.map(line => {
+        const cols = line.split(",");
+        const obj = {};
+        headers.forEach((h, i) => {
+            obj[h] = (cols[i] || "").trim();
+        });
+        return obj;
+    });
+}
+
+/* SERVER MULTIPLI */
+function getServers() {
+    try {
+        let servers = JSON.parse(localStorage.getItem("matteoshare_servers") || "[]");
+        if (!servers || servers.length === 0) {
+            servers = [{ url: DEFAULT_SERVER_URL, active: true, verified: true }];
+            localStorage.setItem("matteoshare_servers", JSON.stringify(servers));
         }
-        saveLocalAccount(existing);
-        hideLoginOverlay();
-      }
+        return servers;
+    } catch {
+        return [{ url: DEFAULT_SERVER_URL, active: true, verified: true }];
+    }
+}
+
+function saveServers(list) {
+    localStorage.setItem("matteoshare_servers", JSON.stringify(list));
+}
+
+function addServer() {
+    const url = document.getElementById("newServerUrl").value.trim();
+    if (!url) {
+        alert("Inserisci un URL CSV valido.");
+        return;
+    }
+
+    const servers = getServers();
+    servers.push({ url, active: true, verified: false });
+    saveServers(servers);
+
+    document.getElementById("newServerUrl").value = "";
+    renderServerList();
+    showNotify("Server aggiunto.");
+    reloadAllServers();
+}
+
+function toggleServer(index) {
+    const servers = getServers();
+    servers[index].active = !servers[index].active;
+    saveServers(servers);
+    renderServerList();
+    reloadAllServers();
+}
+
+function deleteServer(index) {
+    const servers = getServers();
+    servers.splice(index, 1);
+    saveServers(servers);
+    renderServerList();
+    reloadAllServers();
+}
+
+function toggleServerVerified(index) {
+    const servers = getServers();
+    servers[index].verified = !servers[index].verified;
+    saveServers(servers);
+    renderServerList();
+    reloadAllServers();
+}
+
+function renderServerList() {
+    const box = document.getElementById("serverList");
+    const servers = getServers();
+    box.innerHTML = "";
+
+    if (servers.length === 0) {
+        box.textContent = "Nessun server configurato. Aggiungi un link CSV qui sopra.";
+        return;
+    }
+
+    servers.forEach((s, i) => {
+        const div = document.createElement("div");
+        div.style.marginBottom = "5px";
+        div.innerHTML = `
+            <b>${i+1})</b> 
+            <span>${s.url}</span><br>
+            <label>
+                <input type="checkbox" ${s.active ? "checked" : ""} onclick="toggleServer(${i})">
+                Attivo
+            </label>
+            <label style="margin-left:8px;">
+                <input type="checkbox" ${s.verified ? "checked" : ""} onclick="toggleServerVerified(${i})">
+                Verificato
+            </label>
+            <button onclick="deleteServer(${i})">Rimuovi</button>
+            <hr>
+        `;
+        box.appendChild(div);
     });
 
-    document.getElementById("changeAccountBtn").addEventListener("click",()=>{
-      localStorage.removeItem("matteoshare_account");
-      localAccount=null;
-      document.getElementById("accountNameLabel").textContent="-";
-      document.getElementById("settingsAccountName").textContent="-";
-      showLoginOverlay();
+    renderServerStats();
+}
+
+/* ANALISI SERVER */
+function updateServerStats(url, ok, fileCount=0) {
+    const raw = localStorage.getItem("matteoshare_server_stats") || "{}";
+    const stats = JSON.parse(raw);
+    if (!stats[url]) stats[url] = { ok:0, fail:0, files:0, last: null };
+    if (ok) {
+        stats[url].ok++;
+        stats[url].files = fileCount;
+    } else {
+        stats[url].fail++;
+    }
+    stats[url].last = new Date().toLocaleString();
+    localStorage.setItem("matteoshare_server_stats", JSON.stringify(stats));
+}
+
+function renderServerStats() {
+    const box = document.getElementById("serverStatsBox");
+    const raw = localStorage.getItem("matteoshare_server_stats") || "{}";
+    const stats = JSON.parse(raw);
+    box.innerHTML = "";
+    const servers = Object.keys(stats);
+    if (servers.length === 0) {
+        box.textContent = "Nessuna statistica ancora disponibile.";
+        return;
+    }
+    servers.forEach(url => {
+        const s = stats[url];
+        const div = document.createElement("div");
+        div.innerHTML = `
+            <b>${url}</b><br>
+            OK: ${s.ok} | FAIL: ${s.fail} | File: ${s.files} | Ultimo: ${s.last}
+            <hr>
+        `;
+        box.appendChild(div);
+    });
+}
+
+/* AUTO-TAGGING */
+function autoTagFile(f) {
+    const text = ((f.name || "") + " " + (f.description || "") + " " + (f.tags || []).join(" ")).toLowerCase();
+    const tags = new Set(f.tags || []);
+
+    if (text.includes(".iso") || text.includes("setup") || text.includes("installer")) tags.add("software");
+    if (text.includes("game") || text.includes("gioco")) tags.add("game");
+    if (text.includes(".zip") || text.includes(".rar") || text.includes(".7z")) tags.add("archive");
+    if (text.includes("python")) tags.add("python");
+    if (text.includes("source") || text.includes("src")) tags.add("source");
+    if (text.includes("music") || text.includes("mp3") || text.includes("flac")) tags.add("music");
+
+    f.tags = Array.from(tags);
+    return f;
+}
+
+/* SICUREZZA */
+function getBannedServers() {
+    try {
+        return JSON.parse(localStorage.getItem("matteoshare_banned_servers") || "[]");
+    } catch {
+        return [];
+    }
+}
+
+function saveBannedServersList(list) {
+    localStorage.setItem("matteoshare_banned_servers", JSON.stringify(list));
+}
+
+function saveBannedServers() {
+    const text = document.getElementById("bannedServers").value;
+    const lines = text.split(/\r?\n/).map(l => l.trim()).filter(l => l);
+    saveBannedServersList(lines);
+    logSecurity("Lista server bannati aggiornata (" + lines.length + " voci).");
+    reloadAllServers();
+}
+
+function loadBannedServersUI() {
+    const list = getBannedServers();
+    document.getElementById("bannedServers").value = list.join("\n");
+}
+
+function isSafeMode() {
+    return localStorage.getItem("matteoshare_safe_mode") === "1";
+}
+
+function toggleSafeMode() {
+    const checked = document.getElementById("safeMode").checked;
+    localStorage.setItem("matteoshare_safe_mode", checked ? "1" : "0");
+    logSecurity("Safe Mode " + (checked ? "attivata" : "disattivata") + ".");
+    reloadAllServers();
+}
+
+function loadSafeModeUI() {
+    document.getElementById("safeMode").checked = isSafeMode();
+}
+
+function toggleOnlyVerifiedFiles() {
+    onlyVerifiedFilesFlag = document.getElementById("onlyVerifiedFiles").checked;
+    applyFilters();
+}
+
+function toggleObfuscateProtocol() {
+    obfuscateProtocolFlag = document.getElementById("obfuscateProtocol").checked;
+    renderFiles(allFiles);
+}
+
+function logSecurity(msg) {
+    const raw = localStorage.getItem("matteoshare_security_log") || "[]";
+    const arr = JSON.parse(raw);
+    arr.push({ time: new Date().toLocaleString(), msg });
+    localStorage.setItem("matteoshare_security_log", JSON.stringify(arr));
+    renderSecurityLog();
+}
+
+function renderSecurityLog() {
+    const box = document.getElementById("securityLog");
+    const raw = localStorage.getItem("matteoshare_security_log") || "[]";
+    const arr = JSON.parse(raw);
+    box.innerHTML = "";
+    arr.slice().reverse().forEach(e => {
+        const div = document.createElement("div");
+        div.textContent = "[" + e.time + "] " + e.msg;
+        box.appendChild(div);
+    });
+}
+
+/* FILE & AUTO-UPDATE INTELLIGENTE */
+function snapshotFiles(files) {
+    return files.map(f => ({
+        hash: f.hash,
+        name: f.name,
+        description: f.description,
+        size: f.size,
+        security: f.security,
+        type: f.type,
+        tags: (f.tags || []).slice(),
+        cloud_url: f.cloud_url,
+        server_verified: f.server_verified
+    }));
+}
+
+function diffFiles(oldList, newList) {
+    const oldMap = {};
+    oldList.forEach(f => oldMap[f.hash] = f);
+    const newMap = {};
+    newList.forEach(f => newMap[f.hash] = f);
+
+    const added = [];
+    const removed = [];
+    const changed = [];
+
+    newList.forEach(f => {
+        if (!oldMap[f.hash]) {
+            added.push(f);
+        } else {
+            const old = oldMap[f.hash];
+            if (old.name !== f.name || old.description !== f.description || old.size !== f.size || old.security !== f.security) {
+                changed.push(f);
+            }
+        }
     });
 
-    loadFilesFromCache();
-    smartFilesUpdate();
-    filesPollingInterval=setInterval(smartFilesUpdate,60000);
-
-    fetchChatMessages();
-    chatPollingInterval=setInterval(fetchChatMessages,5000);
-    document.getElementById("chatSendBtn").addEventListener("click",sendChatMessage);
-    document.getElementById("chatMessageInput").addEventListener("keydown",e=>{
-      if(e.key==="Enter")sendChatMessage();
+    oldList.forEach(f => {
+        if (!newMap[f.hash]) {
+            removed.push(f);
+        }
     });
-  });
+
+    return { added, removed, changed };
+}
+
+async function loadFiles() {
+    const banned = getBannedServers();
+    let servers = getServers().filter(s => s.active && !banned.includes(s.url));
+
+    if (isSafeMode()) {
+        servers = servers.filter(s => s.verified);
+    }
+
+    if (servers.length === 0) {
+        allFiles = [];
+        renderFiles([]);
+        updateStats();
+        setOffline(true);
+        return;
+    }
+
+    let combined = [];
+
+    for (const server of servers) {
+        try {
+            const res = await fetch(server.url);
+            const csv = await res.text();
+            const rows = parseCSV(csv);
+
+            const files = rows.map(row => {
+                const f = {
+                    // MAPPATURA SPECIFICA PER IL TUO FOGLIO:
+                    // nome, url, size, hash, categoria, note, sicurezza
+                    name: row.name || row.Nome || row.nome || "",
+                    description: row.description || row.Descrizione || row.note || row.Note || "",
+                    size: row.size || row.Peso || row.size || "",
+                    security: row.security || row.Sicurezza || row.sicurezza || "NON VERIFICATO",
+                    type: row.type || row.Tipo || "cloud",
+                    tags: (row.tags || row.Tag || row.categoria || row.Categoria || "").split(";").map(t => t.trim()).filter(t => t),
+                    hash: row.hash || row.Hash || row.hash || (row.nome || row.name || "") + "_" + (row.size || ""),
+                    cloud_url: row.cloud_url || row.Link || row.url || row.URL || "",
+                    server_verified: server.verified === true
+                };
+                return autoTagFile(f);
+            });
+
+            combined = combined.concat(files);
+            updateServerStats(server.url, true, files.length);
+
+        } catch (e) {
+            console.warn("Server non raggiungibile:", server.url);
+            updateServerStats(server.url, false, 0);
+            logSecurity("Server non raggiungibile: " + server.url);
+        }
+    }
+
+    const newSnapshot = snapshotFiles(combined);
+    const diff = diffFiles(previousFilesSnapshot, newSnapshot);
+
+    if (previousFilesSnapshot.length > 0) {
+        if (diff.added.length === 0 && diff.removed.length === 0 && diff.changed.length === 0) {
+            // nessun cambiamento
+        } else {
+            if (diff.added.length > 0) {
+                showNotify("Nuovi file aggiunti: " + diff.added.length);
+            }
+            if (diff.changed.length > 0) {
+                showNotify("File aggiornati: " + diff.changed.length);
+            }
+            if (diff.removed.length > 0) {
+                logSecurity("File rimossi dal server: " + diff.removed.length);
+            }
+        }
+    }
+
+    const flags = {};
+    diff.added.forEach(f => flags[f.hash] = "new");
+    diff.changed.forEach(f => flags[f.hash] = "changed");
+
+    combined.forEach(f => {
+        f._status = flags[f.hash] || "normal";
+    });
+
+    previousFilesSnapshot = newSnapshot;
+    allFiles = combined;
+    renderFiles(allFiles);
+    setOffline(false);
+    updateStats();
+    renderServerStats();
+    updateLastRefreshLabel();
+}
+
+/* URL */
+function obfuscateUrl(url) {
+    if (!url) return "";
+    if (!obfuscateProtocolFlag) return url;
+    return url.replace(/^https:/i, "hxxps:").replace(/^http:/i, "hxxp:");
+}
+
+/* RENDER FILES */
+function renderFiles(files) {
+    const tbody = document.querySelector("#filesTable tbody");
+    tbody.innerHTML = "";
+
+    const favs = getFavs();
+
+    let list = [...files];
+    if (onlyVerifiedFilesFlag) {
+        list = list.filter(f => f.security === "VERIFICATO");
+    }
+
+    list.forEach(f => {
+        const isFav = favs.includes(f.hash);
+        const tr = document.createElement("tr");
+        if (f._status === "new") tr.className = "file-new";
+        else if (f._status === "changed") tr.className = "file-changed";
+
+        const displayUrl = obfuscateUrl(f.cloud_url || "");
+        tr.innerHTML = `
+            <td><a href="#file:${encodeURIComponent(f.hash)}" style="cursor:pointer;text-decoration:underline;color:#0e3f7a;">${f.name}</a></td>
+            <td>${f.description || ""}</td>
+            <td>${f.size}</td>
+            <td>${f.security}</td>
+            <td>${f.type}</td>
+            <td>${(f.tags || []).join(", ")}</td>
+            <td>${f.server_verified ? '<span class="verified-server">✔ Verificato</span>' : '<span class="unverified-server">—</span>'}</td>
+            <td><button onclick="reportFile('${encodeURIComponent(f.hash)}')">Segnala</button></td>
+        `;
+        tbody.appendChild(tr);
+    });
+
+    renderFavorites();
+    renderHistory();
+}
+
+/* FILTRI */
+function applyFilters() {
+    let filtered = [...allFiles];
+
+    const name = document.getElementById("filterName").value.toLowerCase();
+    const type = document.getElementById("filterType").value;
+    const sec = document.getElementById("filterSec").value;
+    const sortBy = document.getElementById("sortBy").value;
+
+    if (name) {
+        filtered = filtered.filter(f => (f.name || "").toLowerCase().includes(name));
+    }
+    if (type !== "all") {
+        filtered = filtered.filter(f => f.type === type);
+    }
+    if (sec !== "all") {
+        filtered = filtered.filter(f => f.security === sec);
+    }
+
+    if (sortBy === "name") {
+        filtered.sort((a,b) => (a.name || "").localeCompare(b.name || ""));
+    } else if (sortBy === "size") {
+        filtered.sort((a,b) => (a.size || "").localeCompare(b.size || ""));
+    } else if (sortBy === "security") {
+        filtered.sort((a,b) => (a.security || "").localeCompare(b.security || ""));
+    }
+
+    renderFiles(filtered);
+}
+
+/* DETTAGLIO FILE */
+function showFileDetailByHash(hash) {
+    const file = allFiles.find(f => f.hash === hash);
+    if (!file) {
+        showSection("files");
+        showNotify("File non trovato.");
+        return;
+    }
+    showFileDetail(file);
+}
+
+function showFileDetail(file) {
+    const box = document.getElementById("fileDetailBox");
+    const displayUrl = obfuscateUrl(file.cloud_url || "");
+    selectedHashForVerify = file.hash;
+
+    box.innerHTML = `
+        <div><span class="file-detail-label">Nome:</span> ${file.name}</div>
+        <div><span class="file-detail-label">Descrizione:</span> ${file.description || "(nessuna descrizione)"}</div>
+        <div><span class="file-detail-label">Peso:</span> ${file.size}</div>
+        <div><span class="file-detail-label">Sicurezza:</span> ${file.security}</div>
+        <div><span class="file-detail-label">Tipo:</span> ${file.type}</div>
+        <div><span class="file-detail-label">Tag:</span> ${(file.tags || []).join(", ") || "(nessun tag)"}</div>
+        <div><span class="file-detail-label">Server verificato:</span> ${file.server_verified ? "Sì" : "No"}</div>
+        <div><span class="file-detail-label">Hash interno:</span> ${file.hash}</div>
+        <div><span class="file-detail-label">Link:</span> ${displayUrl ? '<span style="font-size:10px;">'+displayUrl+'</span>' : "(nessun link)"}</div>
+        <div style="margin-top:8px;">
+            <button onclick="startFileDownload('${encodeURIComponent(file.hash)}')">Download</button>
+            <button onclick="reportFile('${encodeURIComponent(file.hash)}')">Segnala</button>
+        </div>
+    `;
+
+    showSection("filedetail");
+}
+
+function goBackToFiles() {
+    location.hash = "#files";
+}
+
+/* DOWNLOAD MANAGER */
+function startFileDownload(hashEnc) {
+    const hash = decodeURIComponent(hashEnc);
+    const file = allFiles.find(f => f.hash === hash);
+    if (!file) {
+        alert("File non trovato.");
+        return;
+    }
+    logDownload(file);
+    unlockBadge("firstDownload");
+    checkDownloadCountBadges();
+    addXP(5); // XP per download
+    queueDownload(file, file.cloud_url || "", file.hash);
+}
+
+function queueDownload(file, url, hash) {
+    downloadQueue.push({file, url, hash});
+    if (!activeDownload) processNextDownload();
+}
+
+function processNextDownload() {
+    if (downloadQueue.length === 0) {
+        activeDownload = null;
+        return;
+    }
+    activeDownload = downloadQueue.shift();
+    startDownloadManager(activeDownload.file, activeDownload.url, activeDownload.hash, processNextDownload);
+}
+
+function startDownloadManager(file, url, hash, onFinish) {
+    const win = document.getElementById("downloadWindow");
+    const bar = document.getElementById("downloadBar");
+    const status = document.getElementById("downloadStatus");
+    const nameBox = document.getElementById("downloadFileName");
+
+    nameBox.textContent = "File: " + file.name;
+    bar.style.width = "0%";
+    status.textContent = "Inizializzazione...";
+    win.style.display = "block";
+
+    let progress = 0;
+    let speed = 0;
+    let startTime = Date.now();
+
+    if (downloadTimer) clearInterval(downloadTimer);
+    downloadTimer = setInterval(() => {
+        const now = Date.now();
+        const elapsed = (now - startTime) / 1000;
+        const step = 5 + Math.random() * 15;
+        progress += step;
+        if (elapsed > 0) speed = progress / elapsed;
+
+        if (progress >= 100) {
+            progress = 100;
+            clearInterval(downloadTimer);
+            status.textContent = "Completato. Avvio download...";
+            setTimeout(() => {
+                win.style.display = "none";
+                if (url) {
+                    window.location.href = url;
+                } else {
+                    alert("Nessun link disponibile per questo file.");
+                }
+                if (onFinish) onFinish();
+            }, 700);
+        } else {
+            const remaining = (100 - progress) / (speed || 1);
+            status.textContent = "Scaricamento... " + Math.floor(progress) + "% | Vel: " +
+                speed.toFixed(1) + "%/s | ETA: " + Math.max(1, Math.floor(remaining)) + "s";
+        }
+        bar.style.width = progress + "%";
+    }, 300);
+}
+
+function closeDownloadWindow() {
+    const win = document.getElementById("downloadWindow");
+    win.style.display = "none";
+    if (downloadTimer) clearInterval(downloadTimer);
+    activeDownload = null;
+}
+
+/* REPORT FILE (EMAIL) */
+function reportFile(hashEnc) {
+    const hash = decodeURIComponent(hashEnc);
+    const file = allFiles.find(f => f.hash === hash);
+    if (!file) {
+        alert("File non trovato.");
+        return;
+    }
+    const subject = encodeURIComponent("Segnalazione file");
+    const body = encodeURIComponent(
+        "Vorrei segnalare il seguente file:\n\n" +
+        "Nome: " + file.name + "\n" +
+        "Hash: " + file.hash + "\n" +
+        "Server verificato: " + (file.server_verified ? "Sì" : "No") + "\n" +
+        "Link: " + (file.cloud_url || "") + "\n\n" +
+        "Motivo della segnalazione:\n[Scrivi qui]"
+    );
+    window.location.href = "mailto:club.dei.ninja.official@gmail.com?subject=" + subject + "&body=" + body;
+}
+
+/* CRONOLOGIA */
+function logDownload(file) {
+    const raw = localStorage.getItem("matteoshare_history") || "[]";
+    const arr = JSON.parse(raw);
+    arr.push({
+        name: file.name,
+        time: new Date().toLocaleString(),
+        type: file.type,
+        size: file.size
+    });
+    localStorage.setItem("matteoshare_history", JSON.stringify(arr));
+}
+
+function renderHistory() {
+    const box = document.getElementById("historyList");
+    const raw = localStorage.getItem("matteoshare_history") || "[]";
+    const arr = JSON.parse(raw);
+    box.innerHTML = "";
+    arr.slice().reverse().forEach(h => {
+        const div = document.createElement("div");
+        div.textContent = `[${h.time}] ${h.name} (${h.size}) [${h.type}]`;
+        box.appendChild(div);
+    });
+}
+
+function clearHistory() {
+    localStorage.removeItem("matteoshare_history");
+    renderHistory();
+}
+
+/* PREFERITI */
+function getFavs() {
+    try { return JSON.parse(localStorage.getItem("matteoshare_favs") || "[]"); }
+    catch { return []; }
+}
+
+function saveFavs(arr) {
+    localStorage.setItem("matteoshare_favs", JSON.stringify(arr));
+}
+
+function toggleFav(hash) {
+    let favs = getFavs();
+    if (favs.includes(hash)) {
+        favs = favs.filter(h => h !== hash);
+    } else {
+        favs.push(hash);
+    }
+    saveFavs(favs);
+    renderFiles(allFiles);
+}
+
+function renderFavorites() {
+    const favs = getFavs();
+    const box = document.getElementById("favoritesList");
+    box.innerHTML = "";
+    const favFiles = allFiles.filter(f => favs.includes(f.hash));
+    favFiles.forEach(f => {
+        const div = document.createElement("div");
+        div.textContent = `${f.name} (${f.size}) [${f.security}]`;
+        box.appendChild(div);
+    });
+}
+
+/* RICHIESTA PUBBLICAZIONE */
+function openRequestWindow() {
+    document.getElementById("requestWindow").style.display = "block";
+    updateRequestPreview();
+}
+
+function closeRequestWindow() {
+    document.getElementById("requestWindow").style.display = "none";
+}
+
+function updateRequestPreview() {
+    const name = document.getElementById("reqName").value;
+    const desc = document.getElementById("reqDesc").value;
+    const size = document.getElementById("reqSize").value;
+    const sec = document.getElementById("reqSec").value;
+    const link = document.getElementById("reqLink").value;
+
+    const preview =
+        "Richiesta pubblicazione file:\n\n" +
+        "Nome: " + name + "\n" +
+        "Descrizione: " + desc + "\n" +
+        "Peso: " + size + "\n" +
+        "Sicurezza: " + sec + "\n" +
+        "Link: " + link + "\n\n" +
+        "Richiesta inviata tramite MatteoShare Web.";
+
+    document.getElementById("reqPreview").value = preview;
+}
+
+function copyRequestPreview() {
+    const ta = document.getElementById("reqPreview");
+    ta.select();
+    document.execCommand("copy");
+}
+
+function sendRequestEmail() {
+    updateRequestPreview();
+    const text = document.getElementById("reqPreview").value;
+    const subject = encodeURIComponent("Richiesta pubblicazione file");
+    const body = encodeURIComponent(text);
+    window.location.href = "mailto:club.dei.ninja.official@gmail.com?subject=" + subject + "&body=" + body;
+    closeRequestWindow();
+}
+
+/* CHAT GLOBALE – SOCIAL 3.0 */
+function loadChatFromStorage() {
+    try {
+        chatMessages = JSON.parse(localStorage.getItem("matteoshare_chat") || "[]");
+    } catch {
+        chatMessages = [];
+    }
+}
+
+function saveChatToStorage() {
+    localStorage.setItem("matteoshare_chat", JSON.stringify(chatMessages));
+}
+
+function highlightMentions(text, myName) {
+    if (!myName) return text;
+    const safeName = myName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const pattern = new RegExp("@" + safeName, "gi");
+    return text.replace(pattern, m => "<span class='mention'>" + m + "</span>");
+}
+
+function renderChat() {
+    const box = document.getElementById("chatMessages");
+    box.innerHTML = "";
+    const channel = document.getElementById("chatChannel").value;
+    const acc = loadAccountFromStorage();
+    const myName = acc ? acc.name : "";
+
+    const isAdmin = acc && acc.admin;
+
+    chatMessages
+        .filter(m => m.channel === channel)
+        .forEach(m => {
+            const div = document.createElement("div");
+            let text = "[" + m.time + "] " + m.user + ": " + m.text;
+            text = highlightMentions(text, myName);
+            div.innerHTML = text + " ";
+
+            const reactionsSpan = document.createElement("span");
+            reactionsSpan.style.fontSize = "10px";
+            reactionsSpan.textContent = m.reactions ? " " + m.reactions.join(" ") : "";
+            div.appendChild(reactionsSpan);
+
+            if (isAdmin) {
+                const delBtn = document.createElement("button");
+                delBtn.textContent = "X";
+                delBtn.className = "reaction-btn";
+                delBtn.onclick = () => deleteChatMessage(m.id);
+                div.appendChild(delBtn);
+            }
+
+            ["👍","❤️","😂"].forEach(r => {
+                const btn = document.createElement("button");
+                btn.textContent = r;
+                btn.className = "reaction-btn";
+                btn.onclick = () => addReaction(m.id, r);
+                div.appendChild(btn);
+            });
+
+            box.appendChild(div);
+        });
+
+    box.scrollTop = box.scrollHeight;
+
+    const mini = document.getElementById("miniChat");
+    mini.innerHTML = "";
+    chatMessages.slice(-10).forEach(m => {
+        const d = document.createElement("div");
+        d.textContent = m.user + ": " + m.text;
+        mini.appendChild(d);
+    });
+    mini.scrollTop = mini.scrollHeight;
+}
+
+function sendChatMessage() {
+    if (!isConnected()) {
+        showNotify("Devi essere connesso per inviare messaggi.");
+        return;
+    }
+    const input = document.getElementById("chatInput");
+    const text = input.value.trim();
+    if (!text) return;
+
+    const acc = loadAccountFromStorage();
+    const user = acc && acc.name ? acc.name : "Anon";
+    const channel = document.getElementById("chatChannel").value;
+
+    const msg = {
+        id: "msg-" + Date.now() + "-" + Math.random().toString(36).substring(2,6),
+        user,
+        text,
+        channel,
+        time: new Date().toLocaleTimeString(),
+        reactions: []
+    };
+    chatMessages.push(msg);
+    saveChatToStorage();
+    input.value = "";
+    renderChat();
+    unlockBadge("firstChat");
+    addXP(2); // XP per messaggio
+}
+
+function deleteChatMessage(id) {
+    chatMessages = chatMessages.filter(m => m.id !== id);
+    saveChatToStorage();
+    renderChat();
+}
+
+function addReaction(id, reaction) {
+    const msg = chatMessages.find(m => m.id === id);
+    if (!msg) return;
+    if (!msg.reactions) msg.reactions = [];
+    msg.reactions.push(reaction);
+    saveChatToStorage();
+    renderChat();
+
+    const rep = getReputation();
+    rep[msg.user] = (rep[msg.user] || 0) + 1;
+    saveReputation(rep);
+    renderPeers();
+    addXP(1);
+}
+
+function sendMiniChat() {
+    const v = document.getElementById("miniInput").value;
+    document.getElementById("chatInput").value = v;
+    sendChatMessage();
+    document.getElementById("miniInput").value = "";
+}
+
+/* MINI PLAYER */
+function openMiniPlayer() {
+    document.getElementById("miniPlayer").style.display = "block";
+}
+
+function closeMiniPlayer() {
+    document.getElementById("miniPlayer").style.display = "none";
+}
+
+/* CHAT PRIVATA */
+function openPrivateChat(peerId, peerName) {
+    currentPrivatePeer = { id: peerId, name: peerName };
+    document.getElementById("privateChatTitle").textContent = "Chat con " + peerName;
+    document.getElementById("privateChatWindow").style.display = "block";
+    renderPrivateChat();
+}
+
+function closePrivateChat() {
+    document.getElementById("privateChatWindow").style.display = "none";
+    currentPrivatePeer = null;
+}
+
+function getPrivateChatKey(peerId) {
+    const acc = loadAccountFromStorage();
+    const myId = acc ? acc.id : "ME";
+    return "pc_" + [myId, peerId].sort().join("_");
+}
+
+function loadPrivateChat(peerId) {
+    const key = getPrivateChatKey(peerId);
+    try {
+        privateChats[key] = JSON.parse(localStorage.getItem("matteoshare_private_" + key) || "[]");
+    } catch {
+        privateChats[key] = [];
+    }
+}
+
+function savePrivateChat(peerId) {
+    const key = getPrivateChatKey(peerId);
+    localStorage.setItem("matteoshare_private_" + key, JSON.stringify(privateChats[key] || []));
+}
+
+function renderPrivateChat() {
+    if (!currentPrivatePeer) return;
+    const peerId = currentPrivatePeer.id;
+    loadPrivateChat(peerId);
+    const key = getPrivateChatKey(peerId);
+    const msgs = privateChats[key] || [];
+    const box = document.getElementById("privateChatMessages");
+    box.innerHTML = "";
+    msgs.forEach(m => {
+        const div = document.createElement("div");
+        div.textContent = "[" + m.time + "] " + m.user + ": " + m.text;
+        box.appendChild(div);
+    });
+    box.scrollTop = box.scrollHeight;
+}
+
+function sendPrivateChat() {
+    if (!currentPrivatePeer) return;
+    if (!isConnected()) {
+        showNotify("Devi essere connesso per usare la chat privata.");
+        return;
+    }
+    const input = document.getElementById("privateChatInput");
+    const text = input.value.trim();
+    if (!text) return;
+
+    const acc = loadAccountFromStorage();
+    const user = acc && acc.name ? acc.name : "Anon";
+    const peerId = currentPrivatePeer.id;
+
+    loadPrivateChat(peerId);
+    const key = getPrivateChatKey(peerId);
+    if (!privateChats[key]) privateChats[key] = [];
+    privateChats[key].push({
+        user,
+        text,
+        time: new Date().toLocaleTimeString()
+    });
+    savePrivateChat(peerId);
+    input.value = "";
+    renderPrivateChat();
+    showNotify("Messaggio privato inviato (simulato).");
+}
+
+/* PEER / PROFILI + REPUTAZIONE */
+function getReputation() {
+    try {
+        return JSON.parse(localStorage.getItem("matteoshare_rep") || "{}");
+    } catch {
+        return {};
+    }
+}
+
+function saveReputation(rep) {
+    localStorage.setItem("matteoshare_rep", JSON.stringify(rep));
+}
+
+function addReputation(peerId, delta) {
+    const rep = getReputation();
+    rep[peerId] = (rep[peerId] || 0) + delta;
+    saveReputation(rep);
+    renderPeers();
+}
+
+function renderPeers() {
+    const box = document.getElementById("peersList");
+    box.innerHTML = "";
+
+    const acc = loadAccountFromStorage();
+    const rep = getReputation();
+    const isAdmin = acc && acc.admin;
+
+    const peers = [];
+
+    if (acc) {
+        peers.push({
+            id: acc.id,
+            name: acc.name,
+            online: isConnected(),
+            bio: acc.bio || "",
+            score: rep[acc.id] || 0,
+            self: true
+        });
+    }
+
+    peers.push({
+        id: "PEER-1234",
+        name: "RetroUser",
+        online: true,
+        bio: "Ama i sistemi operativi vecchi.",
+        score: rep["PEER-1234"] || 5,
+        self: false
+    });
+
+    peers.push({
+        id: "PEER-5678",
+        name: "Gamer98",
+        online: false,
+        bio: "Giocatore LAN party.",
+        score: rep["PEER-5678"] || 2,
+        self: false
+    });
+
+    peers.forEach(p => {
+        const div = document.createElement("div");
+        div.className = "peer-item";
+        const left = document.createElement("div");
+        const right = document.createElement("div");
+
+        left.innerHTML = `<b>${p.name}</b> (${p.id})<br><span style="font-size:10px;">${p.bio}</span>`;
+        right.innerHTML = `
+            <span class="${p.online ? 'status-online' : 'status-offline'}">
+                ${p.online ? 'ONLINE' : 'OFFLINE'}
+            </span><br>
+            <span class="rep-score">Rep: ${p.score}</span>
+        `;
+
+        if (!p.self) {
+            const chatBtn = document.createElement("button");
+            chatBtn.textContent = "Chat";
+            chatBtn.style.fontSize = "9px";
+            chatBtn.onclick = () => openPrivateChat(p.id, p.name);
+            right.appendChild(document.createElement("br"));
+            right.appendChild(chatBtn);
+        }
+
+        if (isAdmin && !p.self) {
+            const plusBtn = document.createElement("button");
+            plusBtn.textContent = "+Rep";
+            plusBtn.style.fontSize = "9px";
+            plusBtn.onclick = () => addReputation(p.id, 1);
+            right.appendChild(plusBtn);
+        }
+
+        div.appendChild(left);
+        div.appendChild(right);
+        box.appendChild(div);
+    });
+}
+
+/* SOCIAL 3.0 */
+function getSocialData() {
+    try {
+        return JSON.parse(localStorage.getItem("matteoshare_social") || "{}");
+    } catch {
+        return {};
+    }
+}
+
+function saveSocialData(data) {
+    localStorage.setItem("matteoshare_social", JSON.stringify(data));
+}
+
+function loadSocialUI() {
+    const data = getSocialData();
+    document.getElementById("socialStatus").value = data.status || "";
+    renderWall();
+    renderFriends();
+}
+
+function saveSocialStatus() {
+    const data = getSocialData();
+    data.status = document.getElementById("socialStatus").value;
+    saveSocialData(data);
+    showNotify("Stato aggiornato.");
+}
+
+function addWallPost() {
+    const text = document.getElementById("socialPost").value.trim();
+    if (!text) return;
+    const data = getSocialData();
+    if (!data.wall) data.wall = [];
+    const acc = loadAccountFromStorage();
+    data.wall.push({
+        time: new Date().toLocaleString(),
+        text,
+        author: acc && acc.name ? acc.name : "Tu",
+        likes: 0
+    });
+    saveSocialData(data);
+    document.getElementById("socialPost").value = "";
+    renderWall();
+    addXP(3); // XP per post
+}
+
+function likeWallPost(index) {
+    const data = getSocialData();
+    if (!data.wall) return;
+    const post = data.wall[index];
+    if (!post) return;
+    post.likes = (post.likes || 0) + 1;
+    saveSocialData(data);
+    renderWall();
+    addXP(1);
+}
+
+function renderWall() {
+    const box = document.getElementById("wallBox");
+    const data = getSocialData();
+    const wall = data.wall || [];
+    box.innerHTML = "";
+    wall.slice().reverse().forEach((p, idxRev) => {
+        const idx = wall.length - 1 - idxRev;
+        const div = document.createElement("div");
+        div.style.borderBottom = "1px solid #ddd";
+        div.style.marginBottom = "3px";
+        div.innerHTML = `<b>${p.author}</b> [${p.time}]<br>${p.text}<br>
+            <span style="font-size:10px;">Like: ${p.likes || 0}</span>
+            <button class="reaction-btn" onclick="likeWallPost(${idx})">Like</button>`;
+        box.appendChild(div);
+    });
+}
+
+function addFriend() {
+    const id = document.getElementById("friendId").value.trim();
+    if (!id) return;
+    const data = getSocialData();
+    if (!data.friends) data.friends = [];
+    if (!data.friends.includes(id)) {
+        data.friends.push(id);
+        saveSocialData(data);
+        renderFriends();
+        document.getElementById("friendId").value = "";
+        showNotify("Amico aggiunto: " + id);
+        addXP(2);
+    }
+}
+
+function renderFriends() {
+    const box = document.getElementById("friendsBox");
+    const data = getSocialData();
+    const friends = data.friends || [];
+    box.innerHTML = "";
+    if (friends.length === 0) {
+        box.textContent = "Nessun amico aggiunto.";
+        return;
+    }
+    friends.forEach(id => {
+        const div = document.createElement("div");
+        div.className = "friend-item";
+        div.textContent = id;
+        box.appendChild(div);
+    });
+}
+
+/* XP / LIVELLI */
+function loadXP() {
+    try {
+        xpData = JSON.parse(localStorage.getItem("matteoshare_xp") || '{"xp":0,"level":1}');
+    } catch {
+        xpData = { xp:0, level:1 };
+    }
+    updateXPUI();
+}
+
+function saveXP() {
+    localStorage.setItem("matteoshare_xp", JSON.stringify(xpData));
+}
+
+function xpForNextLevel(level) {
+    return 50 + (level - 1) * 50;
+}
+
+function addXP(amount) {
+    xpData.xp += amount;
+    let needed = xpForNextLevel(xpData.level);
+    let leveledUp = false;
+    while (xpData.xp >= needed) {
+        xpData.xp -= needed;
+        xpData.level++;
+        needed = xpForNextLevel(xpData.level);
+        leveledUp = true;
+    }
+    saveXP();
+    updateXPUI();
+    if (leveledUp) {
+        showNotify("Hai raggiunto il livello " + xpData.level + "!");
+    }
+}
+
+function updateXPUI() {
+    const label = document.getElementById("xpLabel");
+    const bar = document.getElementById("xpBarInner");
+    const needed = xpForNextLevel(xpData.level);
+    const perc = Math.min(100, (xpData.xp / needed) * 100);
+    label.textContent = "XP: " + xpData.xp + " (Lv. " + xpData.level + ")";
+    bar.style.width = perc + "%";
+}
+
+/* ACCOUNT + AVATAR + TEMA */
+function generateId() {
+    return "MS-" + Math.random().toString(36).substring(2, 10).toUpperCase();
+}
+
+function loadAccountFromStorage() {
+    try {
+        const raw = localStorage.getItem("matteoshare_account");
+        if (!raw) return null;
+        return JSON.parse(raw);
+    } catch (e) {
+        return null;
+    }
+}
+
+function saveAccountToStorage(acc) {
+    localStorage.setItem("matteoshare_account", JSON.stringify(acc));
+}
+
+function refreshAccountUI() {
+    const acc = loadAccountFromStorage();
+    const nameLabel = document.getElementById("accountNameLabel");
+    const idLabel = document.getElementById("accountIdLabel");
+    const statusLabel = document.getElementById("accountStatusLabel");
+    const avatar = document.getElementById("avatarBox");
+    const themeSelect = document.getElementById("themeSelect");
+
+    if (acc) {
+        nameLabel.textContent = "Account: " + (acc.name || "(senza nome)");
+        idLabel.textContent = "ID: " + (acc.id || "-");
+
+        document.getElementById("accName").value = acc.name || "";
+        document.getElementById("accId").value = acc.id || "";
+        document.getElementById("accBio").value = acc.bio || "";
+        document.getElementById("accSounds").checked = !!acc.sounds;
+        document.getElementById("accDark").checked = !!acc.dark;
+        document.getElementById("accAdmin").checked = !!acc.admin;
+
+        avatar.textContent = (acc.name || "MS").substring(0,2).toUpperCase();
+        if (acc.avatarPixels) {
+            applyAvatarPixelsToEditor(acc.avatarPixels);
+        }
+
+        const theme = acc.theme || "default";
+        themeSelect.value = theme;
+        applyTheme(theme);
+    } else {
+        nameLabel.textContent = "Account: (nessun account)";
+        idLabel.textContent = "ID: -";
+        avatar.textContent = "MS";
+    }
+
+    statusLabel.textContent = "Stato: " + (isConnected() ? "ONLINE" : "OFFLINE");
+    renderBadges();
+}
+
+function saveAccount() {
+    let name = document.getElementById("accName").value.trim();
+    let id = document.getElementById("accId").value.trim();
+    const bio = document.getElementById("accBio").value;
+    const sounds = document.getElementById("accSounds").checked;
+    const dark = document.getElementById("accDark").checked;
+    const admin = document.getElementById("accAdmin").checked;
+    const theme = document.getElementById("themeSelect").value;
+    const avatarPixels = readAvatarPixelsFromEditor();
+
+    if (!name) name = "Utente MatteoShare";
+    if (!id) id = generateId();
+
+    const acc = { name, id, sounds, dark, admin, theme, avatarPixels, bio };
+    saveAccountToStorage(acc);
+    refreshAccountUI();
+    backupAccount();
+    renderPeers();
+}
+
+/* AVATAR PIXEL-ART */
+function initAvatarEditor() {
+    const editor = document.getElementById("avatarEditor");
+    editor.innerHTML = "";
+    for (let i=0;i<16;i++) {
+        const div = document.createElement("div");
+        div.className = "avatar-pixel";
+        div.dataset.colorIndex = "0";
+        div.style.backgroundColor = avatarColors[0];
+        div.onclick = () => {
+            let idx = parseInt(div.dataset.colorIndex,10);
+            idx = (idx + 1) % avatarColors.length;
+            div.dataset.colorIndex = idx.toString();
+            div.style.backgroundColor = avatarColors[idx];
+        };
+        editor.appendChild(div);
+    }
+}
+
+function readAvatarPixelsFromEditor() {
+    const editor = document.getElementById("avatarEditor");
+    const pixels = Array.from(editor.querySelectorAll(".avatar-pixel"));
+    const matrix = [];
+    for (let r=0;r<4;r++) {
+        const row = [];
+        for (let c=0;c<4;c++) {
+            const idx = r*4 + c;
+            row.push(parseInt(pixels[idx].dataset.colorIndex,10));
+        }
+        matrix.push(row);
+    }
+    return matrix;
+}
+
+function applyAvatarPixelsToEditor(matrix) {
+    const editor = document.getElementById("avatarEditor");
+    const pixels = Array.from(editor.querySelectorAll(".avatar-pixel"));
+    for (let r=0;r<4;r++) {
+        for (let c=0;c<4;c++) {
+            const idx = r*4 + c;
+            const colorIndex = matrix[r][c] || 0;
+            pixels[idx].dataset.colorIndex = colorIndex.toString();
+            pixels[idx].style.backgroundColor = avatarColors[colorIndex];
+        }
+    }
+}
+
+/* TEMA */
+function applyTheme(theme) {
+    document.body.className = "theme-" + theme;
+}
+
+function changeTheme() {
+    const theme = document.getElementById("themeSelect").value;
+    applyTheme(theme);
+    const acc = loadAccountFromStorage();
+    if (acc) {
+        acc.theme = theme;
+        saveAccountToStorage(acc);
+    }
+}
+
+/* OFFLINE MODE */
+function setOffline(isOffline) {
+    const banner = document.getElementById("offlineBanner");
+    banner.style.display = isOffline ? "block" : "none";
+}
+
+/* BADGE */
+function getBadges() {
+    const raw = localStorage.getItem("matteoshare_badges") || "{}";
+    return JSON.parse(raw);
+}
+
+function saveBadges(b) {
+    localStorage.setItem("matteoshare_badges", JSON.stringify(b));
+}
+
+function unlockBadge(key) {
+    const badges = getBadges();
+    if (!badges[key]) {
+        badges[key] = true;
+        saveBadges(badges);
+        if (badgeDefinitions[key]) {
+            showNotify("Nuovo badge sbloccato: " + badgeDefinitions[key].label);
+        }
+        renderBadges();
+    }
+}
+
+function checkDownloadCountBadges() {
+    const raw = localStorage.getItem("matteoshare_history") || "[]";
+    const arr = JSON.parse(raw);
+    if (arr.length >= 1) unlockBadge("firstDownload");
+    if (arr.length >= 10) unlockBadge("tenDownloads");
+    if (arr.length >= 50) unlockBadge("fiftyDownloads");
+}
+
+const badgeDefinitions = {
+    firstDownload: { label: "Primo download" },
+    tenDownloads: { label: "10 download" },
+    fiftyDownloads: { label: "50 download" },
+    firstChat: { label: "Primo messaggio in chat" },
+    veteran: { label: "Account veterano (30 giorni)" }
+};
+
+function renderBadges() {
+    const box = document.getElementById("badgeList");
+    const badges = getBadges();
+    box.innerHTML = "";
+    Object.keys(badgeDefinitions).forEach(key => {
+        const def = badgeDefinitions[key];
+        const unlocked = !!badges[key];
+        const div = document.createElement("div");
+        div.className = unlocked ? "badge-unlocked" : "badge-locked";
+        div.textContent = (unlocked ? "✔ " : "✖ ") + def.label;
+        box.appendChild(div);
+    });
+}
+
+/* STATISTICHE */
+function updateStats() {
+    const box = document.getElementById("statsBox");
+    const historyRaw = localStorage.getItem("matteoshare_history") || "[]";
+    const history = JSON.parse(historyRaw);
+    const totalDownloads = history.length;
+    const totalFiles = allFiles.length;
+    const totalChat = chatMessages.length;
+
+    let mostDownloaded = "N/D";
+    if (history.length > 0) {
+        const countMap = {};
+        history.forEach(h => {
+            countMap[h.name] = (countMap[h.name] || 0) + 1;
+        });
+        let maxName = null, maxCount = 0;
+        Object.keys(countMap).forEach(name => {
+            if (countMap[name] > maxCount) {
+                maxCount = countMap[name];
+                maxName = name;
+            }
+        });
+        mostDownloaded = maxName + " (" + maxCount + " download)";
+    }
+
+    box.innerHTML = `
+        File totali (da server): ${totalFiles}<br>
+        Download totali (locale): ${totalDownloads}<br>
+        File più scaricato (locale): ${mostDownloaded}<br>
+        Messaggi in chat (locale): ${totalChat}
+    `;
+}
+
+/* PLUGIN SYSTEM */
+function getPlugins() {
+    const raw = localStorage.getItem("matteoshare_plugins") || "[]";
+    return JSON.parse(raw);
+}
+
+function savePlugins(p) {
+    localStorage.setItem("matteoshare_plugins", JSON.stringify(p));
+}
+
+function loadPluginFile(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const plugin = JSON.parse(e.target.result);
+            applyPlugin(plugin);
+            const plugins = getPlugins();
+            plugins.push(plugin);
+            savePlugins(plugins);
+            renderPlugins();
+            showNotify("Plugin caricato: " + (plugin.name || "Senza nome"));
+        } catch (err) {
+            alert("Plugin non valido.");
+        }
+    };
+    reader.readAsText(file);
+}
+
+function applyPlugin(plugin) {
+    if (plugin.css) {
+        const style = document.createElement("style");
+        style.textContent = plugin.css;
+        document.head.appendChild(style);
+    }
+    if (plugin.js) {
+        const script = document.createElement("script");
+        script.textContent = plugin.js;
+        document.body.appendChild(script);
+    }
+}
+
+function renderPlugins() {
+    const box = document.getElementById("pluginList");
+    const plugins = getPlugins();
+    box.innerHTML = "";
+    plugins.forEach((p, i) => {
+        const div = document.createElement("div");
+        div.textContent = (i+1) + ". " + (p.name || "Plugin senza nome");
+        box.appendChild(div);
+    });
+}
+
+/* BACKUP ACCOUNT */
+function backupAccount() {
+    const acc = loadAccountFromStorage();
+    if (!acc) return;
+    const backup = {
+        time: new Date().toISOString(),
+        account: acc
+    };
+    localStorage.setItem("matteoshare_backup", JSON.stringify(backup));
+}
+
+/* EXPORT / IMPORT ACCOUNT */
+function exportAccount() {
+    const acc = loadAccountFromStorage();
+    if (!acc) {
+        alert("Nessun account da esportare.");
+        return;
+    }
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(acc, null, 2));
+    const a = document.createElement("a");
+    a.href = dataStr;
+    a.download = "matteoshare_account.json";
+    a.click();
+}
+
+function importAccountFile(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const acc = JSON.parse(e.target.result);
+            saveAccountToStorage(acc);
+            refreshAccountUI();
+            renderPeers();
+            showNotify("Account importato.");
+        } catch (err) {
+            alert("File account non valido.");
+        }
+    };
+    reader.readAsText(file);
+}
+
+/* CONNESSIONE */
+function isConnected() {
+    return localStorage.getItem("matteoshare_connected") === "1";
+}
+
+function setConnected(state) {
+    localStorage.setItem("matteoshare_connected", state ? "1" : "0");
+    const btn = document.getElementById("connectBtn");
+    const statusLabel = document.getElementById("accountStatusLabel");
+    if (state) {
+        btn.textContent = "Disconnetti";
+        statusLabel.textContent = "Stato: ONLINE";
+        showNotify("Connesso (simulazione locale).");
+    } else {
+        btn.textContent = "Connetti";
+        statusLabel.textContent = "Stato: OFFLINE";
+        showNotify("Disconnesso.");
+    }
+    renderPeers();
+}
+
+function toggleConnection() {
+    setConnected(!isConnected());
+}
+
+/* HASH VERIFICA */
+function verifyHash() {
+    if (!selectedHashForVerify) {
+        document.getElementById("verifyHashResult").textContent = "Seleziona prima un file (apri la pagina dettaglio).";
+        return;
+    }
+    const expected = document.getElementById("verifyHashInput").value.trim();
+    if (!expected) {
+        document.getElementById("verifyHashResult").textContent = "Inserisci un hash atteso.";
+        return;
+    }
+    if (expected === selectedHashForVerify) {
+        document.getElementById("verifyHashResult").textContent = "OK: hash corrispondente.";
+        logSecurity("Verifica hash OK per " + selectedHashForVerify);
+    } else {
+        document.getElementById("verifyHashResult").textContent = "ATTENZIONE: hash NON corrispondente.";
+        logSecurity("Verifica hash FALLITA per " + selectedHashForVerify);
+    }
+}
+
+/* NEWS */
+async function loadNews() {
+    try {
+        const res = await fetch(NEWS_CSV_URL);
+        const csv = await res.text();
+        const rows = parseCSV(csv);
+        renderNews(rows);
+    } catch (e) {
+        const box = document.getElementById("newsList");
+        box.innerHTML = "Impossibile caricare le news.";
+    }
+}
+
+function renderNews(rows) {
+    const box = document.getElementById("newsList");
+    box.innerHTML = "";
+    if (!rows || rows.length === 0) {
+        box.textContent = "Nessuna news disponibile.";
+        return;
+    }
+    rows.slice().reverse().forEach(r => {
+        const div = document.createElement("div");
+        div.className = "news-item";
+        const title = r.title || r.Titolo || r.titolo || "";
+        const msg = r.message || r.Messaggio || r.messaggio || "";
+        const date = r.date || r.Data || r.data || "";
+        div.innerHTML = `
+            <div class="news-title">${title || "(senza titolo)"}</div>
+            <div class="news-date">${date}</div>
+            <div>${msg}</div>
+        `;
+        box.appendChild(div);
+    });
+}
+
+/* AUTO-UPDATE INTELLIGENTE */
+function startAutoUpdate() {
+    if (autoUpdateTimer) clearInterval(autoUpdateTimer);
+    autoUpdateTimer = setInterval(async () => {
+        await loadFiles();
+        await loadNews();
+    }, AUTO_UPDATE_INTERVAL_MS);
+    document.getElementById("autoUpdateStatus").textContent = "ON (intelligente)";
+}
+
+function updateLastRefreshLabel() {
+    document.getElementById("lastRefreshLabel").textContent = new Date().toLocaleTimeString();
+}
+
+/* INIT */
+function reloadAllServers() {
+    loadFiles();
+}
+
+function init() {
+    initAvatarEditor();
+    refreshAccountUI();
+    renderBadges();
+    renderPlugins();
+    renderServerList();
+    loadChatFromStorage();
+    renderChat();
+    renderPeers();
+    renderHistory();
+    renderFavorites();
+    updateStats();
+    loadSafeModeUI();
+    loadBannedServersUI();
+    renderSecurityLog();
+    loadSocialUI();
+    loadNews();
+    loadXP();
+    router();
+    loadFiles();
+
+    if (isConnected()) setConnected(true);
+
+    startAutoUpdate();
+    window.addEventListener("hashchange", router);
+}
+
+init();
 </script>
+
 </body>
 </html>
