@@ -8,7 +8,7 @@
     *{box-sizing:border-box;margin:0;padding:0}
     body{
       font-family:Tahoma,Segoe UI,system-ui,sans-serif;
-      background:#008080 url("https://i.imgur.com/0vZ5F.png") repeat;
+      background:#008080;
       color:#000;
     }
     .desktop{
@@ -63,9 +63,7 @@
       margin-bottom:6px;
       font-size:11px;
     }
-    .menubar span{
-      cursor:default;
-    }
+    .menubar span{cursor:default}
     .toolbar{
       margin-bottom:6px;
       padding:3px;
@@ -155,12 +153,8 @@
       color:#fff;
       text-align:left;
     }
-    tr:hover{
-      background:#cfe7ff;
-    }
-    tr.selected{
-      background:#99c0ff;
-    }
+    tr:hover{background:#cfe7ff}
+    tr.selected{background:#99c0ff}
     .tag{
       display:inline-block;
       padding:1px 4px;
@@ -208,9 +202,7 @@
       margin-right:4px;
       margin-top:2px;
     }
-    .btn-danger{
-      background:#ffc0c0;
-    }
+    .btn-danger{background:#ffc0c0}
     .news-item{
       border:1px solid #808080;
       background:#fff;
@@ -255,9 +247,7 @@
       font-size:10px;
       color:#555;
     }
-    .chat-user{
-      font-weight:bold;
-    }
+    .chat-user{font-weight:bold}
     .chat-input{
       border-top:1px solid #808080;
       padding:3px;
@@ -272,9 +262,7 @@
       background:#fff;
       flex:1;
     }
-    .input-small{
-      max-width:120px;
-    }
+    .input-small{max-width:120px}
     .settings-grid{
       display:grid;
       grid-template-columns:1fr 1fr;
@@ -308,7 +296,6 @@
       margin-top:2px;
     }
     .hidden{display:none!important}
-    /* LOGIN WINDOW */
     .overlay{
       position:fixed;
       inset:0;
@@ -318,9 +305,7 @@
       justify-content:center;
       z-index:1000;
     }
-    .login-window{
-      width:320px;
-    }
+    .login-window{width:340px}
     .login-body{
       padding:8px;
       border-top:2px solid #fff;
@@ -340,15 +325,13 @@
       margin-top:6px;
       text-align:right;
     }
-    .account-info{
-      font-size:11px;
-    }
+    .account-info{font-size:11px}
   </style>
 </head>
 <body>
 <div class="desktop">
 
-  <!-- LOGIN / ACCOUNT LOCAL -->
+  <!-- LOGIN / REGISTRAZIONE LOCALE -->
   <div class="overlay" id="loginOverlay">
     <div class="window login-window">
       <div class="titlebar">
@@ -362,13 +345,16 @@
           Benvenuto in <b>MatteoShare · Social 3.0</b>.<br>
           Crea o accedi a un <b>account locale</b> per usare il sito.
         </div>
-        <label for="loginUsername">Nome utente</label>
-        <input id="loginUsername" class="input" type="text" placeholder="Es. Matteo">
         <label for="loginMode">Modalità</label>
         <select id="loginMode" class="input">
-          <option value="login">Accedi a un account esistente</option>
-          <option value="create">Crea un nuovo account</option>
+          <option value="login">Login (account esistente)</option>
+          <option value="create">Crea nuovo account</option>
         </select>
+        <label for="loginUsername">Nome utente</label>
+        <input id="loginUsername" class="input" type="text" placeholder="Es. Matteo">
+        <label for="loginPassword">Password</label>
+        <input id="loginPassword" class="input" type="password" placeholder="Password">
+        <div class="settings-note" id="loginError" style="color:#a00;display:none;"></div>
         <div class="login-actions">
           <button class="btn" id="loginConfirmBtn">OK</button>
         </div>
@@ -376,7 +362,7 @@
     </div>
   </div>
 
-  <!-- MAIN WINDOW -->
+  <!-- FINESTRA PRINCIPALE -->
   <div class="window">
     <div class="titlebar">
       <span>MatteoShare - Social 3.0</span>
@@ -413,9 +399,9 @@
       </div>
 
       <div class="main-layout">
-        <!-- LEFT SIDE -->
+        <!-- SINISTRA -->
         <div>
-          <!-- FILES PANEL -->
+          <!-- FILES -->
           <div class="panel tab-panel" data-tab-panel="files">
             <div class="panel-title">
               <span id="filesTitle">Archivio file collegato a Google Sheets</span>
@@ -430,8 +416,7 @@
                 <th id="thSecurity">Sicurezza</th>
               </tr>
               </thead>
-              <tbody id="filesTableBody">
-              </tbody>
+              <tbody id="filesTableBody"></tbody>
             </table>
             <div class="file-detail" id="fileDetail">
               <h3 id="fileDetailName">Seleziona un file…</h3>
@@ -453,20 +438,17 @@
                 <span class="status-led sync" id="filesStatusLed"></span>
                 <span id="filesStatusText">Sincronizzazione intelligente in corso…</span>
               </div>
-              <div>
-                File: <span id="filesCountValue">0</span>
-              </div>
+              <div>File: <span id="filesCountValue">0</span></div>
             </div>
           </div>
 
-          <!-- NEWS PANEL -->
+          <!-- NEWS -->
           <div class="panel tab-panel hidden" data-tab-panel="news">
             <div class="panel-title">
               <span id="newsTitle">News & aggiornamenti</span>
               <span style="font-size:11px;" id="newsBadge">Social 3.0 · Sicurezza · Funzioni</span>
             </div>
             <div id="newsList">
-              <!-- Static fallback, puoi collegare un foglio in JS -->
               <div class="news-item">
                 <div class="news-title" id="newsItem1Title">Social 3.0 attivo</div>
                 <div class="news-meta" id="newsItem1Meta">Chat globale collegata a Google Sheets</div>
@@ -492,7 +474,7 @@
           </div>
         </div>
 
-        <!-- RIGHT SIDE -->
+        <!-- DESTRA -->
         <div>
           <!-- SOCIAL 3.0 / CHAT GLOBALE -->
           <div class="panel tab-panel" data-tab-panel="social">
@@ -513,13 +495,11 @@
                 <span class="status-led" id="chatStatusLed"></span>
                 <span id="chatStatusText">Chat globale connessa</span>
               </div>
-              <div>
-                Messaggi: <span id="chatMessagesCountValue">0</span>
-              </div>
+              <div>Messaggi: <span id="chatMessagesCountValue">0</span></div>
             </div>
           </div>
 
-          <!-- SETTINGS -->
+          <!-- IMPOSTAZIONI -->
           <div class="panel tab-panel hidden" data-tab-panel="settings">
             <div class="panel-title">
               <span id="settingsTitle">Impostazioni</span>
@@ -565,17 +545,11 @@
 </div>
 
 <script>
-  // =========================
   // CONFIG
-  // =========================
-  // Se vuoi collegare il foglio file, metti qui l'URL di export (JSON/CSV/gviz) e adatta il parser sotto.
-  const GOOGLE_SHEETS_FILES_URL = ""; // opzionale, il sito funziona anche senza
+  const GOOGLE_SHEETS_FILES_URL = ""; // opzionale, metti qui l’export del foglio file
   const GLOBAL_CHAT_ENDPOINT = "https://script.google.com/macros/s/AKfycbxMfTpIoNC6VVsFNO5JjX8SX0vwVFz2wLrTFRxcNlO6Kk8kA-hOZiJ1V3j0NJFKt_3F1A/exec";
   const FILE_REPORT_EMAIL = "report@matteoshare.local";
 
-  // =========================
-  // STATO
-  // =========================
   let currentLanguage = localStorage.getItem("matteoshare_lang") || "it";
   let filesData = [];
   let lastFilesSignature = null;
@@ -585,9 +559,6 @@
   let filesPollingInterval = null;
   let localAccount = null;
 
-  // =========================
-  // I18N
-  // =========================
   const i18n = {
     it:{
       globalStatusNoAccount:"Sistema online · Account locale non configurato",
@@ -790,12 +761,10 @@
     updateGlobalStatus();
   }
 
-  // =========================
-  // ACCOUNT LOCALE
-  // =========================
+  // ACCOUNT LOCALE (username + password hash)
   function loadLocalAccount(){
     const raw=localStorage.getItem("matteoshare_account");
-    if(!raw) return null;
+    if(!raw)return null;
     try{return JSON.parse(raw);}catch(e){return null;}
   }
   function saveLocalAccount(acc){
@@ -809,16 +778,13 @@
   }
   function updateGlobalStatus(){
     const t=i18n[currentLanguage]||i18n.it;
-    const led=document.getElementById("globalStatusLed");
     const label=document.getElementById("globalStatusText");
-    led.classList.remove("offline","sync");
     if(localAccount){
       label.textContent=t.globalStatusWithAccount;
     }else{
       label.textContent=t.globalStatusNoAccount;
     }
   }
-
   function showLoginOverlay(){
     document.getElementById("loginOverlay").classList.remove("hidden");
   }
@@ -826,9 +792,13 @@
     document.getElementById("loginOverlay").classList.add("hidden");
   }
 
-  // =========================
+  async function hashPassword(password){
+    const enc=new TextEncoder().encode(password);
+    const buf=await crypto.subtle.digest("SHA-256",enc);
+    return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,"0")).join("");
+  }
+
   // TABS
-  // =========================
   document.querySelectorAll(".toolbar button").forEach(btn=>{
     btn.addEventListener("click",()=>{
       document.querySelectorAll(".toolbar button").forEach(b=>b.classList.remove("active"));
@@ -840,15 +810,12 @@
     });
   });
 
-  // =========================
   // FILES
-  // =========================
   function signatureForFiles(files){
     return JSON.stringify(files.map(f=>({
       nome:f.nome,url:f.url,size:f.size,hash:f.hash,categoria:f.categoria,sicurezza:f.sicurezza,note:f.note
     })));
   }
-
   function renderFilesTable(){
     const tbody=document.getElementById("filesTableBody");
     tbody.innerHTML="";
@@ -856,7 +823,6 @@
       const tr=document.createElement("tr");
       tr.dataset.index=index;
       if(index===selectedFileIndex) tr.classList.add("selected");
-
       const tdName=document.createElement("td");
       tdName.textContent=file.nome||"(senza nome)";
       const tdCat=document.createElement("td");
@@ -872,24 +838,20 @@
       else if(sec.includes("pericoloso")||sec.includes("danger")) tag.classList.add("danger");
       tag.textContent=file.sicurezza||"-";
       tdSec.appendChild(tag);
-
       tr.appendChild(tdName);
       tr.appendChild(tdCat);
       tr.appendChild(tdSize);
       tr.appendChild(tdSec);
-
       tr.addEventListener("click",()=>{
         selectedFileIndex=index;
         document.querySelectorAll("#filesTableBody tr").forEach(r=>r.classList.remove("selected"));
         tr.classList.add("selected");
         renderFileDetail(file);
       });
-
       tbody.appendChild(tr);
     });
     document.getElementById("filesCountValue").textContent=filesData.length.toString();
   }
-
   function renderFileDetail(file){
     const t=i18n[currentLanguage]||i18n.it;
     const detail=document.getElementById("fileDetail");
@@ -900,7 +862,6 @@
     document.getElementById("fileDetailHash").textContent=file.hash?("Hash: "+file.hash):"";
     document.getElementById("fileDetailSecurity").textContent=file.sicurezza?("Sicurezza: "+file.sicurezza):"";
     document.getElementById("fileDetailNotes").textContent=file.note||"";
-
     const url=file.url||"";
     document.getElementById("fileDownloadBtn").onclick=()=>{if(url)window.open(url,"_blank");};
     document.getElementById("fileOpenUrlBtn").onclick=()=>{if(url)window.open(url,"_blank");};
@@ -919,7 +880,6 @@
       window.location.href=`mailto:${FILE_REPORT_EMAIL}?subject=${subject}&body=${body}`;
     };
   }
-
   function loadFilesFromCache(){
     try{
       const cache=localStorage.getItem("matteoshare_files_cache");
@@ -929,7 +889,6 @@
         lastFilesSignature=sig;
         renderFilesTable();
       }else{
-        // fallback demo se non hai ancora collegato il foglio
         if(!GOOGLE_SHEETS_FILES_URL){
           filesData=[
             {nome:"Esempio - Tema XP.zip",url:"#",size:"12 MB",hash:"ABC123",categoria:"Tema",note:"Esempio locale, collega il tuo foglio per dati reali.",sicurezza:"Sicuro"},
@@ -941,7 +900,6 @@
       }
     }catch(e){}
   }
-
   async function fetchFilesFromSheet(){
     if(!GOOGLE_SHEETS_FILES_URL){
       document.getElementById("filesStatusLed").classList.remove("offline","sync");
@@ -953,9 +911,6 @@
       document.getElementById("filesStatusText").textContent=i18n[currentLanguage].filesSyncing;
       const res=await fetch(GOOGLE_SHEETS_FILES_URL);
       const text=await res.text();
-
-      // ADATTA QUI al formato del tuo export.
-      // Esempio: se usi JSON diretto con chiavi nome,url,size,hash,categoria,note,sicurezza:
       let data;
       try{
         data=JSON.parse(text);
@@ -980,7 +935,6 @@
       return filesData;
     }
   }
-
   async function smartFilesUpdate(){
     const newFiles=await fetchFilesFromSheet();
     if(!newFiles || !Array.isArray(newFiles))return;
@@ -999,9 +953,7 @@
     }
   }
 
-  // =========================
   // CHAT GLOBALE
-  // =========================
   async function fetchChatMessages(){
     try{
       document.getElementById("chatStatusLed").classList.add("sync");
@@ -1018,7 +970,6 @@
       document.getElementById("chatStatusText").textContent=i18n[currentLanguage].chatError;
     }
   }
-
   function renderChatMessages(){
     const container=document.getElementById("chatMessages");
     container.innerHTML="";
@@ -1044,7 +995,6 @@
     container.scrollTop=container.scrollHeight;
     document.getElementById("chatMessagesCountValue").textContent=chatMessages.length.toString();
   }
-
   async function sendChatMessage(){
     const userInput=document.getElementById("chatUserInput");
     const msgInput=document.getElementById("chatMessageInput");
@@ -1068,33 +1018,50 @@
     }
   }
 
-  // =========================
   // INIT
-  // =========================
   document.addEventListener("DOMContentLoaded",()=>{
-    // lingua
     document.getElementById("languageSelect").value=currentLanguage;
     applyLanguage(currentLanguage);
     document.getElementById("languageSelect").addEventListener("change",e=>{
       applyLanguage(e.target.value);
     });
 
-    // account
     const acc=loadLocalAccount();
     if(acc){
+      localAccount=acc;
       saveLocalAccount(acc);
       hideLoginOverlay();
     }else{
       showLoginOverlay();
     }
 
-    document.getElementById("loginConfirmBtn").addEventListener("click",()=>{
-      const username=(document.getElementById("loginUsername").value||"").trim();
+    document.getElementById("loginConfirmBtn").addEventListener("click",async()=>{
       const mode=document.getElementById("loginMode").value;
-      if(!username)return;
-      const accObj={username,createdAt:Date.now(),mode};
-      saveLocalAccount(accObj);
-      hideLoginOverlay();
+      const username=(document.getElementById("loginUsername").value||"").trim();
+      const password=document.getElementById("loginPassword").value||"";
+      const errorEl=document.getElementById("loginError");
+      errorEl.style.display="none";
+      errorEl.textContent="";
+      if(!username || !password){
+        errorEl.textContent="Inserisci nome utente e password.";
+        errorEl.style.display="block";
+        return;
+      }
+      const passHash=await hashPassword(password);
+      const existing=loadLocalAccount();
+      if(mode==="create"){
+        const accObj={username,passwordHash:passHash,createdAt:Date.now()};
+        saveLocalAccount(accObj);
+        hideLoginOverlay();
+      }else{
+        if(!existing || existing.username!==username || existing.passwordHash!==passHash){
+          errorEl.textContent="Credenziali non valide. Controlla nome utente e password.";
+          errorEl.style.display="block";
+          return;
+        }
+        saveLocalAccount(existing);
+        hideLoginOverlay();
+      }
     });
 
     document.getElementById("changeAccountBtn").addEventListener("click",()=>{
@@ -1105,12 +1072,10 @@
       showLoginOverlay();
     });
 
-    // files
     loadFilesFromCache();
     smartFilesUpdate();
     filesPollingInterval=setInterval(smartFilesUpdate,60000);
 
-    // chat
     fetchChatMessages();
     chatPollingInterval=setInterval(fetchChatMessages,5000);
     document.getElementById("chatSendBtn").addEventListener("click",sendChatMessage);
