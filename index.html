@@ -2,44 +2,48 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>MatteoShare Web – Versione Completa</title>
+    <title>MatteoShare Web – Versione Completa 100%</title>
     <style>
         :root {
-            --bg-main: #3a6ea5;
-            --bg-panel: #ece9d8;
-            --bg-sidebar: #d4d0c8;
+            --bg-main: #141b2b;
+            --bg-panel: #f3f2f0;
+            --bg-sidebar: #e0ded8;
             --bg-header-top: #1f5fa9;
             --bg-header-bottom: #0e3f7a;
             --border-dark: #404040;
             --border-light: #ffffff;
             --text-main: #000000;
+            --accent: #ffcc00;
         }
 
         body.theme-default {
-            --bg-main: #3a6ea5;
-            --bg-panel: #ece9d8;
-            --bg-sidebar: #d4d0c8;
+            --bg-main: #141b2b;
+            --bg-panel: #f3f2f0;
+            --bg-sidebar: #e0ded8;
             --bg-header-top: #1f5fa9;
             --bg-header-bottom: #0e3f7a;
             --text-main: #000000;
+            --accent: #ffcc00;
         }
 
         body.theme-dark {
-            --bg-main: #101820;
-            --bg-panel: #2b2b2b;
-            --bg-sidebar: #202020;
+            --bg-main: #05060a;
+            --bg-panel: #1f1f24;
+            --bg-sidebar: #18181d;
             --bg-header-top: #303f9f;
             --bg-header-bottom: #1a237e;
             --text-main: #f0f0f0;
+            --accent: #ff9800;
         }
 
         body.theme-neon {
-            --bg-main: #000018;
+            --bg-main: #020014;
             --bg-panel: #050520;
             --bg-sidebar: #050515;
             --bg-header-top: #00bcd4;
             --bg-header-bottom: #00838f;
             --text-main: #e0ffff;
+            --accent: #ffea00;
         }
 
         body.theme-terminal {
@@ -49,10 +53,11 @@
             --bg-header-top: #003300;
             --bg-header-bottom: #001a00;
             --text-main: #00ff00;
+            --accent: #00ff00;
         }
 
         body {
-            background: var(--bg-main);
+            background: radial-gradient(circle at top, #2b3f6b 0, var(--bg-main) 45%, #000 100%);
             color: var(--text-main);
             font-family: Tahoma, sans-serif;
             margin: 0;
@@ -67,6 +72,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.4);
         }
 
         header .title-block {
@@ -78,7 +84,7 @@
             margin: 0;
             font-size: 22px;
             font-weight: bold;
-            text-shadow: 1px 1px 2px #000;
+            text-shadow: 1px 1px 3px #000;
         }
 
         header p {
@@ -96,24 +102,31 @@
             display: block;
         }
 
+        .version-label {
+            font-size: 10px;
+            color: #ffe082;
+        }
+
         .main {
             display: flex;
-            height: calc(100vh - 48px);
+            height: calc(100vh - 52px);
         }
 
         .sidebar {
-            width: 230px;
-            background: var(--bg-sidebar);
+            width: 240px;
+            background: linear-gradient(180deg, var(--bg-sidebar), #c9c7c0);
             border-right: 2px solid var(--border-dark);
             padding: 8px;
             box-sizing: border-box;
             font-size: 12px;
+            box-shadow: 2px 0 6px rgba(0,0,0,0.4);
         }
 
         .sidebar h3 {
             margin-top: 0;
             font-size: 13px;
             color: #0e3f7a;
+            text-shadow: 0 1px 0 #fff;
         }
 
         .sidebar button {
@@ -126,17 +139,18 @@
             flex: 1;
             padding: 8px;
             box-sizing: border-box;
+            overflow-y: auto;
         }
 
         .panel {
             background: var(--bg-panel);
-            border: 2px solid var(--border-light);
-            border-right-color: #a7a6aa;
-            border-bottom-color: #a7a6aa;
+            border-radius: 6px;
+            border: 1px solid rgba(0,0,0,0.25);
             padding: 8px;
             margin-bottom: 8px;
-            border-radius: 3px;
             font-size: 12px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+            backdrop-filter: blur(4px);
         }
 
         .panel h2 {
@@ -145,51 +159,66 @@
             color: #0e3f7a;
         }
 
+        .panel h2::after {
+            content: "";
+            display: block;
+            width: 60px;
+            height: 2px;
+            margin-top: 2px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            background: white;
-            border: 2px solid #a7a6aa;
+            background: rgba(255,255,255,0.96);
+            border-radius: 4px;
+            overflow: hidden;
         }
 
         table th {
-            background: #d4d0c8;
+            background: linear-gradient(180deg, #e4e2da, #c9c7c0);
             padding: 5px;
-            border-bottom: 2px solid #a7a6aa;
+            border-bottom: 1px solid #a7a6aa;
             text-align: left;
             font-size: 11px;
         }
 
         table td {
             padding: 5px;
-            border-bottom: 1px solid #c0c0c0;
+            border-bottom: 1px solid #d0cfcb;
             font-size: 11px;
         }
 
+        table tr:nth-child(even) td {
+            background: #f7f6f4;
+        }
+
         button {
-            background: #d4d0c8;
-            border: 2px solid #ffffff;
-            border-right-color: #404040;
-            border-bottom-color: #404040;
+            background: linear-gradient(180deg, #f5f4f2, #d4d0c8);
+            border-radius: 3px;
+            border: 1px solid #8c8a85;
             padding: 3px 8px;
             cursor: pointer;
             font-weight: bold;
             font-size: 11px;
+            box-shadow: 0 1px 0 #fff inset, 0 1px 2px rgba(0,0,0,0.4);
+        }
+
+        button:hover {
+            filter: brightness(1.05);
         }
 
         button:active {
-            border: 2px solid #404040;
-            border-right-color: #ffffff;
-            border-bottom-color: #ffffff;
-            background: #c8c8c8;
+            box-shadow: 0 0 0 #fff inset;
+            transform: translateY(1px);
         }
 
         input, select, textarea {
             padding: 3px;
-            border: 2px solid #ffffff;
-            border-right-color: #a7a6aa;
-            border-bottom-color: #a7a6aa;
-            background: #f7f7f7;
+            border-radius: 3px;
+            border: 1px solid #a7a6aa;
+            background: #fdfdfd;
             font-family: Tahoma;
             font-size: 11px;
         }
@@ -205,21 +234,22 @@
             left:25%;
             width:50%;
             background: var(--bg-panel);
-            border:2px solid #ffffff;
-            border-right-color:#a7a6aa;
-            border-bottom-color:#a7a6aa;
+            border-radius: 6px;
+            border:1px solid rgba(0,0,0,0.4);
             z-index:9999;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.6);
             animation: winOpen 0.15s ease-out;
         }
 
         .window-header {
             background: linear-gradient(to bottom, var(--bg-header-top), var(--bg-header-bottom));
             color:white;
-            padding:3px 6px;
+            padding:4px 8px;
             font-size:11px;
             display:flex;
             justify-content:space-between;
             align-items:center;
+            border-radius:6px 6px 0 0;
         }
 
         .window-header span {
@@ -227,7 +257,7 @@
         }
 
         .window-header button {
-            padding:0 5px;
+            padding:0 6px;
             font-size:9px;
         }
 
@@ -237,18 +267,20 @@
         }
 
         #chatMessages {
-            height: 200px;
+            height: 220px;
             overflow-y: auto;
             background:white;
+            border-radius:4px;
             border:1px solid #a7a6aa;
             padding:4px;
             font-size:11px;
         }
 
         #peersList {
-            height: 200px;
+            height: 220px;
             overflow-y: auto;
             background:white;
+            border-radius:4px;
             border:1px solid #a7a6aa;
             padding:4px;
             font-size:11px;
@@ -262,12 +294,12 @@
         }
 
         .status-online {
-            color:green;
+            color:#00c853;
             font-weight:bold;
         }
 
         .status-offline {
-            color:red;
+            color:#e53935;
             font-weight:bold;
         }
 
@@ -297,11 +329,13 @@
             position:fixed;
             right:10px;
             bottom:10px;
-            background:#ece9d8;
-            border:2px solid #a7a6aa;
+            background:rgba(236,233,216,0.98);
+            border-radius:4px;
+            border:1px solid #a7a6aa;
             padding:4px 8px;
             font-size:10px;
             display:none;
+            box-shadow:0 2px 6px rgba(0,0,0,0.4);
         }
 
         #miniPlayer {
@@ -315,13 +349,14 @@
             height:120px;
             overflow-y:auto;
             background:white;
+            border-radius:4px;
             border:1px solid #a7a6aa;
             font-size:10px;
             padding:3px;
         }
 
         .offline-banner {
-            background:#a00000;
+            background:#b71c1c;
             color:white;
             text-align:center;
             font-size:10px;
@@ -330,15 +365,17 @@
         }
 
         .avatar-box {
-            width:40px;
-            height:40px;
+            width:44px;
+            height:44px;
+            border-radius:6px;
             border:1px solid #404040;
-            background:#f7f7f7;
+            background:radial-gradient(circle at 30% 20%, #fff, #cfd8dc);
             display:flex;
             align-items:center;
             justify-content:center;
-            font-size:12px;
+            font-size:14px;
             margin-bottom:5px;
+            box-shadow:0 2px 4px rgba(0,0,0,0.4);
         }
 
         .avatar-editor {
@@ -352,6 +389,7 @@
         .avatar-pixel {
             width:16px;
             height:16px;
+            border-radius:2px;
             border:1px solid #404040;
             cursor:pointer;
         }
@@ -362,7 +400,7 @@
         }
 
         .badge-unlocked {
-            color:green;
+            color:#2e7d32;
             font-weight:bold;
         }
 
@@ -371,7 +409,7 @@
         }
 
         .mention {
-            background: #ffff80;
+            background: #fff59d;
             font-weight:bold;
         }
 
@@ -385,6 +423,7 @@
             font-size:11px;
             margin-top:6px;
             background:white;
+            border-radius:4px;
             border:1px solid #a7a6aa;
             padding:4px;
             max-height:120px;
@@ -397,7 +436,7 @@
         }
 
         .verified-server {
-            color:green;
+            color:#2e7d32;
             font-weight:bold;
         }
 
@@ -408,6 +447,7 @@
         .security-log {
             font-size:10px;
             background:white;
+            border-radius:4px;
             border:1px solid #a7a6aa;
             padding:4px;
             max-height:150px;
@@ -416,6 +456,7 @@
 
         .profile-wall {
             background:white;
+            border-radius:4px;
             border:1px solid #a7a6aa;
             padding:4px;
             max-height:180px;
@@ -430,6 +471,7 @@
 
         .news-list {
             background:white;
+            border-radius:4px;
             border:1px solid #a7a6aa;
             padding:4px;
             max-height:260px;
@@ -452,6 +494,42 @@
             color:#555;
         }
 
+        .auto-update-label {
+            font-size:10px;
+            color:#555;
+        }
+
+        .file-new td {
+            background:#e8f5e9 !important;
+        }
+
+        .file-removed td {
+            background:#ffebee !important;
+        }
+
+        .file-changed td {
+            background:#fffde7 !important;
+        }
+
+        .file-detail-label {
+            font-weight:bold;
+        }
+
+        .xp-bar {
+            width:100%;
+            height:10px;
+            border-radius:4px;
+            border:1px solid #404040;
+            background:#f0f0f0;
+            overflow:hidden;
+        }
+
+        .xp-bar-inner {
+            height:100%;
+            background:linear-gradient(90deg,#1f5fa9,#42a5f5);
+            width:0%;
+        }
+
         @keyframes winOpen {
             from { transform:scale(0.9); opacity:0; }
             to { transform:scale(1); opacity:1; }
@@ -465,7 +543,8 @@
 <header>
     <div class="title-block">
         <h1>MatteoShare Web</h1>
-        <p>Programmed by <strong>Angelini Matteo</strong></p>
+        <p>Programmed by <strong>Angelini Matteo</strong> – Social 3.0, Sicurezza & Auto‑Update Intelligente</p>
+        <span class="version-label" id="versionLabel">Build 2.0.0 – Auto‑update intelligente attivo</span>
     </div>
     <div class="account-info">
         <span id="accountNameLabel">Account: (nessun account)</span>
@@ -480,38 +559,44 @@
                 <option value="terminal">Terminale</option>
             </select>
         </span>
+        <span id="xpLabel">XP: 0 (Lv. 1)</span>
+        <div class="xp-bar"><div id="xpBarInner" class="xp-bar-inner"></div></div>
     </div>
 </header>
 
 <div class="main">
     <div class="sidebar">
         <h3>Menu</h3>
-        <button onclick="showSection('files')">File Condivisi</button>
-        <button onclick="showSection('news')">News</button>
-        <button onclick="showSection('request')">Richiesta Pubblicazione</button>
-        <button onclick="showSection('chat')">Chat Globale</button>
-        <button onclick="showSection('peers')">Peer / Profili</button>
-        <button onclick="showSection('social')">Social 2.0</button>
-        <button onclick="showSection('history')">Cronologia Download</button>
-        <button onclick="showSection('favorites')">Preferiti</button>
-        <button onclick="showSection('badges')">Badge</button>
-        <button onclick="showSection('stats')">Statistiche</button>
-        <button onclick="showSection('security')">Sicurezza & Integrità</button>
-        <button onclick="showSection('account')">Account Locale</button>
-        <button onclick="showSection('admin')">Pannello Admin</button>
-        <button onclick="showSection('plugins')">Plugin</button>
-        <button onclick="showSection('server')">Server</button>
+        <button onclick="navigateTo('files')">File Condivisi</button>
+        <button onclick="navigateTo('news')">News</button>
+        <button onclick="navigateTo('request')">Richiesta Pubblicazione</button>
+        <button onclick="navigateTo('chat')">Chat Globale</button>
+        <button onclick="navigateTo('peers')">Peer / Profili</button>
+        <button onclick="navigateTo('social')">Social 3.0</button>
+        <button onclick="navigateTo('history')">Cronologia Download</button>
+        <button onclick="navigateTo('favorites')">Preferiti</button>
+        <button onclick="navigateTo('badges')">Badge</button>
+        <button onclick="navigateTo('stats')">Statistiche</button>
+        <button onclick="navigateTo('security')">Sicurezza & Integrità</button>
+        <button onclick="navigateTo('account')">Account Locale</button>
+        <button onclick="navigateTo('admin')">Pannello Admin</button>
+        <button onclick="navigateTo('plugins')">Plugin</button>
+        <button onclick="navigateTo('server')">Server</button>
         <hr>
         <button onclick="openMiniPlayer()">Mini Player</button>
         <hr>
         <button id="connectBtn" onclick="toggleConnection()">Connetti</button>
+        <p class="auto-update-label">
+            Auto‑update: <span id="autoUpdateStatus">ON (intelligente)</span><br>
+            Ultimo refresh: <span id="lastRefreshLabel">-</span>
+        </p>
     </div>
 
     <div class="content">
 
-        <!-- FILE -->
+        <!-- FILE LISTA -->
         <div id="section-files" class="panel">
-            <h2>File Condivisi</h2>
+            <h2>File Condivisi (lettura completa Google Sheets)</h2>
 
             <div class="filters">
                 <label>Nome:
@@ -551,32 +636,42 @@
                         <th>Tipo</th>
                         <th>Tag</th>
                         <th>Server</th>
-                        <th>Link</th>
-                        <th>Preferito</th>
-                        <th>Download</th>
+                        <th>Segnala</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
             </table>
+            <p style="font-size:10px;margin-top:4px;">
+                I file nuovi sono evidenziati in verde, quelli modificati in giallo. I file rimossi sono mostrati solo nel log interno.
+            </p>
+        </div>
+
+        <!-- PAGINA DETTAGLIO FILE -->
+        <div id="section-filedetail" class="panel" style="display:none;">
+            <h2>Dettaglio file</h2>
+            <div id="fileDetailBox" style="background:white;border-radius:4px;border:1px solid #a7a6aa;padding:6px;font-size:11px;"></div>
+            <div style="margin-top:6px;">
+                <button onclick="goBackToFiles()">Torna alla lista</button>
+            </div>
         </div>
 
         <!-- NEWS -->
         <div id="section-news" class="panel" style="display:none;">
-            <h2>News / Messaggi del creatore</h2>
-            <p style="font-size:11px;">Questa sezione legge i messaggi da un Google Sheets (solo lettura).</p>
+            <h2>News / Messaggi del creatore (Google Sheets)</h2>
+            <p style="font-size:11px;">Il sito legge <strong>tutte le righe</strong> della tua tavola Google Sheets delle news.</p>
             <div id="newsList" class="news-list"></div>
         </div>
 
         <!-- RICHIESTA PUBBLICAZIONE -->
         <div id="section-request" class="panel" style="display:none;">
             <h2>Richiesta Pubblicazione</h2>
-            <p>Solo il proprietario può pubblicare file. Usa questa funzione per chiedere la pubblicazione.</p>
+            <p>Solo il creatore può modificare il Google Sheets dei file. Qui puoi generare una richiesta pronta da inviare.</p>
             <button onclick="openRequestWindow()">Apri finestra richiesta</button>
         </div>
 
         <!-- CHAT GLOBALE -->
         <div id="section-chat" class="panel" style="display:none;">
-            <h2>Chat Globale</h2>
+            <h2>Chat Globale – Social 3.0</h2>
             <div style="margin-bottom:4px;">
                 <label>Canale:
                     <select id="chatChannel" onchange="renderChat()">
@@ -588,22 +683,22 @@
             </div>
             <div id="chatMessages"></div>
             <div style="margin-top:4px;">
-                <input type="text" id="chatInput" placeholder="Scrivi un messaggio..." style="width:70%;">
+                <input type="text" id="chatInput" placeholder="Scrivi un messaggio... usa @nome per mention" style="width:70%;">
                 <button onclick="sendChatMessage()">Invia</button>
             </div>
-            <p style="font-size:10px; margin-top:4px;">Chat simulata locale (nessun backend). Reazioni e mention funzionano solo sul tuo client.</p>
+            <p style="font-size:10px; margin-top:4px;">Chat simulata locale: mention, reazioni, moderazione admin, XP e reputazione sono gestiti solo sul tuo browser.</p>
         </div>
 
         <!-- PEER / PROFILI -->
         <div id="section-peers" class="panel" style="display:none;">
             <h2>Peer Online & Profili</h2>
             <div id="peersList"></div>
-            <p style="font-size:10px;">Peer simulati localmente. Il tuo profilo appare come ONLINE quando sei connesso.</p>
+            <p style="font-size:10px;">I peer sono simulati localmente. Il tuo profilo appare ONLINE quando il tasto Connetti è attivo.</p>
         </div>
 
-        <!-- SOCIAL 2.0 -->
+        <!-- SOCIAL 3.0 -->
         <div id="section-social" class="panel" style="display:none;">
-            <h2>Social 2.0</h2>
+            <h2>Social 3.0 – Stato, Bacheca, Amici, XP</h2>
             <div style="display:flex; gap:10px;">
                 <div style="flex:1;">
                     <h3 style="font-size:13px;">Stato & Bacheca</h3>
@@ -616,19 +711,19 @@
                         <textarea id="socialPost" rows="3" style="width:100%;"></textarea>
                     </div>
                     <button onclick="saveSocialStatus()">Salva stato</button>
-                    <button onclick="addWallPost()">Pubblica post</button>
+                    <button onclick="addWallPost()">Pubblica post (XP)</button>
                     <h4 style="font-size:12px; margin-top:8px;">La tua bacheca</h4>
                     <div id="wallBox" class="profile-wall"></div>
                 </div>
                 <div style="flex:1;">
-                    <h3 style="font-size:13px;">Amici</h3>
+                    <h3 style="font-size:13px;">Amici & Reputazione</h3>
                     <div class="account-field">
                         <label>Aggiungi amico (ID)</label>
                         <input id="friendId" style="width:100%;" placeholder="ID peer">
                     </div>
-                    <button onclick="addFriend()">Aggiungi amico</button>
+                    <button onclick="addFriend()">Aggiungi amico (XP)</button>
                     <h4 style="font-size:12px; margin-top:8px;">Lista amici</h4>
-                    <div id="friendsBox" style="background:white; border:1px solid #a7a6aa; padding:4px; max-height:180px; overflow-y:auto;"></div>
+                    <div id="friendsBox" style="background:white; border-radius:4px; border:1px solid #a7a6aa; padding:4px; max-height:180px; overflow-y:auto;"></div>
                 </div>
             </div>
         </div>
@@ -636,14 +731,14 @@
         <!-- CRONOLOGIA -->
         <div id="section-history" class="panel" style="display:none;">
             <h2>Cronologia Download</h2>
-            <div id="historyList" style="max-height:200px; overflow-y:auto; background:white; border:1px solid #a7a6aa; padding:4px; font-size:11px;"></div>
+            <div id="historyList" style="max-height:200px; overflow-y:auto; background:white; border-radius:4px; border:1px solid #a7a6aa; padding:4px; font-size:11px;"></div>
             <button onclick="clearHistory()">Svuota cronologia</button>
         </div>
 
         <!-- PREFERITI -->
         <div id="section-favorites" class="panel" style="display:none;">
             <h2>Preferiti</h2>
-            <div id="favoritesList" style="max-height:200px; overflow-y:auto; background:white; border:1px solid #a7a6aa; padding:4px; font-size:11px;"></div>
+            <div id="favoritesList" style="max-height:200px; overflow-y:auto; background:white; border-radius:4px; border:1px solid #a7a6aa; padding:4px; font-size:11px;"></div>
         </div>
 
         <!-- BADGE -->
@@ -662,7 +757,7 @@
 
         <!-- SICUREZZA & INTEGRITÀ -->
         <div id="section-security" class="panel" style="display:none;">
-            <h2>Sicurezza & Integrità</h2>
+            <h2>Sicurezza & Integrità – Aggiornamenti avanzati</h2>
             <div class="account-field">
                 <label><input type="checkbox" id="safeMode" onchange="toggleSafeMode()"> Modalità Safe Mode (solo server verificati)</label>
             </div>
@@ -678,7 +773,7 @@
                 <button onclick="saveBannedServers()">Salva lista server bannati</button>
             </div>
             <div class="account-field">
-                <label>Verifica integrità file (hash)</label>
+                <label>Verifica integrità file (hash simulato)</label>
                 <input id="verifyHashInput" style="width:100%;" placeholder="Incolla hash atteso">
                 <button onclick="verifyHash()">Verifica hash selezionato</button>
                 <div id="verifyHashResult" style="font-size:11px; margin-top:4px;"></div>
@@ -734,7 +829,7 @@
         <div id="section-admin" class="panel" style="display:none;">
             <h2>Pannello Admin (locale)</h2>
             <p>Se l'account ha la modalità admin attiva, in chat compariranno pulsanti per moderare i messaggi (solo localmente) e assegnare reputazione ai peer.</p>
-            <p>La moderazione reale richiederebbe un backend, qui è tutto simulato sul tuo browser.</p>
+            <p>La moderazione reale richiederebbe un backend: qui è tutto simulato sul tuo browser.</p>
         </div>
 
         <!-- PLUGIN -->
@@ -750,14 +845,14 @@
             <h2>Server (Google Sheets CSV)</h2>
 
             <h3 style="font-size:13px;">Aggiungi nuovo server</h3>
-            <input type="text" id="newServerUrl" placeholder="Incolla qui il link CSV" style="width:100%;">
+            <input type="text" id="newServerUrl" placeholder="Incolla qui il link CSV (Google Sheets → Pubblica su web → CSV)" style="width:100%;">
             <button onclick="addServer()">Aggiungi server</button>
 
             <h3 style="font-size:13px; margin-top:10px;">Server configurati</h3>
             <div id="serverList" style="font-size:11px;"></div>
 
             <button style="margin-top:6px;" onclick="reloadAllServers()">Ricarica tutti i server</button>
-            <p style="font-size:10px; margin-top:4px;">MatteoShare usa SOLO i server attivi come database file.</p>
+            <p style="font-size:10px; margin-top:4px;">MatteoShare legge <strong>tutte le righe</strong> dei tuoi Google Sheets CSV compatibili (file) e delle news.</p>
         </div>
 
     </div>
@@ -790,7 +885,7 @@
             </select>
         </div>
         <div class="account-field">
-            <label>Link (Google Drive / Mega / GitHub Pages)</label>
+            <label>Link (Google Drive / Mega / GitHub / altro)</label>
             <input id="reqLink" style="width:98%;">
         </div>
 
@@ -826,7 +921,7 @@
         <button onclick="closePrivateChat()">X</button>
     </div>
     <div class="window-body">
-        <div id="privateChatMessages" style="height:180px; overflow-y:auto; background:white; border:1px solid #a7a6aa; padding:4px;"></div>
+        <div id="privateChatMessages" style="height:180px; overflow-y:auto; background:white; border-radius:4px; border:1px solid #a7a6aa; padding:4px;"></div>
         <input id="privateChatInput" style="width:80%;">
         <button onclick="sendPrivateChat()">Invia</button>
     </div>
@@ -840,8 +935,8 @@
     </div>
     <div class="window-body">
         <div id="downloadFileName" style="font-size:11px; margin-bottom:4px;"></div>
-        <div style="width:100%; height:14px; border:1px solid #404040; background:#f0f0f0;">
-            <div id="downloadBar" style="height:100%; width:0%; background:#1f5fa9;"></div>
+        <div style="width:100%; height:14px; border-radius:4px; border:1px solid #404040; background:#f0f0f0; overflow:hidden;">
+            <div id="downloadBar" style="height:100%; width:0%; background:linear-gradient(90deg,#1f5fa9,#42a5f5);"></div>
         </div>
         <div id="downloadStatus" style="font-size:10px; margin-top:3px;">Preparazione...</div>
     </div>
@@ -850,12 +945,13 @@
 <div id="notifyBox"></div>
 
 <script>
-/* COSTANTI */
+/* COSTANTI – COMPATIBILI CON LE TUE TAVOLE GOOGLE SHEETS */
 const DEFAULT_SERVER_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR0JBmDzlXu9-Mr4hG1TSr5lkuHf8vJjBtkljZ-Kqa8gFoRx84r5EJ-xFfB0fE7vqlB06aW8jmYBUrg/pub?gid=0&single=true&output=csv";
 const NEWS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSOlGHBjwu4fcWoNNXfgS_cZWR2O7lQyzwPxTA9BRZ6N-DXJXeWMRn6hfJfzaba-JpWWmnfRu0or2iP/pub?gid=0&single=true&output=csv";
 
 /* GLOBALI */
 let allFiles = [];
+let previousFilesSnapshot = [];
 let downloadTimer = null;
 let downloadQueue = [];
 let activeDownload = null;
@@ -870,9 +966,78 @@ let selectedHashForVerify = null;
 let onlyVerifiedFilesFlag = false;
 let obfuscateProtocolFlag = false;
 
+let autoUpdateTimer = null;
+const AUTO_UPDATE_INTERVAL_MS = 30000;
+
+let xpData = { xp: 0, level: 1 };
+
+function navigateTo(section) {
+    if (section === "files") {
+        location.hash = "#files";
+    } else if (section === "news") {
+        location.hash = "#news";
+    } else if (section === "request") {
+        location.hash = "#request";
+    } else if (section === "chat") {
+        location.hash = "#chat";
+    } else if (section === "peers") {
+        location.hash = "#peers";
+    } else if (section === "social") {
+        location.hash = "#social";
+    } else if (section === "history") {
+        location.hash = "#history";
+    } else if (section === "favorites") {
+        location.hash = "#favorites";
+    } else if (section === "badges") {
+        location.hash = "#badges";
+    } else if (section === "stats") {
+        location.hash = "#stats";
+    } else if (section === "security") {
+        location.hash = "#security";
+    } else if (section === "account") {
+        location.hash = "#account";
+    } else if (section === "admin") {
+        location.hash = "#admin";
+    } else if (section === "plugins") {
+        location.hash = "#plugins";
+    } else if (section === "server") {
+        location.hash = "#server";
+    }
+}
+
+/* ROUTER */
+function router() {
+    const hash = location.hash || "#files";
+    if (hash.startsWith("#file:")) {
+        const id = decodeURIComponent(hash.substring(6));
+        showFileDetailByHash(id);
+        return;
+    }
+
+    const map = {
+        "#files": "files",
+        "#news": "news",
+        "#request": "request",
+        "#chat": "chat",
+        "#peers": "peers",
+        "#social": "social",
+        "#history": "history",
+        "#favorites": "favorites",
+        "#badges": "badges",
+        "#stats": "stats",
+        "#security": "security",
+        "#account": "account",
+        "#admin": "admin",
+        "#plugins": "plugins",
+        "#server": "server"
+    };
+    const section = map[hash] || "files";
+    showSection(section);
+}
+
 /* SEZIONI */
 function showSection(name) {
-    const ids = ["files","news","request","chat","peers","social","history","favorites","badges","stats","security","account","admin","plugins","server"];
+    const ids = ["files","filedetail","news","request","chat","peers","social","history","favorites","badges","stats","security","account","admin","plugins","server"];
     ids.forEach(id => {
         document.getElementById("section-" + id).style.display = (id === name) ? "block" : "none";
     });
@@ -1047,7 +1212,7 @@ function autoTagFile(f) {
     return f;
 }
 
-/* SICUREZZA: BANNED SERVER + SAFE MODE + LOG + SOLO VERIFICATI + OFFUSCA PROTOCOLLO */
+/* SICUREZZA */
 function getBannedServers() {
     try {
         return JSON.parse(localStorage.getItem("matteoshare_banned_servers") || "[]");
@@ -1118,7 +1283,51 @@ function renderSecurityLog() {
     });
 }
 
-/* FILE & FILTRI */
+/* FILE & AUTO-UPDATE INTELLIGENTE */
+function snapshotFiles(files) {
+    return files.map(f => ({
+        hash: f.hash,
+        name: f.name,
+        description: f.description,
+        size: f.size,
+        security: f.security,
+        type: f.type,
+        tags: (f.tags || []).slice(),
+        cloud_url: f.cloud_url,
+        server_verified: f.server_verified
+    }));
+}
+
+function diffFiles(oldList, newList) {
+    const oldMap = {};
+    oldList.forEach(f => oldMap[f.hash] = f);
+    const newMap = {};
+    newList.forEach(f => newMap[f.hash] = f);
+
+    const added = [];
+    const removed = [];
+    const changed = [];
+
+    newList.forEach(f => {
+        if (!oldMap[f.hash]) {
+            added.push(f);
+        } else {
+            const old = oldMap[f.hash];
+            if (old.name !== f.name || old.description !== f.description || old.size !== f.size || old.security !== f.security) {
+                changed.push(f);
+            }
+        }
+    });
+
+    oldList.forEach(f => {
+        if (!newMap[f.hash]) {
+            removed.push(f);
+        }
+    });
+
+    return { added, removed, changed };
+}
+
 async function loadFiles() {
     const banned = getBannedServers();
     let servers = getServers().filter(s => s.active && !banned.includes(s.url));
@@ -1165,19 +1374,50 @@ async function loadFiles() {
         }
     }
 
+    const newSnapshot = snapshotFiles(combined);
+    const diff = diffFiles(previousFilesSnapshot, newSnapshot);
+
+    if (previousFilesSnapshot.length > 0) {
+        if (diff.added.length === 0 && diff.removed.length === 0 && diff.changed.length === 0) {
+            // nessun cambiamento
+        } else {
+            if (diff.added.length > 0) {
+                showNotify("Nuovi file aggiunti: " + diff.added.length);
+            }
+            if (diff.changed.length > 0) {
+                showNotify("File aggiornati: " + diff.changed.length);
+            }
+            if (diff.removed.length > 0) {
+                logSecurity("File rimossi dal server: " + diff.removed.length);
+            }
+        }
+    }
+
+    const flags = {};
+    diff.added.forEach(f => flags[f.hash] = "new");
+    diff.changed.forEach(f => flags[f.hash] = "changed");
+
+    combined.forEach(f => {
+        f._status = flags[f.hash] || "normal";
+    });
+
+    previousFilesSnapshot = newSnapshot;
     allFiles = combined;
     renderFiles(allFiles);
     setOffline(false);
     updateStats();
     renderServerStats();
+    updateLastRefreshLabel();
 }
 
+/* URL */
 function obfuscateUrl(url) {
     if (!url) return "";
     if (!obfuscateProtocolFlag) return url;
     return url.replace(/^https:/i, "hxxps:").replace(/^http:/i, "hxxp:");
 }
 
+/* RENDER FILES */
 function renderFiles(files) {
     const tbody = document.querySelector("#filesTable tbody");
     tbody.innerHTML = "";
@@ -1192,40 +1432,28 @@ function renderFiles(files) {
     list.forEach(f => {
         const isFav = favs.includes(f.hash);
         const tr = document.createElement("tr");
+        if (f._status === "new") tr.className = "file-new";
+        else if (f._status === "changed") tr.className = "file-changed";
+
         const displayUrl = obfuscateUrl(f.cloud_url || "");
         tr.innerHTML = `
-            <td>${f.name}</td>
+            <td><a href="#file:${encodeURIComponent(f.hash)}" style="cursor:pointer;text-decoration:underline;color:#0e3f7a;">${f.name}</a></td>
             <td>${f.description || ""}</td>
             <td>${f.size}</td>
             <td>${f.security}</td>
             <td>${f.type}</td>
             <td>${(f.tags || []).join(", ")}</td>
             <td>${f.server_verified ? '<span class="verified-server">✔ Verificato</span>' : '<span class="unverified-server">—</span>'}</td>
-            <td>${displayUrl ? '<span style="font-size:10px;">'+displayUrl+'</span>' : ''}</td>
-            <td><button onclick="toggleFav('${f.hash}')">${isFav ? "★" : "☆"}</button></td>
-            <td><button data-url="${f.cloud_url || ""}" data-hash="${f.hash}">Download</button></td>
+            <td><button onclick="reportFile('${encodeURIComponent(f.hash)}')">Segnala</button></td>
         `;
         tbody.appendChild(tr);
-    });
-
-    document.querySelectorAll("#filesTable button[data-url]").forEach(btn => {
-        btn.addEventListener("click", () => {
-            const url = btn.dataset.url;
-            const hash = btn.dataset.hash;
-            const file = allFiles.find(x => x.hash === hash);
-            if (file) {
-                logDownload(file);
-                unlockBadge("firstDownload");
-                checkDownloadCountBadges();
-                queueDownload(file, url, hash);
-            }
-        });
     });
 
     renderFavorites();
     renderHistory();
 }
 
+/* FILTRI */
 function applyFilters() {
     let filtered = [...allFiles];
 
@@ -1255,7 +1483,60 @@ function applyFilters() {
     renderFiles(filtered);
 }
 
-/* DOWNLOAD MANAGER – TUTTO VIA LINK */
+/* DETTAGLIO FILE */
+function showFileDetailByHash(hash) {
+    const file = allFiles.find(f => f.hash === hash);
+    if (!file) {
+        showSection("files");
+        showNotify("File non trovato.");
+        return;
+    }
+    showFileDetail(file);
+}
+
+function showFileDetail(file) {
+    const box = document.getElementById("fileDetailBox");
+    const displayUrl = obfuscateUrl(file.cloud_url || "");
+    selectedHashForVerify = file.hash;
+
+    box.innerHTML = `
+        <div><span class="file-detail-label">Nome:</span> ${file.name}</div>
+        <div><span class="file-detail-label">Descrizione:</span> ${file.description || "(nessuna descrizione)"}</div>
+        <div><span class="file-detail-label">Peso:</span> ${file.size}</div>
+        <div><span class="file-detail-label">Sicurezza:</span> ${file.security}</div>
+        <div><span class="file-detail-label">Tipo:</span> ${file.type}</div>
+        <div><span class="file-detail-label">Tag:</span> ${(file.tags || []).join(", ") || "(nessun tag)"}</div>
+        <div><span class="file-detail-label">Server verificato:</span> ${file.server_verified ? "Sì" : "No"}</div>
+        <div><span class="file-detail-label">Hash interno:</span> ${file.hash}</div>
+        <div><span class="file-detail-label">Link:</span> ${displayUrl ? '<span style="font-size:10px;">'+displayUrl+'</span>' : "(nessun link)"}</div>
+        <div style="margin-top:8px;">
+            <button onclick="startFileDownload('${encodeURIComponent(file.hash)}')">Download</button>
+            <button onclick="reportFile('${encodeURIComponent(file.hash)}')">Segnala</button>
+        </div>
+    `;
+
+    showSection("filedetail");
+}
+
+function goBackToFiles() {
+    location.hash = "#files";
+}
+
+/* DOWNLOAD MANAGER */
+function startFileDownload(hashEnc) {
+    const hash = decodeURIComponent(hashEnc);
+    const file = allFiles.find(f => f.hash === hash);
+    if (!file) {
+        alert("File non trovato.");
+        return;
+    }
+    logDownload(file);
+    unlockBadge("firstDownload");
+    checkDownloadCountBadges();
+    addXP(5); // XP per download
+    queueDownload(file, file.cloud_url || "", file.hash);
+}
+
 function queueDownload(file, url, hash) {
     downloadQueue.push({file, url, hash});
     if (!activeDownload) processNextDownload();
@@ -1320,6 +1601,26 @@ function closeDownloadWindow() {
     win.style.display = "none";
     if (downloadTimer) clearInterval(downloadTimer);
     activeDownload = null;
+}
+
+/* REPORT FILE (EMAIL) */
+function reportFile(hashEnc) {
+    const hash = decodeURIComponent(hashEnc);
+    const file = allFiles.find(f => f.hash === hash);
+    if (!file) {
+        alert("File non trovato.");
+        return;
+    }
+    const subject = encodeURIComponent("Segnalazione file");
+    const body = encodeURIComponent(
+        "Vorrei segnalare il seguente file:\n\n" +
+        "Nome: " + file.name + "\n" +
+        "Hash: " + file.hash + "\n" +
+        "Server verificato: " + (file.server_verified ? "Sì" : "No") + "\n" +
+        "Link: " + (file.cloud_url || "") + "\n\n" +
+        "Motivo della segnalazione:\n[Scrivi qui]"
+    );
+    window.location.href = "mailto:club.dei.ninja.official@gmail.com?subject=" + subject + "&body=" + body;
 }
 
 /* CRONOLOGIA */
@@ -1429,7 +1730,7 @@ function sendRequestEmail() {
     closeRequestWindow();
 }
 
-/* CHAT GLOBALE (locale, con reazioni e mention) */
+/* CHAT GLOBALE – SOCIAL 3.0 */
 function loadChatFromStorage() {
     try {
         chatMessages = JSON.parse(localStorage.getItem("matteoshare_chat") || "[]");
@@ -1528,6 +1829,7 @@ function sendChatMessage() {
     input.value = "";
     renderChat();
     unlockBadge("firstChat");
+    addXP(2); // XP per messaggio
 }
 
 function deleteChatMessage(id) {
@@ -1543,6 +1845,13 @@ function addReaction(id, reaction) {
     msg.reactions.push(reaction);
     saveChatToStorage();
     renderChat();
+
+    // reputazione + XP per autore
+    const rep = getReputation();
+    rep[msg.user] = (rep[msg.user] || 0) + 1;
+    saveReputation(rep);
+    renderPeers();
+    addXP(1);
 }
 
 function sendMiniChat() {
@@ -1561,7 +1870,7 @@ function closeMiniPlayer() {
     document.getElementById("miniPlayer").style.display = "none";
 }
 
-/* CHAT PRIVATA P2P (locale) */
+/* CHAT PRIVATA */
 function openPrivateChat(peerId, peerName) {
     currentPrivatePeer = { id: peerId, name: peerName };
     document.getElementById("privateChatTitle").textContent = "Chat con " + peerName;
@@ -1638,7 +1947,7 @@ function sendPrivateChat() {
     showNotify("Messaggio privato inviato (simulato).");
 }
 
-/* PEER / PROFILI + REPUTAZIONE (locale) */
+/* PEER / PROFILI + REPUTAZIONE */
 function getReputation() {
     try {
         return JSON.parse(localStorage.getItem("matteoshare_rep") || "{}");
@@ -1734,7 +2043,7 @@ function renderPeers() {
     });
 }
 
-/* SOCIAL 2.0: STATO, WALL, AMICI */
+/* SOCIAL 3.0 */
 function getSocialData() {
     try {
         return JSON.parse(localStorage.getItem("matteoshare_social") || "{}");
@@ -1770,11 +2079,24 @@ function addWallPost() {
     data.wall.push({
         time: new Date().toLocaleString(),
         text,
-        author: acc && acc.name ? acc.name : "Tu"
+        author: acc && acc.name ? acc.name : "Tu",
+        likes: 0
     });
     saveSocialData(data);
     document.getElementById("socialPost").value = "";
     renderWall();
+    addXP(3); // XP per post
+}
+
+function likeWallPost(index) {
+    const data = getSocialData();
+    if (!data.wall) return;
+    const post = data.wall[index];
+    if (!post) return;
+    post.likes = (post.likes || 0) + 1;
+    saveSocialData(data);
+    renderWall();
+    addXP(1);
 }
 
 function renderWall() {
@@ -1782,11 +2104,14 @@ function renderWall() {
     const data = getSocialData();
     const wall = data.wall || [];
     box.innerHTML = "";
-    wall.slice().reverse().forEach(p => {
+    wall.slice().reverse().forEach((p, idxRev) => {
+        const idx = wall.length - 1 - idxRev;
         const div = document.createElement("div");
         div.style.borderBottom = "1px solid #ddd";
         div.style.marginBottom = "3px";
-        div.innerHTML = `<b>${p.author}</b> [${p.time}]<br>${p.text}`;
+        div.innerHTML = `<b>${p.author}</b> [${p.time}]<br>${p.text}<br>
+            <span style="font-size:10px;">Like: ${p.likes || 0}</span>
+            <button class="reaction-btn" onclick="likeWallPost(${idx})">Like</button>`;
         box.appendChild(div);
     });
 }
@@ -1802,6 +2127,7 @@ function addFriend() {
         renderFriends();
         document.getElementById("friendId").value = "";
         showNotify("Amico aggiunto: " + id);
+        addXP(2);
     }
 }
 
@@ -1820,6 +2146,50 @@ function renderFriends() {
         div.textContent = id;
         box.appendChild(div);
     });
+}
+
+/* XP / LIVELLI */
+function loadXP() {
+    try {
+        xpData = JSON.parse(localStorage.getItem("matteoshare_xp") || '{"xp":0,"level":1}');
+    } catch {
+        xpData = { xp:0, level:1 };
+    }
+    updateXPUI();
+}
+
+function saveXP() {
+    localStorage.setItem("matteoshare_xp", JSON.stringify(xpData));
+}
+
+function xpForNextLevel(level) {
+    return 50 + (level - 1) * 50;
+}
+
+function addXP(amount) {
+    xpData.xp += amount;
+    let needed = xpForNextLevel(xpData.level);
+    let leveledUp = false;
+    while (xpData.xp >= needed) {
+        xpData.xp -= needed;
+        xpData.level++;
+        needed = xpForNextLevel(xpData.level);
+        leveledUp = true;
+    }
+    saveXP();
+    updateXPUI();
+    if (leveledUp) {
+        showNotify("Hai raggiunto il livello " + xpData.level + "!");
+    }
+}
+
+function updateXPUI() {
+    const label = document.getElementById("xpLabel");
+    const bar = document.getElementById("xpBarInner");
+    const needed = xpForNextLevel(xpData.level);
+    const perc = Math.min(100, (xpData.xp / needed) * 100);
+    label.textContent = "XP: " + xpData.xp + " (Lv. " + xpData.level + ")";
+    bar.style.width = perc + "%";
 }
 
 /* ACCOUNT + AVATAR + TEMA */
@@ -1981,7 +2351,9 @@ function unlockBadge(key) {
     if (!badges[key]) {
         badges[key] = true;
         saveBadges(badges);
-        showNotify("Nuovo badge sbloccato: " + badgeDefinitions[key].label);
+        if (badgeDefinitions[key]) {
+            showNotify("Nuovo badge sbloccato: " + badgeDefinitions[key].label);
+        }
         renderBadges();
     }
 }
@@ -2049,7 +2421,7 @@ function updateStats() {
     `;
 }
 
-/* PLUGIN SYSTEM BASE */
+/* PLUGIN SYSTEM */
 function getPlugins() {
     const raw = localStorage.getItem("matteoshare_plugins") || "[]";
     return JSON.parse(raw);
@@ -2103,7 +2475,7 @@ function renderPlugins() {
     });
 }
 
-/* BACKUP AUTOMATICO */
+/* BACKUP ACCOUNT */
 function backupAccount() {
     const acc = loadAccountFromStorage();
     if (!acc) return;
@@ -2146,7 +2518,7 @@ function importAccountFile(event) {
     reader.readAsText(file);
 }
 
-/* CONNESSIONE REALE (locale) */
+/* CONNESSIONE */
 function isConnected() {
     return localStorage.getItem("matteoshare_connected") === "1";
 }
@@ -2171,15 +2543,10 @@ function toggleConnection() {
     setConnected(!isConnected());
 }
 
-/* HASH: SELEZIONE E VERIFICA (simulata) */
-function selectHashForVerify(hash) {
-    selectedHashForVerify = hash;
-    document.getElementById("verifyHashResult").textContent = "Hash selezionato: " + hash;
-}
-
+/* HASH VERIFICA */
 function verifyHash() {
     if (!selectedHashForVerify) {
-        document.getElementById("verifyHashResult").textContent = "Seleziona prima un file (pulsante Hash).";
+        document.getElementById("verifyHashResult").textContent = "Seleziona prima un file (apri la pagina dettaglio).";
         return;
     }
     const expected = document.getElementById("verifyHashInput").value.trim();
@@ -2196,7 +2563,7 @@ function verifyHash() {
     }
 }
 
-/* NEWS DA GOOGLE SHEETS */
+/* NEWS */
 async function loadNews() {
     try {
         const res = await fetch(NEWS_CSV_URL);
@@ -2231,6 +2598,20 @@ function renderNews(rows) {
     });
 }
 
+/* AUTO-UPDATE INTELLIGENTE */
+function startAutoUpdate() {
+    if (autoUpdateTimer) clearInterval(autoUpdateTimer);
+    autoUpdateTimer = setInterval(async () => {
+        await loadFiles();
+        await loadNews();
+    }, AUTO_UPDATE_INTERVAL_MS);
+    document.getElementById("autoUpdateStatus").textContent = "ON (intelligente)";
+}
+
+function updateLastRefreshLabel() {
+    document.getElementById("lastRefreshLabel").textContent = new Date().toLocaleTimeString();
+}
+
 /* INIT */
 function reloadAllServers() {
     loadFiles();
@@ -2253,10 +2634,14 @@ function init() {
     renderSecurityLog();
     loadSocialUI();
     loadNews();
-    showSection("files");
+    loadXP();
+    router();
     loadFiles();
 
     if (isConnected()) setConnected(true);
+
+    startAutoUpdate();
+    window.addEventListener("hashchange", router);
 }
 
 init();
